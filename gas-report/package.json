@@ -1,13 +1,11 @@
 {
-  "name": "my-app",
+  "name": "gas-report",
   "main": "expo-router/entry",
   "version": "1.0.0",
   "dependencies": {
     "@expo/ui": "~56.0.18",
-    "chart.js": "^4.5.1",
     "expo": "~56.0.12",
     "expo-constants": "~56.0.18",
-    "expo-dev-client": "~56.0.20",
     "expo-device": "~56.0.4",
     "expo-font": "~56.0.7",
     "expo-glass-effect": "~56.0.4",

@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "my-app",
-    "slug": "my-app",
+    "name": "gas-report",
+    "slug": "gas-report",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "scheme": "gasreport",
     "userInterfaceStyle": "automatic",
     "ios": {
       "icon": "./assets/expo.icon"
@@ -18,7 +18,7 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.afleming089.myapp"
+      "package": "com.afleming089.gasreport"
     },
     "web": {
       "output": "static",
@@ -44,7 +44,7 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "f3814ade-b30c-4365-a99f-5b690fab74e9"
+        "projectId": "60118b50-19d7-4b46-8312-45f22bb8fb65"
       }
     }
   }
