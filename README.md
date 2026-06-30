@@ -11,3 +11,7 @@ Features
 - find price by location
 - Allows you to set time to update daily request each day or updates when app launches the first time.
 - set time for notifications to go out. When they go out if not updated for the day update.
+
+### Third part gas API Reference
+
+https://www.eia.gov/developer/
