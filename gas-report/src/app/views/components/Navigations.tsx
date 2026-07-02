@@ -1,0 +1,2 @@
+function Header() {}
+function Footer() {}
