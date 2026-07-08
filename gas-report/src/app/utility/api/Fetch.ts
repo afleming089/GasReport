@@ -1,4 +1,7 @@
 import { ApiResponse, FetchConfig } from "./api";
+import * as t from "io-ts";
+import { PathReporter } from "io-ts/PathReporter";
+import { isLeft } from "fp-ts/Either";
 
 async function Fetch<T>(
   url: string,
@@ -20,18 +23,31 @@ async function Fetch<T>(
       headers: config.headers,
     });
 
-    // Check for HTTP errors
-    if (!response.ok) {
-      return {
-        error: {
-          message: `HTTP error: ${response.statusText}`,
-          status: response.status,
-        },
-      } as ApiResponse<T>;
-    }
+    console.log(config);
 
     const data: T = (await response.json()) as T;
-    return { data } as ApiResponse<T>;
+
+    const decoded = config.type.decoded(data);
+    // if (isLeft(decoded)) {
+    //   throw Error(
+    //     `Could not validate data: ${PathReporter.report(decoded).join("\n")}`,
+    //   );
+    //   // e.g.: Could not validate data: Invalid value "foo" supplied to : { userId: number, name: string }/userId: number
+    // }
+
+    // type DataT = t.TypeOf<typeof config.type>; // compile-time type
+    // const decodedData: DataT = decoded.right; // now safely the correct type
+
+    // return { decodedData } as ApiResponse<T>;
+    // // Check for HTTP errors
+    // if (!response.ok) {
+    //   return {
+    //     error: {
+    //       message: `HTTP error: ${response.statusText}`,
+    //       status: response.status,
+    //     },
+    //   } as ApiResponse<T>;
+    // }
   } catch (error) {
     return {
       error: {

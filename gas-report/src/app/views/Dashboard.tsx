@@ -4,13 +4,17 @@ import useFetch from "../utility/customHooks/useFetch";
 import { ApiResponse, FetchConfig } from "../utility/api/api";
 import { PetroleumData } from "../models/Petroleum/PetroleumData";
 
-type rest = {
-  a: string;
-};
+//remove
+import * as t from "io-ts";
+const rest = t.type({
+  a: t.string,
+});
+
+type rest = t.TypeOf<typeof rest>;
 
 function Dashboard() {
   const reportParameters = useContext(ReportParametersContext);
-  const gasReport: ApiResponse<rest> = useFetch<rest>("", {});
+  const gasReport: ApiResponse<rest> = useFetch<rest>("", { type: rest });
 
   console.log(gasReport);
 
