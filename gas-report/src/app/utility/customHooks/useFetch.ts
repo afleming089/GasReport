@@ -1,18 +1,22 @@
 import { useState, useEffect } from "react";
-import {FetchData} from "../api/FetchData";
-import { ApiResponse } from "../api/ApiResponse";
-import { FetchConfig } from "../../utility/api/FetchConfig";
+import { Fetch, ApiResponse, FetchConfig } from "../../utility/api/api";
 
 function useFetch<T>(url: string, config: FetchConfig): ApiResponse<T> {
-  const [response, setResponse] = useState(<T> | null);
-//   const [loading, setLoading] = useState(true);
+  const [response, setResponse] = useState<ApiResponse<T>>({
+    data: undefined,
+    error: { message: "Loading", status: 202 },
+  });
 
   useEffect(() => {
-    setResponse(FetchData<T>(url, config));
+    const fetchData = async () => {
+      const apiResponse: ApiResponse<T> = await Fetch<T>(url, config);
+      setResponse(apiResponse);
+    };
 
+    fetchData();
   }, [url]);
 
-  return { response };
+  return response;
 }
 
-export { useFetch };
+export default useFetch;

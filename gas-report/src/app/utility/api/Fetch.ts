@@ -1,7 +1,6 @@
-import { ApiResponse } from "../../utility/api/ApiResponse";
-import { FetchConfig } from "../../utility/api/FetchConfig";
+import { ApiResponse, FetchConfig } from "./api";
 
-async function FetchData<T>(
+async function Fetch<T>(
   url: string,
   config: FetchConfig = {},
 ): Promise<ApiResponse<T>> {
@@ -28,19 +27,19 @@ async function FetchData<T>(
           message: `HTTP error: ${response.statusText}`,
           status: response.status,
         },
-      };
+      } as ApiResponse<T>;
     }
 
-    const data: T = await response.json();
-    return { data };
+    const data: T = (await response.json()) as T;
+    return { data } as ApiResponse<T>;
   } catch (error) {
     return {
       error: {
         message:
           error instanceof Error ? error.message : "Unknown error occurred",
       },
-    };
+    } as ApiResponse<T>;
   }
 }
 
-export { FetchData };
+export { Fetch };
