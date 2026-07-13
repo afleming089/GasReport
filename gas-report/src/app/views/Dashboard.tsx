@@ -14,7 +14,10 @@ type rest = t.TypeOf<typeof rest>;
 
 function Dashboard() {
   const reportParameters = useContext(ReportParametersContext);
-  const gasReport: ApiResponse<rest> = useFetch<rest>("", { type: rest });
+  const gasReport: ApiResponse<rest> = useFetch<rest>(
+    "https://api.kanye.rest",
+    { type: rest },
+  );
 
   console.log(gasReport);
 
