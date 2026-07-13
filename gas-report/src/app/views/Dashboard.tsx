@@ -1,8 +1,19 @@
 import { useContext } from "react";
 import { ReportParametersContext } from "../state/ReportParametersContext";
+
+// native
+import { View } from "react-native";
+
+// utility
 import useFetch from "../utility/customHooks/useFetch";
 import { ApiResponse, FetchConfig } from "../utility/api/api";
+// models
 import { PetroleumData } from "../models/Petroleum/PetroleumData";
+
+// components
+import { Card } from "./components/Cards";
+import { Line } from "./components/Line";
+import { LineChart } from "react-native-chart-kit/v2";
 
 //remove
 import * as t from "io-ts";
@@ -21,7 +32,12 @@ function Dashboard() {
 
   console.log(gasReport);
 
-  return <>Dashboard</>;
+  return (
+    <View>
+      <Card title="Average This Week" subTitle="${price}"></Card>
+      <Line />
+    </View>
+  );
 }
 
 export default Dashboard;

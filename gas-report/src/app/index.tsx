@@ -1,15 +1,7 @@
-import { Text, View, StyleSheet } from "react-native";
-import { Chart } from "./views/components/Charts";
+import "../../global.css";
+import { Text, View } from "react-native";
 import Dashboard from "./views/Dashboard";
 
-import "../../global.css"
-
-export default function Index() {
-  return (
-    <View className="flex-1 items-center justify-center bg-white">
-      <Text className="text-xl text-blue-600">
-        Welcome to Nativewind!
-      </Text>
-    </View>
-  );
+export default function index() {
+  return <View className="flex-1 items-center justify-center bg-white"></View>;
 }
