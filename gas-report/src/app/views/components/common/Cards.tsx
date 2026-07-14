@@ -3,8 +3,8 @@ import { View, Text } from "react-native";
 
 interface CardProps {
   variant?: keyof typeof cardVariants;
-  title: string;
-  subTitle?: string;
+  title: string | number;
+  subTitle?: string | number;
   children?: React.ReactNode;
 }
 
@@ -23,14 +23,14 @@ function Card({ variant = "default", title, subTitle, children }: CardProps) {
   return (
     <View
       accessibilityLabel="Card"
-      className="border border-solid border-black rounded-sm p-5">
+      className="border border-solid border-black rounded-lg p-5">
       <View accessibilityLabel="Header Group" className={styles.headerGroup}>
         <Text accessibilityLabel="Title" className="text-2xl">
           {title}
         </Text>
         {subTitle && (
           <Text accessibilityLabel="Sub Title" className="text-xl">
-            {subTitle}
+            ${subTitle}
           </Text>
         )}
       </View>
