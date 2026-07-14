@@ -8,11 +8,11 @@ import { View } from "react-native";
 import useFetch from "../utility/customHooks/useFetch";
 import { ApiResponse, FetchConfig } from "../utility/api/api";
 // models
-import { PetroleumData } from "../models/Petroleum/PetroleumData";
+import { DashboardData } from "../models/dashboard/Dashboard";
 
 // components
-import { Card } from "./components/Cards";
-import { Line } from "./components/Line";
+import { OverallSummary } from "./components/OverallSummary";
+import { Card } from "./components/common/Common";
 import { LineChart } from "react-native-chart-kit/v2";
 
 //remove
@@ -33,9 +33,9 @@ function Dashboard() {
   console.log(gasReport);
 
   return (
-    <View>
-      <Card title="Average This Week" subTitle="${price}"></Card>
-      <Line />
+    <View className="flex gap-4">
+      <OverallSummary />
+      <Card variant="centered" title="${price}" subTitle="period"></Card>
     </View>
   );
 }

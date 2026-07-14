@@ -5,8 +5,11 @@ import Dashboard from "./views/Dashboard";
 import "../../global.css";
 export default function RootLayout() {
   return (
-    <View className="flex-1 items-center justify-center bg-white">
-      <Dashboard />
+    <View>
+      <Header />
+      <View accessibilityLabel="Body" className="p-5">
+        <Dashboard />
+      </View>
     </View>
   );
 }
