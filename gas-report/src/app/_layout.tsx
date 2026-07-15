@@ -1,15 +1,38 @@
-import { Header } from "./views/components/NavigationBars";
-import { View, Text } from "react-native";
-import Dashboard from "./views/Dashboard";
+import { Header } from "../components/Header";
+import { ScrollView, View } from "react-native";
+import { Stack } from "expo-router";
 
-import "../../global.css";
+import {
+  Default,
+  Auth,
+} from "../components/header-navigation/HeaderNavigation";
+
 export default function RootLayout() {
   return (
-    <View>
-      <Header />
-      <View accessibilityLabel="Body" className="p-5">
-        <Dashboard />
-      </View>
-    </View>
+    <ScrollView>
+      <Stack
+        screenOptions={{
+          header: () => {
+            return <Header children={<Default />} />;
+          },
+        }}>
+        <Stack.Screen
+          name="dashboard"
+          options={{
+            header: () => {
+              return <Header children={<Auth />} />;
+            },
+          }}
+        />
+        <Stack.Screen
+          name="account"
+          options={{
+            header: () => {
+              return <Header children={<Auth />} />;
+            },
+          }}
+        />
+      </Stack>
+    </ScrollView>
   );
 }

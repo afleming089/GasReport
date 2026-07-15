@@ -2,7 +2,7 @@ import { View, Text } from "react-native";
 import { Card, Line } from "./common/Common";
 
 // model
-import { OverallSummary as OverallSummaryModel } from "../../models/dashboard/OverallSummary";
+import { OverallSummary as OverallSummaryModel } from "../models/dashboard/OverallSummary";
 
 interface OverallSummaryProps {
   OverallSummary: OverallSummaryModel;

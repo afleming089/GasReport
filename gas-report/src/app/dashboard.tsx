@@ -11,20 +11,20 @@ import { ApiResponse, FetchConfig } from "../utility/api/api";
 import { DashboardData } from "../models/dashboard/Dashboard";
 
 // components
-import { OverallSummary } from "./components/OverallSummary";
-import { Card, LoadView } from "./components/common/Common";
+import { OverallSummary } from "../components/OverallSummary";
+import { Card, LoadView } from "../components/common/Common";
 import { LineChart } from "react-native-chart-kit/v2";
 
 //remove
 import * as t from "io-ts";
-import { PriceSnapshot } from "./components/PriceSnapshot";
+import { PriceSnapshot } from "../components/PriceSnapshot";
 const rest = t.type({
   a: t.string,
 });
 
 type rest = t.TypeOf<typeof rest>;
 
-function Dashboard() {
+export default function Dashboard() {
   // const [dashboardData, useDashboardData] = useState<DashboardData | null>(
   //   null,
   // );
@@ -84,5 +84,3 @@ function Dashboard() {
     </View>
   );
 }
-
-export default Dashboard;
