@@ -11,7 +11,11 @@ interface LinkProps {
 // }
 
 function Link({ title, href }: LinkProps) {
-  return <NativeLink href={href}>{title}</NativeLink>;
+  return (
+    <NativeLink className="border rounded-sm p-1" href={href}>
+      {title}
+    </NativeLink>
+  );
 }
 
 export { Link };

@@ -80,6 +80,7 @@ export default function Dashboard() {
         OverallSummary={dashboardData.overallSummary}
         lastFetch={dashboardData.fetchTime.toDateString()}
       />
+      {/* <LineChart /> */}
       <PriceSnapshot priceSnapshot={dashboardData.priceSnapShot} />
     </View>
   );

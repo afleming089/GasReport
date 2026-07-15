@@ -8,9 +8,9 @@ interface HeaderProps {
 
 function Header({ title = "Gas-Report", children }: HeaderProps) {
   return (
-    <View>
-      <Text>{title}</Text>
-      <View>{children}</View>
+    <View className="border-b border-solid border-black p-2 mb-5">
+      <Text className="text-3xl">{title}</Text>
+      <View className="flex">{children}</View>
     </View>
   );
 }
