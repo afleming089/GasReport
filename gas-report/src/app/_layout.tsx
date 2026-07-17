@@ -1,11 +1,10 @@
 import { Header } from "../components/Header";
-import { ScrollView } from "react-native";
 import { Stack } from "expo-router";
 
 import { SessionProvider, useSession } from "@/context/AuthContext";
 import { SplashScreenController } from "@/utility/splash";
 
-import { NotAuthenticated } from "../components/header-navigation/HeaderNavigation";
+import { NotAuthenticated as NavigationComponents } from "../components/header-navigation/HeaderNavigation";
 
 export default function Root() {
   // Set up the auth context and render your layout inside of it.
@@ -26,7 +25,7 @@ function RootNavigator() {
       screenOptions={{
         header: () => (
           <Header>
-            <NotAuthenticated />
+            <NavigationComponents />
           </Header>
         ),
       }}>

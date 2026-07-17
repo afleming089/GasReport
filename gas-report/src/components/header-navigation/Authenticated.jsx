@@ -1,12 +1,12 @@
-import { View } from "react-native";
+import { NavigationWrapper } from "./NavigationWrapper";
 import { Link } from "../common/Common";
 
 function Authenticated() {
   return (
-    <View>
+    <NavigationWrapper>
       {/* // make a drop down  with profile settings and log out*/}
       <Link title="Account" href="/account" />
-    </View>
+    </NavigationWrapper>
   );
 }
 

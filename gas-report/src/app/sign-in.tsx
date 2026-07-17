@@ -1,6 +1,8 @@
 import { router } from "expo-router";
 import { Text, View } from "react-native";
 
+import { NotAuthenticated } from "../components/header-navigation/HeaderNavigation";
+
 import { useSession } from "@/context/AuthContext";
 
 export default function SignIn() {
@@ -15,6 +17,7 @@ export default function SignIn() {
         }}>
         Sign In
       </Text>
+      <NotAuthenticated />
     </View>
   );
 }

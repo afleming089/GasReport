@@ -1,7 +1,7 @@
 import { Header } from "../../components/Header";
 import { Stack } from "expo-router";
 
-import { Authenticated } from "../../components/header-navigation/HeaderNavigation";
+import { Authenticated as NavigationComponents } from "../../components/header-navigation/HeaderNavigation";
 
 export default function AppLayout() {
   return (
@@ -9,7 +9,7 @@ export default function AppLayout() {
       screenOptions={{
         header: () => (
           <Header>
-            <Authenticated />
+            <NavigationComponents />
           </Header>
         ),
       }}
