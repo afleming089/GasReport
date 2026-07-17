@@ -1,7 +1,6 @@
 import { View, Text } from "react-native";
 import { Link } from "../components/common/Common";
 import "../../global.css";
-import Dashboard from "./dashboard";
 
 export default function index() {
   return (

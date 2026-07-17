@@ -1,7 +1,7 @@
 import { View } from "react-native";
 import { Link } from "../common/Common";
 
-function Auth() {
+function Authenticated() {
   return (
     <View>
       {/* // make a drop down  with profile settings and log out*/}
@@ -10,4 +10,4 @@ function Auth() {
   );
 }
 
-export { Auth };
+export { Authenticated };

@@ -1,23 +1,23 @@
 import { useContext, useState } from "react";
-import { ReportParametersContext } from "../state/ReportParametersContext";
-
+import { ReportParametersContext } from "../../context/ReportParametersContext";
+import { Stack } from "expo-router";
 // native
 import { View } from "react-native";
 
 // utility
-import useFetch from "../utility/customHooks/useFetch";
-import { ApiResponse, FetchConfig } from "../utility/api/api";
+import useFetch from "../../utility/customHooks/useFetch";
+import { ApiResponse, FetchConfig } from "../../utility/api/api";
 // models
-import { DashboardData } from "../models/dashboard/Dashboard";
+import { DashboardData } from "../../models/dashboard/Dashboard";
 
 // components
-import { OverallSummary } from "../components/OverallSummary";
-import { Card, LoadView } from "../components/common/Common";
+import { OverallSummary } from "../../components/OverallSummary";
+import { Card, LoadView } from "../../components/common/Common";
 import { LineChart } from "react-native-chart-kit/v2";
 
 //remove
 import * as t from "io-ts";
-import { PriceSnapshot } from "../components/PriceSnapshot";
+import { PriceSnapshot } from "../../components/PriceSnapshot";
 const rest = t.type({
   a: t.string,
 });

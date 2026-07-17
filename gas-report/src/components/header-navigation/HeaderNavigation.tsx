@@ -1,5 +1,5 @@
 // The links that are added to the Header.tsx children prop.
-import { Default } from "./Default";
-import { Auth } from "./Auth";
+import { NotAuthenticated } from "./NotAuthenticated";
+import { Authenticated } from "./Authenticated";
 
-export { Default, Auth };
+export { NotAuthenticated, Authenticated };

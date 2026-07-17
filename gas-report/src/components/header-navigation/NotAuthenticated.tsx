@@ -1,7 +1,7 @@
 import { View } from "react-native";
 import { Link } from "../common/Common";
 
-function Default() {
+function NotAuthenticated() {
   return (
     <View>
       <Link title="Home" href="/" />
@@ -10,4 +10,4 @@ function Default() {
   );
 }
 
-export { Default };
+export { NotAuthenticated };

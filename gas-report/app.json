@@ -9,9 +9,9 @@
     "userInterfaceStyle": "automatic",
     "ios": {
       "icon": "./assets/expo.icon",
-    "experiments": {
-      "typedRoutes": true
-    }
+      "experiments": {
+        "typedRoutes": true
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -40,7 +40,14 @@
           }
         }
       ],
-      "expo-status-bar"
+      "expo-status-bar",
+      [
+        "expo-secure-store",
+        {
+          "configureAndroidBackup": true,
+          "faceIDPermission": "Allow $(PRODUCT_NAME) to access your Face ID biometric data."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,
