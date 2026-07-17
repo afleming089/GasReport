@@ -5,10 +5,7 @@ import { Stack } from "expo-router";
 import { SessionProvider, useSession } from "@/context/AuthContext";
 import { SplashScreenController } from "@/utility/splash";
 
-import {
-  NotAuthenticated,
-  Authenticated,
-} from "../components/header-navigation/HeaderNavigation";
+import { NotAuthenticated } from "../components/header-navigation/HeaderNavigation";
 
 export default function Root() {
   // Set up the auth context and render your layout inside of it.
@@ -23,17 +20,29 @@ export default function Root() {
 // Create a new component that can access the SessionProvider context later.
 function RootNavigator() {
   const { session } = useSession();
-  return (
-    <ScrollView>
-      <Stack>
-        <Stack.Protected guard={!!session}>
-          <Stack.Screen name="(app)" />
-        </Stack.Protected>
 
-        <Stack.Protected guard={!session}>
-          <Stack.Screen name="sign-in" />
-        </Stack.Protected>
-      </Stack>
-    </ScrollView>
+  return (
+    <Stack
+      screenOptions={{
+        header: () => (
+          <Header>
+            <NotAuthenticated />
+          </Header>
+        ),
+      }}>
+      {/* TO DO add !! to guard ex: !!session when done developing or backend auth
+        integrated. */}
+      <Stack.Protected guard={!session}>
+        <Stack.Screen
+          options={{
+            headerShown: false,
+          }}
+          name="(app)"
+        />
+      </Stack.Protected>
+      <Stack.Protected guard={!session}>
+        <Stack.Screen name="sign-in" />
+      </Stack.Protected>
+    </Stack>
   );
 }

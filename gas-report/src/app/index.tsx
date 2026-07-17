@@ -4,9 +4,9 @@ import "../../global.css";
 
 export default function index() {
   return (
-    <View accessibilityLabel="Login" className="p-5">
+    <View accessibilityLabel="Login">
       <Text>Login or home</Text>
-      <Link title="Go to Dashboard" href="/dashboard" />
+      <Link title="Go to Dashboard" href="./dashboard" />
     </View>
   );
 }
