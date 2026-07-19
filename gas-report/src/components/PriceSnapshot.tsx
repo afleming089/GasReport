@@ -15,19 +15,20 @@ function PriceSnapshot({ priceSnapshot }: PriceSnapshotProps) {
         className="flex-row flex-wrap gap-4">
         <View key={0} className="w-full">
           <Card
-            variant="centered"
+            align="centered"
             title={priceSnapshot[0].snapShotTitle}
             subTitle={
               priceSnapshot[0].petroleumPeriod.value +
               " " +
               priceSnapshot[0].petroleumPeriod.units
-            }></Card>
+            }
+          />
         </View>
 
         {priceSnapshot.slice(1).map((snapshot, index) => (
           <View key={index + 1} className="w-[49%]">
             <Card
-              variant="centered"
+              align="centered"
               title={snapshot.snapShotTitle}
               subTitle={
                 snapshot.petroleumPeriod.value +

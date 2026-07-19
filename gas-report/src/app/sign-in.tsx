@@ -1,7 +1,7 @@
 import { router } from "expo-router";
 import { Text, View } from "react-native";
 
-import { NotAuthenticated } from "../components/header-navigation/HeaderNavigation";
+import { NotAuthenticated } from "../components/header-navigation/links/Links";
 
 import { useSession } from "@/context/AuthContext";
 

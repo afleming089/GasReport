@@ -165,6 +165,8 @@ node_modules/
 # shared project settings (app.json edits, etc.)
 .expo-shared/
 
+expo-env.d.ts
+
 # Metro bundler caches/logs
 # generic Expo temp files
 *.expo
@@ -176,6 +178,8 @@ node_modules/
 *.tmp
 # build or Metro logs
 *.log
+
+
 
 # Environment variables
 .env

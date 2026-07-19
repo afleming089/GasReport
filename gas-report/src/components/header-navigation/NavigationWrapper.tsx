@@ -1,23 +1,33 @@
-import { tv } from "tailwind-variants";
+import { tv, type VariantProps } from "tailwind-variants";
 import { View } from "react-native";
 
-interface NavigationWrapper {
-  variant?: keyof typeof navigationWrapper;
+const navigationWrapper = tv({
+  slots: {
+    base: "flex-1 flex-wrap flex-row items-center gap-3",
+  },
+  variants: {
+    align: {
+      right: {
+        base: "justify-end",
+      },
+      left: {
+        base: "justify-left",
+      },
+    },
+  },
+  defaultVariants: { align: "left" },
+});
+
+type NavigationVariants = VariantProps<typeof navigationWrapper>;
+
+interface NavigationProps extends NavigationVariants {
   children: React.ReactNode;
 }
 
-const navigationWrapper = tv({
-  //   alignRight: {
-  //     wrapper: "flex flex-wrap gap-2 flex-row",
-  //   },
-  //   alignLeft: {
-  //     wrapper: "flex flex-wrap flex-row justify-center items-center gap-2 ",
-  //   },
-  base: "flex flex-wrap flex-row justify-center items-center gap-2",
-});
+function NavigationWrapper({ children, ...NavigationProps }: NavigationProps) {
+  const { base } = navigationWrapper(NavigationProps);
 
-function NavigationWrapper({ children }: NavigationWrapper) {
-  return <View className={navigationWrapper()}>{children}</View>;
+  return <View className={base()}>{children}</View>;
 }
 
 export { NavigationWrapper };

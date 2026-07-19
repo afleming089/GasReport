@@ -4,7 +4,7 @@ import { Stack } from "expo-router";
 import { SessionProvider, useSession } from "@/context/AuthContext";
 import { SplashScreenController } from "@/utility/splash";
 
-import { NotAuthenticated as NavigationComponents } from "../components/header-navigation/HeaderNavigation";
+import { NotAuthenticated as NavigationComponents } from "../components/header-navigation/links/Links";
 
 export default function Root() {
   // Set up the auth context and render your layout inside of it.

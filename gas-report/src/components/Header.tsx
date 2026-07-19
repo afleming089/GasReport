@@ -8,8 +8,8 @@ interface HeaderProps {
 
 function Header({ title = "Gas-Report", children }: HeaderProps) {
   return (
-    <View className="flex flex-wrap gap-2 flex-row items-center border-b border-solid border-black p-2 mb-3">
-      <Text className="text-3xl">{title}</Text>
+    <View className="flex flex-wrap gap-4 flex-row items-center border-b border-solid bg-slate p-2 mb-3">
+      <Text className="text-navyBlack text-3xl">{title}</Text>
       {children}
     </View>
   );
