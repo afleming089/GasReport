@@ -3,7 +3,7 @@ import { tv, VariantProps } from "tailwind-variants";
 
 const link = tv({
   slots: {
-    base: "p-1 hover:bg-gray-300 rounded-sm",
+    base: "p-1 rounded-sm",
   },
 
   variants: {
@@ -15,13 +15,14 @@ const link = tv({
       base: "text-base",
     },
     color: {
-      muted: "border-lightGray text-lightGray",
-      darkGray: "border-darkGray text-darkGray",
+      skyBlue: "border-skyBlue hover:bg-misty text-skyBlue",
+      misty: "border-misty hover:bg-lightGray text-misty",
     },
   },
   defaultVariants: {
     border: "bottom",
     fontSize: "base",
+    color: "skyBlue",
   },
 });
 

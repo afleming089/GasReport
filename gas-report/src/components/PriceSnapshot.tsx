@@ -8,8 +8,8 @@ interface PriceSnapshotProps {
 
 function PriceSnapshot({ priceSnapshot }: PriceSnapshotProps) {
   return (
-    <>
-      <Text className="text-2xl text-center">Price Snapshot</Text>
+    <View>
+      <Text className="text-2xl text-center mb-2">Price Snapshot</Text>
       <View
         accessibilityLabel="Price Snapshot Group"
         className="flex-row flex-wrap gap-4">
@@ -39,7 +39,7 @@ function PriceSnapshot({ priceSnapshot }: PriceSnapshotProps) {
           </View>
         ))}
       </View>
-    </>
+    </View>
   );
 }
 

@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import { ReportParametersContext } from "../../context/ReportParametersContext";
 import { Stack } from "expo-router";
 // native
-import { View } from "react-native";
+import { ScrollView } from "react-native";
 
 // utility
 import useFetch from "../../utility/customHooks/useFetch";
@@ -75,13 +75,15 @@ export default function Dashboard() {
   if (!dashboardData) return <LoadView />;
 
   return (
-    <View accessibilityLabel="Dashboard Group" className="flex gap-4">
+    <ScrollView
+      accessibilityLabel="Dashboard Group"
+      contentContainerClassName="flex gap-3 p-3">
       <OverallSummary
         OverallSummary={dashboardData.overallSummary}
         lastFetch={dashboardData.fetchTime.toDateString()}
       />
       {/* <LineChart /> */}
       <PriceSnapshot priceSnapshot={dashboardData.priceSnapShot} />
-    </View>
+    </ScrollView>
   );
 }
