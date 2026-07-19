@@ -1,6 +1,6 @@
 import { View, Text } from "react-native";
-import { Card } from "./common/Common";
-import { PriceSnapshot as PriceSnapshotModel } from "../models/dashboard/PriceSnapshot";
+import { Card } from "../common/Common";
+import { PriceSnapshot as PriceSnapshotModel } from "../../models/dashboard/PriceSnapshot";
 
 interface PriceSnapshotProps {
   priceSnapshot: PriceSnapshotModel[];
@@ -24,9 +24,8 @@ function PriceSnapshot({ priceSnapshot }: PriceSnapshotProps) {
             }
           />
         </View>
-
         {priceSnapshot.slice(1).map((snapshot, index) => (
-          <View key={index + 1} className="w-[49%]">
+          <View key={index + 1} className="w-full sm:w-[49%] grow">
             <Card
               align="centered"
               title={snapshot.snapShotTitle}

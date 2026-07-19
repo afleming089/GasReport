@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { ReportParametersContext } from "../../context/ReportParametersContext";
-import { Stack } from "expo-router";
+
 // native
 import { ScrollView } from "react-native";
 
@@ -11,13 +11,13 @@ import { ApiResponse, FetchConfig } from "../../utility/api/api";
 import { DashboardData } from "../../models/dashboard/Dashboard";
 
 // components
-import { OverallSummary } from "../../components/OverallSummary";
-import { Card, LoadView } from "../../components/common/Common";
-import { LineChart } from "react-native-chart-kit/v2";
+import { OverallSummary } from "../../components/dashboard/OverallSummary";
+import { LoadView } from "../../components/common/Common";
+import { PriceTrackerChart } from "../../components/dashboard/PriceTrackerChart";
 
 //remove
 import * as t from "io-ts";
-import { PriceSnapshot } from "../../components/PriceSnapshot";
+import { PriceSnapshot } from "../../components/dashboard/PriceSnapshot";
 const rest = t.type({
   a: t.string,
 });
@@ -58,6 +58,10 @@ export default function Dashboard() {
       },
       {
         petroleumPeriod: { period: new Date(), value: 3.2, units: "usd" },
+        snapShotTitle: "Last 3 Months",
+      },
+      {
+        petroleumPeriod: { period: new Date(), value: 3.2, units: "usd" },
         snapShotTitle: "Last Year",
       },
     ],
@@ -77,12 +81,12 @@ export default function Dashboard() {
   return (
     <ScrollView
       accessibilityLabel="Dashboard Group"
-      contentContainerClassName="flex gap-3 p-3">
+      contentContainerClassName="flex gap-3 p-3 md:w-[80%] mx-auto">
       <OverallSummary
         OverallSummary={dashboardData.overallSummary}
         lastFetch={dashboardData.fetchTime.toDateString()}
       />
-      {/* <LineChart /> */}
+      <PriceTrackerChart />
       <PriceSnapshot priceSnapshot={dashboardData.priceSnapShot} />
     </ScrollView>
   );

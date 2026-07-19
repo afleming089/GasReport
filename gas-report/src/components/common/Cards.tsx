@@ -1,11 +1,12 @@
-import React from "react";
+import React, { Children } from "react";
 import { View, Text } from "react-native";
 import { tv, VariantProps } from "tailwind-variants";
 
 const card = tv({
   slots: {
-    base: "flex flex-wrap flex-row justify-center items-center gap-2",
-    headerGroup: "flex-1 items-left justify-center",
+    wrapper: "border border-solid border-black rounded-lg p-5 gap-2",
+    headerGroup: "flex-1 justify-center",
+    childrenStyles: "p-2",
   },
 
   variants: {
@@ -13,7 +14,13 @@ const card = tv({
       centered: {
         headerGroup: "items-center",
       },
+      left: {
+        headerGroup: "items-left",
+      },
     },
+  },
+  defaultVariants: {
+    align: "left",
   },
 });
 
@@ -27,12 +34,10 @@ interface CardProps extends CardVariants {
 }
 
 function Card({ title, subTitle, children, ...CardProps }: CardProps) {
-  const { headerGroup } = card(CardProps);
+  const { childrenStyles, wrapper, headerGroup } = card(CardProps);
 
   return (
-    <View
-      accessibilityLabel="Card"
-      className="border border-solid border-black rounded-lg p-5">
+    <View accessibilityLabel="Card" className={wrapper()}>
       <View accessibilityLabel="Header Group" className={headerGroup()}>
         <Text accessibilityLabel="Title" className="text-2xl">
           {title}
@@ -45,7 +50,7 @@ function Card({ title, subTitle, children, ...CardProps }: CardProps) {
       </View>
 
       {children && (
-        <View accessibilityLabel="Article" className="m-5">
+        <View className={childrenStyles()} accessibilityLabel="Card Article">
           {children}
         </View>
       )}

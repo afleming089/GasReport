@@ -1,8 +1,8 @@
 import { View, Text } from "react-native";
-import { Card, Line } from "./common/Common";
+import { Card, Line } from "../common/Common";
 
 // model
-import { OverallSummary as OverallSummaryModel } from "../models/dashboard/OverallSummary";
+import { OverallSummary as OverallSummaryModel } from "../../models/dashboard/OverallSummary";
 
 interface OverallSummaryProps {
   OverallSummary: OverallSummaryModel;
@@ -20,9 +20,11 @@ function OverallSummary({ OverallSummary, lastFetch }: OverallSummaryProps) {
     <>
       <Card title="Average This Week" subTitle={OverallSummary.periodAverage}>
         {content.map((item, index) => (
-          <View key={index}>
+          <View
+            className="flex flex-row flex-wrap gap-1 justify-between"
+            key={index}>
             <Line />
-            <Text>{item.title}</Text>
+            <Text className="mb-1">{item.title}</Text>
             <Text>{item.data}</Text>
           </View>
         ))}
