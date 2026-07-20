@@ -1,5 +1,6 @@
 import { router } from "expo-router";
-import { Text, View } from "react-native";
+import { Text } from "react-native";
+import { RouteWrapper } from "../components/common/Common";
 
 import { NotAuthenticated } from "../components/header-navigation/links/Links";
 
@@ -8,7 +9,7 @@ import { useSession } from "@/context/AuthContext";
 export default function SignIn() {
   const { signIn } = useSession();
   return (
-    <View>
+    <RouteWrapper accessibilityLabel="Sign-In Group">
       <Text
         onPress={() => {
           signIn();
@@ -18,6 +19,6 @@ export default function SignIn() {
         Sign In
       </Text>
       <NotAuthenticated />
-    </View>
+    </RouteWrapper>
   );
 }

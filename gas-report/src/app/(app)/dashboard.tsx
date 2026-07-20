@@ -2,7 +2,6 @@ import { useContext, useState } from "react";
 import { ReportParametersContext } from "../../context/ReportParametersContext";
 
 // native
-import { ScrollView } from "react-native";
 
 // utility
 import useFetch from "../../utility/customHooks/useFetch";
@@ -12,7 +11,7 @@ import { DashboardData } from "../../models/dashboard/Dashboard";
 
 // components
 import { OverallSummary } from "../../components/dashboard/OverallSummary";
-import { LoadView } from "../../components/common/Common";
+import { RouteWrapper, LoadView } from "../../components/common/Common";
 import { PriceTrackerChart } from "../../components/dashboard/PriceTrackerChart";
 
 //remove
@@ -79,15 +78,13 @@ export default function Dashboard() {
   if (!dashboardData) return <LoadView />;
 
   return (
-    <ScrollView
-      accessibilityLabel="Dashboard Group"
-      contentContainerClassName="flex gap-3 p-3 sm:w-[70%] mx-auto">
+    <RouteWrapper accessibilityLabel="Dashboard Group">
       <OverallSummary
         OverallSummary={dashboardData.overallSummary}
         lastFetch={dashboardData.fetchTime.toDateString()}
       />
       <PriceTrackerChart />
       <PriceSnapshot priceSnapshot={dashboardData.priceSnapShot} />
-    </ScrollView>
+    </RouteWrapper>
   );
 }

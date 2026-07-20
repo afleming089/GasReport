@@ -1,12 +1,13 @@
-import { Text, View } from "react-native";
+import { Text } from "react-native";
 
 import { useSession } from "@/context/AuthContext";
+import { RouteWrapper } from "../../components/common/Common";
 
 export default function Account() {
   // add to a drop down button
   const { signOut } = useSession();
   return (
-    <View>
+    <RouteWrapper accessibilityLabel="Account Group">
       <Text>Account view</Text>
       <Text
         onPress={() => {
@@ -15,6 +16,6 @@ export default function Account() {
         }}>
         Sign Out
       </Text>
-    </View>
+    </RouteWrapper>
   );
 }

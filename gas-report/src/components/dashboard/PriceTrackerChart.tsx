@@ -24,8 +24,9 @@ function PriceTrackerChart() {
   return (
     <View
       ref={ref}
-      className="flex flex-flex-wrap sm:flex-row gap-4 justify-center items-center sm:items-stretch border aspect-video">
+      className="flex sm:flex-row gap-4 justify-center items-center sm:items-stretch aspect-video">
       <LineChart
+        preset="graphite"
         data={data}
         xKey="month"
         yKey="revenue"
