@@ -81,7 +81,7 @@ export default function Dashboard() {
   return (
     <ScrollView
       accessibilityLabel="Dashboard Group"
-      contentContainerClassName="flex gap-3 p-3 md:w-[80%] mx-auto">
+      contentContainerClassName="flex gap-3 p-3 sm:w-[70%] mx-auto">
       <OverallSummary
         OverallSummary={dashboardData.overallSummary}
         lastFetch={dashboardData.fetchTime.toDateString()}

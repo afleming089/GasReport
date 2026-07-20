@@ -1,4 +1,5 @@
-import { Dimensions, View } from "react-native";
+import { useEffect, useRef, useState } from "react";
+import { useWindowDimensions, View } from "react-native";
 import { LineChart } from "react-native-chart-kit/v2";
 
 const data = [
@@ -9,16 +10,29 @@ const data = [
 ];
 
 function PriceTrackerChart() {
+  const [chartDimensions, setChartDimensions] = useState({
+    width: 0,
+    height: 0,
+  });
+
+  const ref = useRef<any>({});
+  useEffect(() => {
+    const { width, height } = ref.current.getBoundingClientRect();
+    setChartDimensions({ width: width, height: height });
+  }, [useWindowDimensions().width]);
+
   return (
-    <View className="flex flex-flex-wrap sm:flex-row gap-4 justify-center items-center sm:items-stretch">
+    <View
+      ref={ref}
+      className="flex flex-flex-wrap sm:flex-row gap-4 justify-center items-center sm:items-stretch border aspect-video">
       <LineChart
         data={data}
         xKey="month"
         yKey="revenue"
-        width={Dimensions.get("window").width * 0.6}
-        height={Dimensions.get("window").height * 0.8}
+        width={chartDimensions.width}
+        height={chartDimensions.height}
       />
-      <View className="grow bg-navyBlack p-2">Options box</View>
+      {/* <View className="grow bg-navyBlack p-2">Options box</View> */}
     </View>
   );
 }
