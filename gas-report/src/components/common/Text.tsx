@@ -1,5 +1,6 @@
 import { tv, VariantProps } from "tailwind-variants";
 import { Text as NativeText, TextProps as NativeTextProps } from "react-native";
+import { align } from "@expo/ui/jetpack-compose/modifiers";
 
 const text = tv({
   slots: {
@@ -11,6 +12,7 @@ const text = tv({
       h1: "text-3xl",
       h2: "text-2xl",
       h3: "text-xl",
+      h4: "text-lg",
       base: "text-base",
     },
   },

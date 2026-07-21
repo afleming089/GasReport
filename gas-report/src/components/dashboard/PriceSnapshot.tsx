@@ -9,7 +9,9 @@ interface PriceSnapshotProps {
 function PriceSnapshot({ priceSnapshot }: PriceSnapshotProps) {
   return (
     <View>
-      <Text className="text-2xl text-center mb-2">Price Snapshot</Text>
+      <Text className="text-center mb-3" fontSize="h1">
+        Price Snapshot
+      </Text>
       <View
         accessibilityLabel="Price Snapshot Group"
         className="flex-row flex-wrap gap-4">

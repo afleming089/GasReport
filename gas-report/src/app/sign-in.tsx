@@ -1,6 +1,5 @@
 import { router } from "expo-router";
-import { Text } from "../components/common/Common";
-import { RouteWrapper } from "../components/common/Common";
+import { RouteWrapper, Text } from "../components/common/Common";
 
 import { NotAuthenticated } from "../components/header-navigation/links/Links";
 

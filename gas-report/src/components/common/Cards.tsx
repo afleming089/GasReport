@@ -2,6 +2,7 @@ import React from "react";
 import { View } from "react-native";
 import { Text } from "./Text";
 import { tv, VariantProps } from "tailwind-variants";
+import { width } from "@expo/ui/jetpack-compose/modifiers";
 
 const card = tv({
   slots: {
@@ -30,7 +31,7 @@ type CardVariants = VariantProps<typeof card>;
 // return the prop interface
 interface CardProps extends CardVariants {
   title: string;
-  subTitle: string | number;
+  subTitle?: string | number;
   children?: React.ReactNode;
 }
 
@@ -40,11 +41,11 @@ function Card({ title, subTitle, children, ...CardVariants }: CardProps) {
   return (
     <View accessibilityLabel="Card" className={wrapper()}>
       <View accessibilityLabel="Header Group" className={headerGroup()}>
-        <Text accessibilityLabel="Title" className="text-2xl">
+        <Text accessibilityLabel="Title" fontSize="h2">
           {title}
         </Text>
         {subTitle && (
-          <Text accessibilityLabel="Sub Title" className="text-xl">
+          <Text accessibilityLabel="Sub Title" fontSize="h3">
             ${subTitle}
           </Text>
         )}
