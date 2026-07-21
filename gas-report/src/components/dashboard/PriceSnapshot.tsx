@@ -1,5 +1,5 @@
-import { View, Text } from "react-native";
-import { Card } from "../common/Common";
+import { View } from "react-native";
+import { Card, Text } from "../common/Common";
 import { PriceSnapshot as PriceSnapshotModel } from "../../models/dashboard/PriceSnapshot";
 
 interface PriceSnapshotProps {

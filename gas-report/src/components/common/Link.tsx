@@ -1,4 +1,8 @@
-import { Href, Link as NativeLink } from "expo-router";
+import {
+  Href,
+  Link as NativeLink,
+  LinkProps as NativeLinkProps,
+} from "expo-router";
 import { tv, VariantProps } from "tailwind-variants";
 
 const link = tv({
@@ -28,16 +32,15 @@ const link = tv({
 
 type LinkVariants = VariantProps<typeof link>;
 
-interface LinkProps extends LinkVariants {
-  //variant?: keyof typeof linkVariants;
+interface LinkProps extends NativeLinkProps, LinkVariants {
   title: string;
   href: Href;
 }
 
-function Link({ title, href, ...LinkProps }: LinkProps) {
+function Link({ title, href, className, ...LinkProps }: LinkProps) {
   const { base } = link(LinkProps);
   return (
-    <NativeLink className={base()} href={href}>
+    <NativeLink className={`${className} + ${base()}`} href={href}>
       {title}
     </NativeLink>
   );

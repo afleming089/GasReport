@@ -1,5 +1,6 @@
-import React, { Children } from "react";
-import { View, Text } from "react-native";
+import React from "react";
+import { View } from "react-native";
+import { Text } from "./Text";
 import { tv, VariantProps } from "tailwind-variants";
 
 const card = tv({
@@ -33,8 +34,8 @@ interface CardProps extends CardVariants {
   children?: React.ReactNode;
 }
 
-function Card({ title, subTitle, children, ...CardProps }: CardProps) {
-  const { childrenStyles, wrapper, headerGroup } = card(CardProps);
+function Card({ title, subTitle, children, ...CardVariants }: CardProps) {
+  const { childrenStyles, wrapper, headerGroup } = card(CardVariants);
 
   return (
     <View accessibilityLabel="Card" className={wrapper()}>

@@ -1,4 +1,5 @@
-import { View, Text } from "react-native";
+import { View } from "react-native";
+import { Text } from "../common/Common";
 import { Card, Line } from "../common/Common";
 
 // model

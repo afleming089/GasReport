@@ -1,11 +1,14 @@
-import { Button as NativeButton } from "react-native";
+import {
+  Button as NativeButton,
+  ButtonProps as NativeButtonProps,
+} from "react-native";
 
-interface BtnProps {
+interface ButtonProps extends NativeButtonProps {
   title: string;
 }
 
-function Button({ title }: BtnProps) {
-  return <NativeButton title={title} />;
+function Button({ ...ButtonProps }: ButtonProps) {
+  return <NativeButton {...ButtonProps} />;
 }
 
 export { Button };

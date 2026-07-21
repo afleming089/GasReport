@@ -1,4 +1,5 @@
-import { View, Text } from "react-native";
+import { View } from "react-native";
+import { Text } from "./common/Common";
 
 // children are the Headers links or anything else that is needed to be place in the header
 interface HeaderProps {
@@ -9,7 +10,9 @@ interface HeaderProps {
 function Header({ title = "Gas-Report", children }: HeaderProps) {
   return (
     <View className="flex flex-wrap gap-4 flex-row items-center border-b border-solid bg-slate p-2">
-      <Text className="text-offWhite text-3xl">{title}</Text>
+      <Text className="text-offWhite" fontSize="h1">
+        {title}
+      </Text>
       {children}
     </View>
   );

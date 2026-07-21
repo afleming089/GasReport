@@ -1,4 +1,4 @@
-import { Text } from "react-native";
+import { Text } from "../../components/common/Common";
 
 import { useSession } from "@/context/AuthContext";
 import { RouteWrapper } from "../../components/common/Common";

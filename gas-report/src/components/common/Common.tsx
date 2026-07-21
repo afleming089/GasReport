@@ -5,5 +5,6 @@ import { Line } from "./Line";
 import { LoadView } from "./Loaders";
 import { Link } from "./Link";
 import { RouteWrapper } from "./RouteWrapper";
+import { Text } from "./Text";
 
-export { Link, Button, Card, Line, LoadView, RouteWrapper };
+export { Link, Button, Card, Line, LoadView, RouteWrapper, Text };
