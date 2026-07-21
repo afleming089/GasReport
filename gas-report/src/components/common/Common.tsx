@@ -6,5 +6,6 @@ import { LoadView } from "./Loaders";
 import { Link } from "./Link";
 import { RouteWrapper } from "./RouteWrapper";
 import { Text } from "./Text";
+import { TextInput } from "./TextInput";
 
-export { Link, Button, Card, Line, LoadView, RouteWrapper, Text };
+export { Link, Button, Card, Line, LoadView, RouteWrapper, Text, TextInput };
