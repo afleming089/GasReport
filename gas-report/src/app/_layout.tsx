@@ -31,14 +31,13 @@ function RootNavigator() {
       }}>
       {/* TO DO add !! to guard ex: !!session when done developing or backend auth
         integrated. */}
-      <Stack.Protected guard={!session}>
-        <Stack.Screen
-          options={{
-            headerShown: false,
-          }}
-          name="(app)"
-        />
-      </Stack.Protected>
+      <Stack.Screen
+        options={{
+          headerShown: false,
+        }}
+        name="(app)"
+      />
+      <Stack.Protected guard={!!session}></Stack.Protected>
       <Stack.Protected guard={!session}>
         <Stack.Screen name="sign-in" />
       </Stack.Protected>

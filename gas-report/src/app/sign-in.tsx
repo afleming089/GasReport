@@ -5,6 +5,8 @@ import { NotAuthenticated } from "../components/header-navigation/links/Links";
 
 import { useSession } from "@/context/AuthContext";
 
+// just send sign in route to home page at /
+// just use google and yahoo or what ever else to sign up maybe
 export default function SignIn() {
   const { signIn } = useSession();
   return (

@@ -2,13 +2,12 @@ import React from "react";
 import { View } from "react-native";
 import { Text } from "./Text";
 import { tv, VariantProps } from "tailwind-variants";
-import { width } from "@expo/ui/jetpack-compose/modifiers";
 
 const card = tv({
   slots: {
     wrapper: "border border-solid border-black rounded-lg p-5 gap-2",
     headerGroup: "flex-1 justify-center",
-    childrenStyles: "p-2",
+    childrenStyles: "",
   },
 
   variants: {
@@ -20,9 +19,14 @@ const card = tv({
         headerGroup: "items-left",
       },
     },
+    paddingChildren: {
+      padding2: { childrenStyles: "p-2" },
+      paddingNone: { childrenStyles: "p-0" },
+    },
   },
   defaultVariants: {
     align: "left",
+    paddingChildren: "padding2",
   },
 });
 
