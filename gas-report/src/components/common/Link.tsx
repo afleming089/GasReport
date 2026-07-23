@@ -40,7 +40,10 @@ interface LinkProps extends NativeLinkProps, LinkVariants {
 function Link({ title, href, className, ...LinkProps }: LinkProps) {
   const { base } = link(LinkProps);
   return (
-    <NativeLink className={`${className} + ${base()}`} href={href}>
+    <NativeLink
+      className={`${className} + ${base()}`}
+      href={href}
+      {...LinkProps}>
       {title}
     </NativeLink>
   );

@@ -1,15 +1,22 @@
 import { View } from "react-native";
 import { Card, TextInput, Text, Button } from "../common/Common";
+
+import { useSession } from "@/context/AuthContext";
+import { router } from "expo-router";
 import { useForm, Controller } from "react-hook-form";
 
 function SignInCard() {
+  const { signIn } = useSession();
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm({ defaultValues: { userName: "", password: "" } });
 
-  const onSubmit = (data: any) => console.log(data);
+  const onSubmit = (data: any) => {
+    signIn();
+    router.replace("/dashboard");
+  };
 
   return (
     <Card paddingChildren="paddingNone" title="Login">

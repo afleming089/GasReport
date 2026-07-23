@@ -1,18 +1,22 @@
 import {
   Button as NativeButton,
   ButtonProps as NativeButtonProps,
+  View,
 } from "react-native";
 import { tv, VariantProps } from "tailwind-variants";
 
 const button = tv({
   slots: {
-    base: "",
+    base: "flex rounded-sm",
+    color: "",
   },
 
   variants: {
     color: {
-      primary: "",
-      secondary: "",
+      // slate in tailwind.config.js
+      primary: { color: "#45556c" },
+      // misty in tailwind.config.js
+      secondary: { color: "#d0d6d8)" },
     },
   },
 
@@ -23,13 +27,22 @@ const button = tv({
 
 type ButtonVariants = VariantProps<typeof button>;
 
-interface ButtonProps extends NativeButtonProps, ButtonVariants {
+interface ButtonProps extends Omit<NativeButtonProps, "color">, ButtonVariants {
   title: string;
+  className?: string;
 }
 
-function Button({ ...ButtonProps }: ButtonProps) {
-  const { base } = button(ButtonProps);
-  return <NativeButton className={base()} {...ButtonProps} />;
+function Button({ title, className, ...ButtonProps }: ButtonProps) {
+  const { base, color } = button(ButtonProps);
+
+  return (
+    <View className={`${className} + ${base()}`}>
+      <NativeButton
+        color={color()}
+        title={title}
+        {...ButtonProps}></NativeButton>
+    </View>
+  );
 }
 
 export { Button };

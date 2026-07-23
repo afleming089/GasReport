@@ -29,8 +29,7 @@ function RootNavigator() {
           </Header>
         ),
       }}>
-      {/* TO DO add !! to guard ex: !!session when done developing or backend auth
-        integrated. */}
+      {/* TO DO add !! add app screen back to guard */}
       <Stack.Screen
         options={{
           headerShown: false,
@@ -39,7 +38,9 @@ function RootNavigator() {
       />
       <Stack.Protected guard={!!session}></Stack.Protected>
       <Stack.Protected guard={!session}>
-        <Stack.Screen name="sign-in" />
+        <Stack.Screen name="index" />
+        <Stack.Screen name="about" />
+        <Stack.Screen name="sign-up" />
       </Stack.Protected>
     </Stack>
   );

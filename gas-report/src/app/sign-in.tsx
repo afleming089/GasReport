@@ -1,10 +1,9 @@
 import { router } from "expo-router";
 import { RouteWrapper, Text } from "../components/common/Common";
 
-import { NotAuthenticated } from "../components/header-navigation/links/Links";
-
 import { useSession } from "@/context/AuthContext";
 
+// use the one on index.
 // just send sign in route to home page at /
 // just use google and yahoo or what ever else to sign up maybe
 export default function SignIn() {
@@ -19,7 +18,6 @@ export default function SignIn() {
         }}>
         Sign In
       </Text>
-      <NotAuthenticated />
     </RouteWrapper>
   );
 }
