@@ -1,4 +1,5 @@
 import { tv, VariantProps } from "tailwind-variants";
+import { twJoin } from "tailwind-merge";
 import { Text as NativeText, TextProps as NativeTextProps } from "react-native";
 
 const text = tv({
@@ -28,7 +29,7 @@ function Text({ children, className, ...TextProps }: TextProps) {
   const { base } = text(TextProps);
 
   return (
-    <NativeText className={`${className} + ${base()}`} {...TextProps}>
+    <NativeText className={twJoin(className, base())} {...TextProps}>
       {children}
     </NativeText>
   );

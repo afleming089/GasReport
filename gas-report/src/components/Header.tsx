@@ -19,6 +19,7 @@ function Header({ title = "Gas-Report", children }: HeaderProps) {
         paddingTop: insets.top,
         paddingLeft: insets.left,
         paddingRight: insets.right,
+        backgroundColor: "bg-slate",
       }}>
       <View className="flex flex-wrap gap-4 flex-row items-center border-b border-solid bg-slate p-2">
         <Text className="text-offWhite" fontSize="h1">

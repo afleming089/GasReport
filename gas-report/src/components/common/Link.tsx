@@ -4,6 +4,7 @@ import {
   LinkProps as NativeLinkProps,
 } from "expo-router";
 import { tv, VariantProps } from "tailwind-variants";
+import { twJoin } from "tailwind-merge";
 
 const link = tv({
   slots: {
@@ -41,7 +42,7 @@ function Link({ title, href, className, ...LinkProps }: LinkProps) {
   const { base } = link(LinkProps);
   return (
     <NativeLink
-      className={`${className} + ${base()}`}
+      className={twJoin(className, base())}
       href={href}
       {...LinkProps}>
       {title}

@@ -4,6 +4,7 @@ import {
   View,
 } from "react-native";
 import { tv, VariantProps } from "tailwind-variants";
+import { twJoin } from "tailwind-merge";
 
 const button = tv({
   slots: {
@@ -36,7 +37,7 @@ function Button({ title, className, ...ButtonProps }: ButtonProps) {
   const { base, color } = button(ButtonProps);
 
   return (
-    <View className={`${className} + ${base()}`}>
+    <View className={twJoin(className, base())}>
       <NativeButton
         color={color()}
         title={title}
