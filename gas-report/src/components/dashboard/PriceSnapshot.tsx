@@ -27,7 +27,7 @@ function PriceSnapshot({ priceSnapshot }: PriceSnapshotProps) {
           />
         </View>
         {priceSnapshot.slice(1).map((snapshot, index) => (
-          <View key={index + 1} className="w-full sm:w-[49%] grow">
+          <View key={index + 1} className="w-full sm:w-[43%] grow">
             <Card
               align="centered"
               title={snapshot.snapShotTitle}

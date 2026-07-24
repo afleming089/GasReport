@@ -5,9 +5,7 @@ import "../../global.css";
 
 export default function index() {
   return (
-    <RouteWrapper
-      className="w-full sm:w-[350px]"
-      accessibilityLabel="Home Group">
+    <RouteWrapper accessibilityLabel="Home Group">
       <SignInCard />
       <Link
         title="Sign-up"

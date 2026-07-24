@@ -3,6 +3,8 @@ import { RouteWrapper, Text } from "../components/common/Common";
 
 import { useSession } from "@/context/AuthContext";
 
+
+// TO DO remove this page
 // use the one on index.
 // just send sign in route to home page at /
 // just use google and yahoo or what ever else to sign up maybe
