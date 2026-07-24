@@ -4,14 +4,15 @@ module.exports = {
   presets: [require("nativewind/preset")],
   theme: {
     extend: {
+      // use hex only because some color methods don`t work with this version of native
       colors: {
-        lightGray: "oklch(55.1% 0.027 264.364)",
-        darkGray: "oklch(37.3% 0.034 259.733)",
+        lightGray: "#6a7282",
+        darkGray: "#364153",
         navyBlack: "#222831",
         offWhite: "#EEEEEE",
-        misty: "oklch(87.2% 0.007 219.6)",
-        slate: "oklch(44.6% 0.043 257.281)",
-        skyBlue: "oklch(50% 0.134 242.749)",
+        misty: "#d0d6d8",
+        slate: "#45556c",
+        skyBlue: "#0069a8",
       },
     },
   },

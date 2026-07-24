@@ -11,6 +11,10 @@
       "icon": "./assets/expo.icon",
       "experiments": {
         "typedRoutes": true
+      },
+      "bundleIdentifier": "com.afleming089.gasreport",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
