@@ -1,5 +1,6 @@
 import { useSession } from "@/context/AuthContext";
 import { RouteWrapper, Text } from "../../components/common/Common";
+import { router } from "expo-router";
 
 export default function Account() {
   // add to a drop down button
@@ -11,6 +12,7 @@ export default function Account() {
         onPress={() => {
           // The guard in `RootNavigator` redirects back to the sign-in screen.
           signOut();
+          router.replace("/");
         }}>
         Sign Out
       </Text>

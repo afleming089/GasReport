@@ -7,5 +7,16 @@ import { Link } from "./Link";
 import { RouteWrapper } from "./RouteWrapper";
 import { Text } from "./Text";
 import { TextInput } from "./TextInput";
+import { Alert } from "./Alert";
 
-export { Link, Button, Card, Line, LoadView, RouteWrapper, Text, TextInput };
+export {
+  Link,
+  Button,
+  Card,
+  Line,
+  LoadView,
+  RouteWrapper,
+  Text,
+  TextInput,
+  Alert,
+};

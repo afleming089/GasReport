@@ -11,7 +11,7 @@ function SignInCard() {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm({ defaultValues: { userName: "", password: "" } });
+  } = useForm({ defaultValues: { email: "", password: "" } });
 
   const onSubmit = (data: any) => {
     signIn();
@@ -28,16 +28,16 @@ function SignInCard() {
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
-              label="Username"
-              placeholder="Username here"
+              label="Email"
+              placeholder="Email here"
               onBlur={onBlur}
               onChangeText={onChange}
               value={value}
             />
           )}
-          name="userName"
+          name="email"
         />
-        {errors.userName && <Text>Username is required.</Text>}
+        {errors.email && <Text>Username is required.</Text>}
         <Controller
           control={control}
           rules={{
@@ -50,6 +50,7 @@ function SignInCard() {
               onBlur={onBlur}
               onChangeText={onChange}
               value={value}
+              secureTextEntry={true}
             />
           )}
           name="password"

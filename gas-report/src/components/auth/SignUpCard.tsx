@@ -1,7 +1,8 @@
-import { Card, TextInput, Text, Button } from "../common/Common";
+import { Card, TextInput, Text, Button, Alert } from "../common/Common";
 
 import { useSession } from "@/context/AuthContext";
 import { router } from "expo-router";
+
 import { useForm, Controller } from "react-hook-form";
 import { View } from "react-native";
 
@@ -11,13 +12,23 @@ function SignUpCard() {
     control,
     handleSubmit,
     formState: { errors },
+    getValues,
   } = useForm({
     defaultValues: { email: "", password: "", confirmPassword: "" },
   });
 
   const onSubmit = (data: any) => {
-    signIn();
-    router.replace("/dashboard");
+    const password = getValues("password");
+    const confirmPassword = getValues("confirmPassword");
+
+    try {
+      if (password !== confirmPassword) {
+        // Alert("alert");
+      } else {
+        signIn();
+        router.replace("/dashboard");
+      }
+    } catch (e: any) {}
   };
 
   return (
@@ -52,6 +63,7 @@ function SignUpCard() {
               onBlur={onBlur}
               onChangeText={onChange}
               value={value}
+              secureTextEntry={true}
             />
           )}
           name="password"
@@ -69,6 +81,7 @@ function SignUpCard() {
               onBlur={onBlur}
               onChangeText={onChange}
               value={value}
+              secureTextEntry={true}
             />
           )}
           name="confirmPassword"

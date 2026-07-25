@@ -46,4 +46,4 @@ function Button({ title, className, ...ButtonProps }: ButtonProps) {
   );
 }
 
-export { Button };
+export { Button, ButtonProps };

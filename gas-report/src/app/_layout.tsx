@@ -29,19 +29,20 @@ function RootNavigator() {
           </Header>
         ),
       }}>
-      {/* TO DO add !! add app screen back to guard */}
-      <Stack.Screen
-        options={{
-          headerShown: false,
-        }}
-        name="(app)"
-      />
-      <Stack.Protected guard={!!session}></Stack.Protected>
-      <Stack.Protected guard={!session}>
+      {/* TO DO look at docs again to do safe routing right*/}
+      {/* <Stack.Protected guard={!!session}>
+        <Stack.Screen
+          options={{
+            headerShown: false,
+          }}
+          name="(app)"
+        />
+      </Stack.Protected>
+      <Stack.Protected guard={!!session}>
         <Stack.Screen name="index" />
         <Stack.Screen name="about" />
         <Stack.Screen name="sign-up" />
-      </Stack.Protected>
+      </Stack.Protected> */}
     </Stack>
   );
 }
