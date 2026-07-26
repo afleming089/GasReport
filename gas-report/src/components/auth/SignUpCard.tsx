@@ -1,13 +1,15 @@
-import { Card, TextInput, Text, Button, Alert } from "../common/Common";
+import { Card, TextInput, Text, Button } from "../common/Common";
 
 import { useSession } from "@/context/AuthContext";
 import { router } from "expo-router";
 
+import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { View } from "react-native";
 
 function SignUpCard() {
   const { signIn } = useSession();
+
   const {
     control,
     handleSubmit,
@@ -21,9 +23,10 @@ function SignUpCard() {
     const password = getValues("password");
     const confirmPassword = getValues("confirmPassword");
 
+    // TO: DO add element without reloading every item
     try {
       if (password !== confirmPassword) {
-        // Alert("alert");
+        // add context here to render alert
       } else {
         signIn();
         router.replace("/dashboard");
@@ -32,64 +35,66 @@ function SignUpCard() {
   };
 
   return (
-    <Card paddingChildren="paddingNone" title="Sign up">
-      <View className="flex gap-3">
-        <Controller
-          control={control}
-          rules={{
-            required: true,
-          }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              label="Email"
-              placeholder="Email here"
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-            />
-          )}
-          name="email"
-        />
-        {errors.email && <Text>Email is required.</Text>}
-        <Controller
-          control={control}
-          rules={{
-            required: true,
-          }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              label="Password"
-              placeholder="Password here"
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-              secureTextEntry={true}
-            />
-          )}
-          name="password"
-        />
-        {errors.password && <Text>Password is required.</Text>}
-        <Controller
-          control={control}
-          rules={{
-            required: true,
-          }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              label="Confirm Password"
-              placeholder="Confirm Password here"
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-              secureTextEntry={true}
-            />
-          )}
-          name="confirmPassword"
-        />
-        {errors.confirmPassword && <Text>Confirm Password is required.</Text>}
-        <Button title="Submit" onPress={handleSubmit(onSubmit)} />
-      </View>
-    </Card>
+    <>
+      <Card paddingChildren="paddingNone" title="Sign up">
+        <View className="flex gap-3">
+          <Controller
+            control={control}
+            rules={{
+              required: true,
+            }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                label="Email"
+                placeholder="Email here"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
+            name="email"
+          />
+          {errors.email && <Text>Email is required.</Text>}
+          <Controller
+            control={control}
+            rules={{
+              required: true,
+            }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                label="Password"
+                placeholder="Password here"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                secureTextEntry={true}
+              />
+            )}
+            name="password"
+          />
+          {errors.password && <Text>Password is required.</Text>}
+          <Controller
+            control={control}
+            rules={{
+              required: true,
+            }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                label="Confirm Password"
+                placeholder="Confirm Password here"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                secureTextEntry={true}
+              />
+            )}
+            name="confirmPassword"
+          />
+          {errors.confirmPassword && <Text>Confirm Password is required.</Text>}
+          <Button title="Submit" onPress={handleSubmit(onSubmit)} />
+        </View>
+      </Card>
+    </>
   );
 }
 
