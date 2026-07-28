@@ -1,14 +1,15 @@
-import { Card, TextInput, Text, Button } from "../common/Common";
+import { Card, TextInput, Text, Button, Alert } from "../common/Common";
 
+import { useState } from "react";
 import { useSession } from "@/context/AuthContext";
 import { router } from "expo-router";
 
-import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { View } from "react-native";
 
 function SignUpCard() {
   const { signIn } = useSession();
+  const [showAlert, setShowAlert] = useState(true);
 
   const {
     control,
@@ -23,10 +24,9 @@ function SignUpCard() {
     const password = getValues("password");
     const confirmPassword = getValues("confirmPassword");
 
-    // TO: DO add element without reloading every item
     try {
       if (password !== confirmPassword) {
-        // add context here to render alert
+        setShowAlert(true);
       } else {
         signIn();
         router.replace("/dashboard");
@@ -36,6 +36,20 @@ function SignUpCard() {
 
   return (
     <>
+      {showAlert ? (
+        <Alert
+          title="Passwords do not match"
+          message="A message about stuff and things"
+          buttonsPropsArray={[{ title: "Button 1" }, { title: "Button 2" }]}
+          textInputArray={[
+            { label: "input 1" },
+            { label: "input 2" },
+            { label: "input 3" },
+          ]}
+          setShowAlert={setShowAlert}
+        />
+      ) : null}
+
       <Card paddingChildren="paddingNone" title="Sign up">
         <View className="flex gap-3">
           <Controller

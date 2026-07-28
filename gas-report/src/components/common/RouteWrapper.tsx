@@ -1,4 +1,3 @@
-import { Alert } from "./Alert";
 import { ScrollView, ScrollViewProps } from "react-native";
 import { twJoin } from "tailwind-merge";
 
@@ -29,7 +28,6 @@ function RouteWrapper({
       )}
       {...RouteWrapperProps}>
       {children}
-      <Alert title="Alert Box" />
     </ScrollView>
   );
 }

@@ -5,15 +5,24 @@ import { Text as NativeText, TextProps as NativeTextProps } from "react-native";
 const text = tv({
   slots: {
     base: "",
+    color: "",
+    align: "",
   },
 
   variants: {
+    align: {
+      center: "text-center",
+    },
+    color: {
+      white: "text-offWhite",
+    },
     fontSize: {
       h1: "text-3xl",
       h2: "text-2xl",
       h3: "text-xl",
       h4: "text-lg",
       base: "text-base",
+      sm: "text-sm",
     },
   },
   defaultVariants: {
@@ -35,4 +44,4 @@ function Text({ children, className, ...TextProps }: TextProps) {
   );
 }
 
-export { Text };
+export { Text, TextProps, TextVariants };

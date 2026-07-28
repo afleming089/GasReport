@@ -33,7 +33,6 @@ function PriceTrackerChart() {
         width={chartDimensions.width}
         height={chartDimensions.height}
       />
-      {/* <View className="grow bg-navyBlack p-2">Options box</View> */}
     </View>
   );
 }

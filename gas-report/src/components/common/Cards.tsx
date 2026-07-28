@@ -63,4 +63,4 @@ function Card({ title, subTitle, children, ...CardVariants }: CardProps) {
     </View>
   );
 }
-export { Card };
+export { Card, CardProps };

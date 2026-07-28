@@ -1,47 +1,59 @@
 import {
-  Button as NativeButton,
-  ButtonProps as NativeButtonProps,
+  Pressable as NativeButton,
+  PressableProps as NativeButtonProps,
   View,
 } from "react-native";
+
+import { Text, TextVariants } from "./Text";
 import { tv, VariantProps } from "tailwind-variants";
 import { twJoin } from "tailwind-merge";
 
 const button = tv({
   slots: {
-    base: "flex rounded-sm",
-    color: "",
+    base: "flex rounded-sm px-2 py-1",
+    bgColor: "",
   },
 
   variants: {
-    color: {
-      // slate in tailwind.config.js
-      primary: { color: "#45556c" },
-      // misty in tailwind.config.js
-      secondary: { color: "#d0d6d8)" },
+    bgColor: {
+      primary: { bgColor: "bg-slate" },
+      secondary: { bgColor: "bg-misty" },
     },
   },
 
   defaultVariants: {
-    color: "primary",
+    bgColor: "primary",
+    fontSize: "base",
   },
 });
 
+// default text styles. All text variants can be applied and changed through textStyles
+const defaultTextStyles: TextVariants = {
+  color: "white",
+  align: "center",
+};
+
 type ButtonVariants = VariantProps<typeof button>;
 
-interface ButtonProps extends Omit<NativeButtonProps, "color">, ButtonVariants {
+interface ButtonProps extends NativeButtonProps, ButtonVariants {
   title: string;
+  textStyles?: TextVariants;
   className?: string;
 }
 
-function Button({ title, className, ...ButtonProps }: ButtonProps) {
-  const { base, color } = button(ButtonProps);
+function Button({
+  title,
+  className,
+  textStyles = defaultTextStyles,
+  ...ButtonProps
+}: ButtonProps) {
+  const { base, bgColor } = button(ButtonProps);
 
   return (
-    <View className={twJoin(className, base())}>
-      <NativeButton
-        color={color()}
-        title={title}
-        {...ButtonProps}></NativeButton>
+    <View className={twJoin(className, base(), bgColor())}>
+      <NativeButton {...ButtonProps}>
+        <Text {...textStyles}>{title}</Text>
+      </NativeButton>
     </View>
   );
 }

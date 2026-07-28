@@ -6,7 +6,7 @@ import {
 } from "react-native";
 
 interface TextInputProps extends NativeTextInputProps {
-  label?: string;
+  label: string;
 }
 
 function TextInput({ label, ...TextInputProps }: TextInputProps) {
@@ -18,4 +18,4 @@ function TextInput({ label, ...TextInputProps }: TextInputProps) {
   );
 }
 
-export { TextInput };
+export { TextInput, TextInputProps };

@@ -50,4 +50,4 @@ function Link({ title, href, className, ...LinkProps }: LinkProps) {
   );
 }
 
-export { Link };
+export { Link, LinkProps };

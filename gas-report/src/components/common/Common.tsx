@@ -1,22 +1,27 @@
 // commonly use components in my application
-import { Button } from "./Button";
-import { Card } from "./Cards";
+import { Button, ButtonProps } from "./Button";
+import { Card, CardProps } from "./Cards";
 import { Line } from "./Line";
 import { LoadView } from "./Loaders";
-import { Link } from "./Link";
+import { Link, LinkProps } from "./Link";
 import { RouteWrapper } from "./RouteWrapper";
-import { Text } from "./Text";
-import { TextInput } from "./TextInput";
-import { Alert } from "./Alert";
+import { Text, TextProps } from "./Text";
+import { TextInput, TextInputProps } from "./TextInput";
+import { Alert, AlertProps } from "./Alert";
 
 export {
   Link,
   Button,
+  ButtonProps,
   Card,
+  CardProps,
   Line,
   LoadView,
   RouteWrapper,
   Text,
+  TextProps,
   TextInput,
+  TextInputProps,
   Alert,
+  AlertProps,
 };
