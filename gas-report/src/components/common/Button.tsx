@@ -17,7 +17,7 @@ const button = tv({
   variants: {
     bgColor: {
       primary: { bgColor: "bg-slate" },
-      secondary: { bgColor: "bg-misty" },
+      secondary: { bgColor: "bg-lightGray" },
     },
   },
 
@@ -30,7 +30,6 @@ const button = tv({
 // default text styles. All text variants can be applied and changed through textStyles
 const defaultTextStyles: TextVariants = {
   color: "white",
-  align: "center",
 };
 
 type ButtonVariants = VariantProps<typeof button>;
@@ -52,7 +51,9 @@ function Button({
   return (
     <View className={twJoin(className, base(), bgColor())}>
       <NativeButton {...ButtonProps}>
-        <Text {...textStyles}>{title}</Text>
+        <Text className="flex justify-center items-center" {...textStyles}>
+          {title}
+        </Text>
       </NativeButton>
     </View>
   );

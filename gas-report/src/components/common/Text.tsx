@@ -4,15 +4,10 @@ import { Text as NativeText, TextProps as NativeTextProps } from "react-native";
 
 const text = tv({
   slots: {
-    base: "",
-    color: "",
-    align: "",
+    base: "text-left",
   },
 
   variants: {
-    align: {
-      center: "text-center",
-    },
     color: {
       white: "text-offWhite",
     },

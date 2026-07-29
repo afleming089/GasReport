@@ -1,4 +1,13 @@
-import { Card, TextInput, Text, Button, Alert } from "../common/Common";
+import {
+  Card,
+  TextInput,
+  Text,
+  Button,
+  Alert,
+  AlertProps,
+} from "../common/Common";
+
+import { ApiError } from "../../utility/api/ApiError";
 
 import { useState } from "react";
 import { useSession } from "@/context/AuthContext";
@@ -9,7 +18,7 @@ import { View } from "react-native";
 
 function SignUpCard() {
   const { signIn } = useSession();
-  const [showAlert, setShowAlert] = useState(true);
+  const [alertState, setAlertState] = useState<AlertProps | null>(null);
 
   const {
     control,
@@ -26,29 +35,29 @@ function SignUpCard() {
 
     try {
       if (password !== confirmPassword) {
-        setShowAlert(true);
+        setAlertState({
+          title: "Passwords do not match",
+          setAlertState,
+        });
       } else {
         signIn();
         router.replace("/dashboard");
       }
-    } catch (e: any) {}
+    } catch (error) {
+      // const apiError = error as ApiError;
+      const apiError: ApiError = { message: " Error logging in", status: 404 };
+
+      setAlertState({
+        message: apiError.message,
+        status: apiError.status,
+        setAlertState,
+      });
+    }
   };
 
   return (
     <>
-      {showAlert ? (
-        <Alert
-          title="Passwords do not match"
-          message="A message about stuff and things"
-          buttonsPropsArray={[{ title: "Button 1" }, { title: "Button 2" }]}
-          textInputArray={[
-            { label: "input 1" },
-            { label: "input 2" },
-            { label: "input 3" },
-          ]}
-          setShowAlert={setShowAlert}
-        />
-      ) : null}
+      {alertState ? <Alert {...alertState} /> : null}
 
       <Card paddingChildren="paddingNone" title="Sign up">
         <View className="flex gap-3">

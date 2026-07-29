@@ -4,9 +4,10 @@ import { twJoin } from "tailwind-merge";
 import { Dispatch, SetStateAction } from "react";
 
 interface AlertProps {
-  title: string;
+  title?: string;
   message?: string;
-  setShowAlert: Dispatch<SetStateAction<boolean>>;
+  status?: number;
+  setAlertState: Dispatch<SetStateAction<AlertProps | null>>;
   className?: string;
   buttonsPropsArray?: ButtonProps[];
   textInputArray?: TextInputProps[];
@@ -15,8 +16,9 @@ interface AlertProps {
 function Alert({
   title,
   message,
+  status,
   className,
-  setShowAlert,
+  setAlertState,
   buttonsPropsArray,
   textInputArray,
 }: AlertProps) {
@@ -25,19 +27,32 @@ function Alert({
       <View
         className={twJoin(
           className,
-          "fixed h-inset-0 z-50 p-11 flex items-center justify-center bg-white rounded-lg shadow-xl gap-2",
+          "fixed h-inset-0 z-50 p-11 flex items-center justify-center bg-white rounded-lg shadow-xl gap-2 sm:w-[400px] md:w-[430px]",
         )}>
         <Button
           className="absolute top-3 right-3"
-          onPress={() => setShowAlert(false)}
-          title="x"
+          onPress={() => setAlertState(null)}
+          title="X"
         />
 
-        <Text fontSize="h2">{title}</Text>
-        {message && <Text className="text-left">{message}</Text>}
+        {status && (
+          <Text className="text-center" fontSize="h2">
+            {status}
+          </Text>
+        )}
+        {title && (
+          <Text className="text-center" fontSize="h2">
+            {title}
+          </Text>
+        )}
+        {message && (
+          <Text className="text-center" fontSize="sm">
+            {message}
+          </Text>
+        )}
 
         {textInputArray && (
-          <View>
+          <View className="flex gap-2 w-full">
             {textInputArray.map(
               (textInputProp: TextInputProps, index: number) => (
                 <TextInput key={index} {...textInputProp} />
@@ -47,9 +62,9 @@ function Alert({
         )}
 
         {buttonsPropsArray && (
-          <View>
+          <View className="flex gap-2 w-full flex-row justify-center mt-2">
             {buttonsPropsArray.map((buttonProp: ButtonProps, index: number) => (
-              <Button key={index} {...buttonProp} />
+              <Button className="flex-1" key={index} {...buttonProp} />
             ))}
           </View>
         )}
