@@ -1,4 +1,7 @@
-import { Button, ButtonProps, Text, TextInput, TextInputProps } from "./Common";
+import { Button, ButtonProps } from "./Button";
+import { Text } from "./Text";
+import { TextInput, TextInputProps } from "./TextInput";
+
 import { View } from "react-native";
 import { twJoin } from "tailwind-merge";
 import { Dispatch, SetStateAction } from "react";
