@@ -1,9 +1,9 @@
 import {
   TextInput as NativeTextInput,
   TextInputProps as NativeTextInputProps,
-  Text,
   View,
 } from "react-native";
+import { Text } from "./Text";
 
 interface TextInputProps extends NativeTextInputProps {
   label: string;
@@ -12,7 +12,7 @@ interface TextInputProps extends NativeTextInputProps {
 function TextInput({ label, ...TextInputProps }: TextInputProps) {
   return (
     <View>
-      <Text className="text-sm">{label}</Text>
+      <Text fontSize="sm">{label}</Text>
       <NativeTextInput className="border rounded-sm p-1" {...TextInputProps} />
     </View>
   );

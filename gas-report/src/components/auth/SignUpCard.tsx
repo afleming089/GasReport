@@ -43,9 +43,9 @@ function SignUpCard() {
         signIn();
         router.replace("/dashboard");
       }
-    } catch (error) {
+    } catch (error: any) {
       // const apiError = error as ApiError;
-      const apiError: ApiError = { message: " Error logging in", status: 404 };
+      const apiError: ApiError = error;
 
       setAlertState({
         message: apiError.message,
