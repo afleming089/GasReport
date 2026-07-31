@@ -3,8 +3,9 @@ import {
   Link as NativeLink,
   LinkProps as NativeLinkProps,
 } from "expo-router";
-import { tv, VariantProps } from "tailwind-variants";
+import { Text, View } from "react-native";
 import { twJoin } from "tailwind-merge";
+import { tv, VariantProps } from "tailwind-variants";
 
 const link = tv({
   slots: {
@@ -14,7 +15,7 @@ const link = tv({
   variants: {
     border: {
       solid: "border",
-      bottom: "border-b rounded-b-none ",
+      bottom: "border-b rounded-b-none",
     },
     fontSize: {
       base: "text-base",
@@ -45,7 +46,9 @@ function Link({ title, href, className, ...LinkProps }: LinkProps) {
       className={twJoin(className, base())}
       href={href}
       {...LinkProps}>
-      {title}
+      <View className={twJoin(base(), className)}>
+        <Text>{title}</Text>
+      </View>
     </NativeLink>
   );
 }

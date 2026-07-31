@@ -4,9 +4,9 @@ import {
   View,
 } from "react-native";
 
-import { Text, TextVariants } from "./Text";
-import { tv, VariantProps } from "tailwind-variants";
 import { twJoin } from "tailwind-merge";
+import { tv, VariantProps } from "tailwind-variants";
+import { Text, TextVariants } from "./Text";
 
 const button = tv({
   slots: {
@@ -51,7 +51,7 @@ function Button({
   return (
     <View className={twJoin(className, base(), bgColor())}>
       <NativeButton {...ButtonProps}>
-        <Text className="flex justify-center items-center" {...textStyles}>
+        <Text className="text-center" {...textStyles}>
           {title}
         </Text>
       </NativeButton>
