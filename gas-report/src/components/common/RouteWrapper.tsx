@@ -21,7 +21,7 @@ function RouteWrapper({
   return (
     <ScrollView
       accessibilityLabel={accessibilityLabel}
-      contentContainerStyle={{ paddingBottom: insets.bottom }}
+      contentContainerStyle={{ paddingBottom: insets.bottom + 10 }}
       contentContainerClassName={twJoin(
         "flex gap-3 p-3 w-full sm:w-[70%] md:w-[53%] mx-auto mb-3",
         className,

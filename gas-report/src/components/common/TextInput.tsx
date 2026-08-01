@@ -13,7 +13,7 @@ function TextInput({ label, ...TextInputProps }: TextInputProps) {
   return (
     <View>
       <Text fontSize="sm">{label}</Text>
-      <NativeTextInput className="border rounded-sm p-1" {...TextInputProps} />
+      <NativeTextInput className="border rounded-sm p-2" {...TextInputProps} />
     </View>
   );
 }

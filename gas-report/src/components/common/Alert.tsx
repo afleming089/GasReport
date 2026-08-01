@@ -26,16 +26,17 @@ function Alert({
   textInputArray,
 }: AlertProps) {
   return (
-    <View className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+    <View className="absolute inset-0 z-50 flex items-center justify-center bg-black/50 h-[100vh]">
       <View
         className={twJoin(
           className,
-          "fixed h-inset-0 z-50 p-11 flex items-center justify-center bg-white rounded-lg shadow-xl gap-2 sm:w-[400px] md:w-[430px]",
+          "absolute top-20 z-50 p-11 flex items-center justify-center bg-white rounded-lg shadow-xl gap-2 sm:w-[400px] md:w-[430px]",
         )}>
         <Button
-          className="absolute top-3 right-3"
+          className="absolute top-3 right-3 p-0 mb-2"
+          hitSlop={20}
           onPress={() => setAlertState(null)}
-          title="X"
+          title="x"
         />
 
         {status && (

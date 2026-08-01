@@ -3,30 +3,38 @@ import {
   Link as NativeLink,
   LinkProps as NativeLinkProps,
 } from "expo-router";
-import { Text, View } from "react-native";
+import { Text, Pressable } from "react-native";
 import { twJoin } from "tailwind-merge";
 import { tv, VariantProps } from "tailwind-variants";
 
 const link = tv({
   slots: {
     base: "p-1 rounded-sm",
+    text: "text-center",
   },
 
   variants: {
     border: {
-      solid: "border",
-      bottom: "border-b rounded-b-none",
+      solid: { base: "border" },
+      bottom: { base: "border-b rounded-b-none" },
     },
     fontSize: {
-      base: "text-base",
+      lg: { text: "text-lg" },
+      base: { text: "text-base" },
     },
     color: {
-      skyBlue: "border-skyBlue hover:bg-misty text-skyBlue",
-      misty: "border-misty hover:bg-lightGray text-misty",
+      skyBlue: {
+        base: "border-skyBlue active:bg-misty hover:bg-misty",
+        text: "text-skyBlue",
+      },
+      misty: {
+        base: "border-misty active:bg-lightGray hover:bg-lightGray",
+        text: "text-misty",
+      },
     },
   },
   defaultVariants: {
-    border: "bottom",
+    border: "solid",
     fontSize: "base",
     color: "skyBlue",
   },
@@ -40,15 +48,12 @@ interface LinkProps extends NativeLinkProps, LinkVariants {
 }
 
 function Link({ title, href, className, ...LinkProps }: LinkProps) {
-  const { base } = link(LinkProps);
+  const { base, text } = link(LinkProps);
   return (
-    <NativeLink
-      className={twJoin(className, base())}
-      href={href}
-      {...LinkProps}>
-      <View className={twJoin(base(), className)}>
-        <Text>{title}</Text>
-      </View>
+    <NativeLink href={href} {...LinkProps} asChild>
+      <Pressable className={twJoin(base(), className)}>
+        <Text className={text()}>{title}</Text>
+      </Pressable>
     </NativeLink>
   );
 }

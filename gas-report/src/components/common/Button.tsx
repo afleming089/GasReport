@@ -7,17 +7,22 @@ import {
 import { twJoin } from "tailwind-merge";
 import { tv, VariantProps } from "tailwind-variants";
 import { Text, TextVariants } from "./Text";
+import { useState } from "react";
 
 const button = tv({
   slots: {
-    base: "flex rounded-sm px-2 py-1",
-    bgColor: "",
+    base: "flex rounded-sm px-2 py-3 ",
+    activeColor: "hover:bg-lightSlate, bg-lightSlate",
   },
 
   variants: {
     bgColor: {
-      primary: { bgColor: "bg-slate" },
-      secondary: { bgColor: "bg-lightGray" },
+      primary: {
+        base: "bg-slate",
+      },
+      secondary: {
+        base: "bg-lightGray",
+      },
     },
   },
 
@@ -46,11 +51,19 @@ function Button({
   textStyles = defaultTextStyles,
   ...ButtonProps
 }: ButtonProps) {
-  const { base, bgColor } = button(ButtonProps);
+  const { base, activeColor } = button(ButtonProps);
+  const [active, setActive] = useState(false);
 
   return (
-    <View className={twJoin(className, base(), bgColor())}>
-      <NativeButton {...ButtonProps}>
+    <View
+      className={twJoin(className, base(), `${active ? activeColor() : null}`)}>
+      <NativeButton
+        hitSlop={10}
+        onPressIn={() => setActive(true)}
+        onPressOut={() => {
+          setActive(false);
+        }}
+        {...ButtonProps}>
         <Text className="text-center" {...textStyles}>
           {title}
         </Text>

@@ -12,6 +12,7 @@ module.exports = {
         offWhite: "#EEEEEE",
         misty: "#d0d6d8",
         slate: "#45556c",
+        lightSlate: "#90a1b9",
         skyBlue: "#0069a8",
       },
     },
