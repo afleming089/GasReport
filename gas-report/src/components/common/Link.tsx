@@ -9,7 +9,7 @@ import { tv, VariantProps } from "tailwind-variants";
 
 const link = tv({
   slots: {
-    base: "p-1 rounded-sm",
+    base: "rounded-sm p-1",
     text: "text-center",
   },
 
@@ -30,6 +30,10 @@ const link = tv({
       misty: {
         base: "border-misty active:bg-lightGray hover:bg-lightGray",
         text: "text-misty",
+      },
+      hazard: {
+        base: "border-hazard active:bg-lightHazard hover:bg-lightHazard",
+        text: "text-hazard",
       },
     },
   },

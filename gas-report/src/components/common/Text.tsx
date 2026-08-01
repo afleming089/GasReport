@@ -8,6 +8,9 @@ const text = tv({
   },
 
   variants: {
+    indent: {
+      sm: "indent-4",
+    },
     color: {
       white: "text-offWhite",
     },

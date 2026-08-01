@@ -11,7 +11,7 @@ import { useState } from "react";
 
 const button = tv({
   slots: {
-    base: "flex rounded-sm px-2 py-3 ",
+    base: "flex rounded-sm px-2 py-3",
     activeColor: "hover:bg-lightSlate, bg-lightSlate",
   },
 
@@ -22,6 +22,9 @@ const button = tv({
       },
       secondary: {
         base: "bg-lightGray",
+      },
+      hazard: {
+        base: "bg-hazard",
       },
     },
   },

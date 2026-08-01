@@ -14,6 +14,8 @@ module.exports = {
         slate: "#45556c",
         lightSlate: "#90a1b9",
         skyBlue: "#0069a8",
+        hazard: "#c10007",
+        lightHazard: "#ffa2a2",
       },
     },
   },
