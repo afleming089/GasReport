@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { JSX, useState } from "react";
 import { ScrollView, View, Pressable, Text } from "react-native";
 
 import { twJoin } from "tailwind-merge";
@@ -7,7 +7,7 @@ import { tv, VariantProps } from "tailwind-variants";
 
 const dropdown = tv({
   slots: {
-    base: "bg-lightSlate hover:bg-skyBlue active:bg-skyBlue p-3 flex flex-row rounded-sm ",
+    base: "bg-lightSlate hover:bg-slate active:bg-slate p-3 flex flex-row rounded-sm",
     text: "text-white text-center",
     menu: "",
     option:
@@ -35,8 +35,11 @@ function CustomDropdown({
   const { base, text, option } = dropdown(DropdownVariants);
   const [showMenu, setShowMenu] = useState<boolean>(false);
 
+  {
+    /*TO: DO make a flat list to optimize performance */
+  }
   return (
-    <View>
+    <View className="flex">
       <Pressable
         onPress={() => {
           showMenu ? setShowMenu(false) : setShowMenu(true);
@@ -50,7 +53,8 @@ function CustomDropdown({
       {showMenu ? (
         <ScrollView
           className="mt-2 max-h-[300px] p-2 bg-lightSlate rounded-sm"
-          contentContainerClassName={"flex gap-1"}>
+          contentContainerClassName={"flex gap-1"}
+          showsVerticalScrollIndicator>
           {/* renders each child element in a options view box so they all have an outline */}
           {children &&
             React.Children.map(children, (child: any) => (
@@ -66,4 +70,31 @@ function CustomDropdown({
   );
 }
 
-export { CustomDropdown };
+interface ConcreteDropdownProps {
+  title: string;
+  children: React.ReactNode;
+  className?: string;
+}
+
+// see about how double for loop here
+function SelectDropdown({ title, children, className }: ConcreteDropdownProps) {
+  return (
+    <CustomDropdown className={className} title={title}>
+      <Text>option 1</Text>
+    </CustomDropdown>
+  );
+}
+
+function NavigationDropdown({
+  title,
+  children,
+  className,
+}: ConcreteDropdownProps) {
+  return (
+    <CustomDropdown className={className} title={title}>
+      <Link>option 1</Link>
+    </CustomDropdown>
+  );
+}
+
+export { CustomDropdown, SelectDropdown, NavigationDropdown };
