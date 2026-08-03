@@ -1,5 +1,10 @@
 import { SignInCard } from "../components/auth/SignInCard";
-import { Link, RouteWrapper, Button } from "../components/common/Common";
+import {
+  Link,
+  RouteWrapper,
+  Dropdown,
+  Text,
+} from "../components/common/Common";
 
 import "../../global.css";
 
@@ -9,6 +14,9 @@ export default function index() {
       <SignInCard />
       <Link title="Sign-up" href="./sign-up" />
       <Link title="Go to Dashboard REMOVE" href="./dashboard" />
+      <Dropdown title="Dropdown">
+        <Text>Item</Text>
+      </Dropdown>
     </RouteWrapper>
   );
 }
