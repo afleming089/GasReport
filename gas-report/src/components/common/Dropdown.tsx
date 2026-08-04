@@ -1,5 +1,6 @@
-import React, { JSX, useState } from "react";
+import React, { useState } from "react";
 import { ScrollView, View, Pressable, Text } from "react-native";
+import { Link } from "expo-router";
 
 import { twJoin } from "tailwind-merge";
 
@@ -38,6 +39,7 @@ function CustomDropdown({
   {
     /*TO: DO make a flat list to optimize performance */
   }
+
   return (
     <View className="flex">
       <Pressable
@@ -58,11 +60,7 @@ function CustomDropdown({
           {/* renders each child element in a options view box so they all have an outline */}
           {children &&
             React.Children.map(children, (child: any) => (
-              <View className={option()}>
-                {React.cloneElement(child, {
-                  className: { ...child.props.className },
-                })}
-              </View>
+              <View className={option()}>{child}</View>
             ))}
         </ScrollView>
       ) : null}
@@ -70,31 +68,38 @@ function CustomDropdown({
   );
 }
 
-interface ConcreteDropdownProps {
-  title: string;
-  children: React.ReactNode;
-  className?: string;
+interface SelectProps extends DropdownProps {
+  children: React.ReactElement<typeof Link>;
 }
 
-// see about how double for loop here
-function SelectDropdown({ title, children, className }: ConcreteDropdownProps) {
+// use context from react-hook-forms for sending data maybe
+function Select({
+  title,
+  children,
+  className,
+  ...DropdownVariants
+}: SelectProps) {
   return (
-    <CustomDropdown className={className} title={title}>
-      <Text>option 1</Text>
+    <CustomDropdown className={className} title={title} {...DropdownVariants}>
+      {children}
     </CustomDropdown>
   );
+}
+
+interface NavigationDropdownProps extends DropdownProps {
+  children: React.ReactElement<typeof Link>;
 }
 
 function NavigationDropdown({
   title,
   children,
   className,
-}: ConcreteDropdownProps) {
+}: NavigationDropdownProps) {
   return (
     <CustomDropdown className={className} title={title}>
-      <Link>option 1</Link>
+      {children}
     </CustomDropdown>
   );
 }
 
-export { CustomDropdown, SelectDropdown, NavigationDropdown };
+export { CustomDropdown, Select, NavigationDropdown };
