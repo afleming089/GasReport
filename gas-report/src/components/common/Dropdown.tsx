@@ -1,16 +1,21 @@
-import React, { useState } from "react";
-import { ScrollView, View, Pressable, Text } from "react-native";
 import { Link } from "expo-router";
+import React, { Dispatch, SetStateAction, useState } from "react";
+import {
+  FlatList,
+  GestureResponderEvent,
+  Pressable,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 
 import { twJoin } from "tailwind-merge";
-
 import { tv, VariantProps } from "tailwind-variants";
 
 const dropdown = tv({
   slots: {
     base: "bg-lightSlate hover:bg-slate active:bg-slate p-3 flex flex-row rounded-sm",
     text: "text-white text-center",
-    menu: "",
     option:
       "border border-lightGray hover:bg-slate active:bg-slate rounded-sm p-1",
   },
@@ -21,73 +26,125 @@ const dropdown = tv({
 
 type DropdownVariants = VariantProps<typeof dropdown>;
 
+// button for all Dropdown types
+interface DropdownPressable extends DropdownVariants {
+  title: string;
+  showMenu: boolean;
+  setShowMenu: Dispatch<SetStateAction<boolean>>;
+}
+
+function DropdownPressable({
+  title,
+  showMenu,
+  setShowMenu,
+  ...styles
+}: DropdownPressable) {
+  const { base, text } = dropdown(styles);
+
+  return (
+    <Pressable
+      onPress={() => {
+        showMenu ? setShowMenu(false) : setShowMenu(true);
+      }}
+      className={twJoin(base())}
+      hitSlop={10}>
+      <Text className={twJoin(text(), "w-[95%]")}>{title}</Text>
+      <Text className={twJoin(text(), "align-self-end w-fit")}>v</Text>
+    </Pressable>
+  );
+}
+
+// menu for all drop down types
+interface MenuProps extends DropdownVariants {
+  children: React.ReactNode;
+}
+
+function Menu({ children, ...styles }: MenuProps) {
+  const childArray = React.Children.toArray(children);
+  const { option } = dropdown(styles);
+
+  return (
+    <FlatList
+      data={childArray}
+      keyExtractor={(_, index) => index.toString()}
+      style={{ maxHeight: 300 }}
+      className="mt-2 rounded-sm bg-lightSlate p-2"
+      contentContainerClassName="gap-1"
+      showsVerticalScrollIndicator
+      renderItem={({ item }) => <View className={option()}>{item}</View>}
+    />
+  );
+}
+
+// generic dropdown where you can put any component in
 interface DropdownProps extends DropdownVariants {
   title: string;
   children: React.ReactNode;
   className?: string;
 }
 
-function CustomDropdown({
-  title,
-  children,
-  className,
-  ...DropdownVariants
-}: DropdownProps) {
-  const { base, text, option } = dropdown(DropdownVariants);
+function CustomDropdown({ title, children, className }: DropdownProps) {
   const [showMenu, setShowMenu] = useState<boolean>(false);
 
-  {
-    /*TO: DO make a flat list to optimize performance */
-  }
-
   return (
-    <View className="flex">
-      <Pressable
-        onPress={() => {
-          showMenu ? setShowMenu(false) : setShowMenu(true);
-        }}
-        className={twJoin(base(), className)}
-        hitSlop={10}>
-        <Text className={twJoin(text(), "w-[95%]")}>{title}</Text>
-        <Text className={twJoin(text(), "align-self-end w-fit")}>v</Text>
-      </Pressable>
+    <View className={twJoin("flex", className)}>
+      <DropdownPressable
+        title={title}
+        showMenu={showMenu}
+        setShowMenu={setShowMenu}
+      />
 
-      {showMenu ? (
-        <ScrollView
-          className="mt-2 max-h-[300px] p-2 bg-lightSlate rounded-sm"
-          contentContainerClassName={"flex gap-1"}
-          showsVerticalScrollIndicator>
-          {/* renders each child element in a options view box so they all have an outline */}
-          {children &&
-            React.Children.map(children, (child: any) => (
-              <View className={option()}>{child}</View>
-            ))}
-        </ScrollView>
-      ) : null}
+      {showMenu ? <Menu>{children}</Menu> : null}
     </View>
   );
 }
 
-interface SelectProps extends DropdownProps {
-  children: React.ReactElement<typeof Link>;
+// Select dropdown type where you can only put text in. Handles form submits and updates the title on change.
+interface SelectProps extends DropdownVariants {
+  title: string;
+  options: string[];
+  className?: string;
 }
 
-// use context from react-hook-forms for sending data maybe
-function Select({
-  title,
-  children,
-  className,
-  ...DropdownVariants
-}: SelectProps) {
+// use Controller from react-hook-forms for sending data maybe
+function Select({ title, className, options }: SelectProps) {
+  const [showMenu, setShowMenu] = useState<boolean>(false);
+
+  const onSubmit = (data: any) => console.log(data);
+
+  function handleSubmit(e: GestureResponderEvent) {
+    console.log(e);
+  }
+
+  const [optionsMap, setOptionsMap] = useState(
+    options.map((option) => {
+      return (
+        <Pressable
+          onPress={(e) => {
+            handleSubmit(e);
+          }}>
+          <TextInput value={option} />
+        </Pressable>
+      );
+    }),
+  );
+
   return (
-    <CustomDropdown className={className} title={title} {...DropdownVariants}>
-      {children}
-    </CustomDropdown>
+    <View className={twJoin("flex", className)}>
+      <DropdownPressable
+        title={title}
+        showMenu={showMenu}
+        setShowMenu={setShowMenu}
+      />
+
+      {showMenu ? <Menu>{optionsMap}</Menu> : null}
+    </View>
   );
 }
 
+// Dropdown for navigation. Only accepts of type link
 interface NavigationDropdownProps extends DropdownProps {
-  children: React.ReactElement<typeof Link>;
+  children: React.ReactElement<typeof Link>[];
 }
 
 function NavigationDropdown({
@@ -102,4 +159,4 @@ function NavigationDropdown({
   );
 }
 
-export { CustomDropdown, Select, NavigationDropdown };
+export { CustomDropdown, NavigationDropdown, Select };

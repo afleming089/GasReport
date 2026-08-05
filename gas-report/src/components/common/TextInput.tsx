@@ -6,7 +6,7 @@ import {
 import { Text } from "./Text";
 
 interface TextInputProps extends NativeTextInputProps {
-  label: string;
+  label?: string;
 }
 
 function TextInput({ label, ...TextInputProps }: TextInputProps) {
