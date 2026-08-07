@@ -1,7 +1,4 @@
 import { ApiResponse, FetchConfig } from "./api";
-import * as t from "io-ts";
-import { PathReporter } from "io-ts/PathReporter";
-import { isLeft } from "fp-ts/Either";
 
 async function Fetch<T>(
   url: string,

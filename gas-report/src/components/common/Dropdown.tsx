@@ -1,23 +1,26 @@
-import { Link } from "expo-router";
-import React, { Dispatch, SetStateAction, useState } from "react";
 import {
   FlatList,
-  GestureResponderEvent,
   Pressable,
   Text,
-  TextInput,
+  TouchableOpacity,
   View,
 } from "react-native";
+import { Link } from "expo-router";
 
-import { twJoin } from "tailwind-merge";
 import { tv, VariantProps } from "tailwind-variants";
+import { twJoin } from "tailwind-merge";
+
+import React, { Dispatch, SetStateAction, useState, useMemo } from "react";
+
+import useFetch from "../../utility/customHooks/useFetch";
+import { FetchConfig } from "@/utility/api/FetchConfig";
 
 const dropdown = tv({
   slots: {
     base: "bg-lightSlate hover:bg-slate active:bg-slate p-3 flex flex-row rounded-sm",
-    text: "text-white text-center",
+    text: "text-white text-lg select-none",
     option:
-      "border border-lightGray hover:bg-slate active:bg-slate rounded-sm p-1",
+      "border border-lightGray hover:bg-slate active:bg-slate rounded-sm p-2",
   },
 
   variants: {},
@@ -48,7 +51,7 @@ function DropdownPressable({
       }}
       className={twJoin(base())}
       hitSlop={10}>
-      <Text className={twJoin(text(), "w-[95%]")}>{title}</Text>
+      <Text className={twJoin(text(), "w-[95%] text-center")}>{title}</Text>
       <Text className={twJoin(text(), "align-self-end w-fit")}>v</Text>
     </Pressable>
   );
@@ -99,45 +102,70 @@ function CustomDropdown({ title, children, className }: DropdownProps) {
   );
 }
 
-// Select dropdown type where you can only put text in. Handles form submits and updates the title on change.
+// Select from different options and has option to add a useForm hook if need to make calls to backend
 interface SelectProps extends DropdownVariants {
   title: string;
   options: string[];
   className?: string;
+  url?: string;
+  fetchConfig?: FetchConfig;
+  handleSelect?(): void;
 }
 
-// use Controller from react-hook-forms for sending data maybe
-function Select({ title, className, options }: SelectProps) {
+function Select({
+  title,
+  className,
+  options,
+  url,
+  fetchConfig,
+  ...styles
+}: SelectProps) {
+  const { text } = dropdown(styles);
+
+  const [pressableTitle, setPressableTitle] = useState<string>(title);
   const [showMenu, setShowMenu] = useState<boolean>(false);
 
-  const onSubmit = (data: any) => console.log(data);
+  const [selectedOption, setSelectedOption] = useState<string>("");
 
-  function handleSubmit(e: GestureResponderEvent) {
-    console.log(e);
+  function handleSelect(optionValue: string) {
+    setSelectedOption(optionValue);
+    setPressableTitle(optionValue);
+
+    // add to selectedOption to prams
+    if (url && fetchConfig) useFetch(url.concat(selectedOption), fetchConfig);
+
+    setShowMenu(false);
   }
 
-  const [optionsMap, setOptionsMap] = useState(
-    options.map((option) => {
+  // saved here in order to avoid a double loop when passing it into <Menu />
+  // Time of n instead of n^2
+  const [optionsElement] = useState(
+    options.map((option, index) => {
       return (
-        <Pressable
-          onPress={(e) => {
-            handleSubmit(e);
+        <TouchableOpacity
+          key={index}
+          hitSlop={10}
+          onPress={() => {
+            handleSelect(options[index]);
           }}>
-          <TextInput value={option} />
-        </Pressable>
+          <Text className={text()}>{option}</Text>
+        </TouchableOpacity>
       );
     }),
   );
 
+  // prevents re render when just the title changes
+  const menu = useMemo(() => <Menu>{optionsElement}</Menu>, [optionsElement]);
+
   return (
     <View className={twJoin("flex", className)}>
       <DropdownPressable
-        title={title}
+        title={pressableTitle}
         showMenu={showMenu}
         setShowMenu={setShowMenu}
       />
 
-      {showMenu ? <Menu>{optionsMap}</Menu> : null}
+      {showMenu ? menu : null}
     </View>
   );
 }

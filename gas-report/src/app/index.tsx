@@ -6,7 +6,7 @@ import "../../global.css";
 export default function index() {
   return (
     <RouteWrapper accessibilityLabel="Home Group">
-      <Select title="Select" options={["first", "second", "third"]} />
+      <Select title="Default option" options={["first", "second", "third"]} />
 
       <SignInCard />
       <Link title="Sign-up" href="./sign-up" />
