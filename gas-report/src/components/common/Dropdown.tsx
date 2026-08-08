@@ -69,11 +69,10 @@ function Menu({ children, ...styles }: MenuProps) {
   return (
     <FlatList
       data={childArray}
+      scrollEnabled={false}
       keyExtractor={(_, index) => index.toString()}
-      style={{ maxHeight: 300 }}
       className="mt-2 rounded-sm bg-lightSlate p-2"
       contentContainerClassName="gap-1"
-      showsVerticalScrollIndicator
       renderItem={({ item }) => <View className={option()}>{item}</View>}
     />
   );
