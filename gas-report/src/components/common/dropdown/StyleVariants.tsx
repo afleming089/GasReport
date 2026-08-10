@@ -11,9 +11,10 @@ const dropdown = tv({
   variants: {
     type: {
       default: {
-        base: "bg-lightSlate hover:bg-slate active:bg-slate",
-        menu: "bg-lightSlate",
-        option: "border border-lightGray hover:bg-slate active:bg-slate",
+        base: "bg-navyBlack hover:bg-lightGray active:bg-lightGray",
+        menu: "bg-navyBlack",
+        option:
+          "border border-lightGray hover:bg-lightGray active:bg-lightGray",
       },
       misty: {
         base: "bg-slate active:bg-lightGray hover:bg-lightGray text-center flex justify-center border border-misty",
