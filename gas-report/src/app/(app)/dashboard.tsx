@@ -13,10 +13,12 @@ import { DashboardData } from "../../models/dashboard/Dashboard";
 import { OverallSummary } from "../../components/dashboard/OverallSummary";
 import { RouteWrapper, LoadView } from "../../components/common/Common";
 import { PriceTrackerChart } from "../../components/dashboard/PriceTrackerChart";
+import { Select } from "../../components/common/Common";
 
 //remove
 import * as t from "io-ts";
 import { PriceSnapshot } from "../../components/dashboard/PriceSnapshot";
+import { View } from "react-native";
 const rest = t.type({
   a: t.string,
 });
@@ -79,6 +81,19 @@ export default function Dashboard() {
 
   return (
     <RouteWrapper accessibilityLabel="Dashboard Group">
+      <View className="h-[100px] z-50">
+        <View className="flex gap-3 absolute w-full bg-navyBlack p-3 rounded-sm">
+          <Select
+            title="Fuel Grade state here"
+            options={["Regular", "Mid Grade", "Premium", "Diesel"]}
+          />
+          <Select
+            title="Region location state here"
+            options={["Midwest", "North East", "Chicago", "South"]}
+          />
+        </View>
+      </View>
+
       <OverallSummary
         OverallSummary={dashboardData.overallSummary}
         lastFetch={dashboardData.fetchTime.toDateString()}

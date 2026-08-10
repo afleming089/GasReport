@@ -1,19 +1,21 @@
 import { FetchConfig } from "@/utility/api/FetchConfig";
 import { LinkProps } from "expo-router";
-import { DropdownVariants } from "./DropdownStyles";
+import { DropdownVariants } from "./StyleVariants";
 
-// generic dropdown where you can put any component in
-interface CustomDropdownProps extends DropdownVariants {
+interface GenericDropdownProps extends DropdownVariants {
   title: string;
-  children: React.ReactNode;
+  showPressableArrow?: boolean;
   className?: string;
 }
 
+// generic dropdown where you can put any component in
+interface CustomDropdownProps extends GenericDropdownProps {
+  children: React.ReactNode;
+}
+
 // Select from different options and has option to add a useForm hook if need to make calls to backend
-interface SelectProps extends DropdownVariants {
-  title: string;
+interface SelectProps extends GenericDropdownProps {
   options: string[];
-  className?: string;
   url?: string;
   fetchConfig?: FetchConfig;
   handleSelect?(): void;
@@ -21,11 +23,11 @@ interface SelectProps extends DropdownVariants {
 
 // Dropdown for navigation. Only accepts of type link
 interface Links extends LinkProps {
-  linkTitle: string;
+  title: string;
+  className?: string;
 }
 
-interface NavigationDropdownProps extends CustomDropdownProps {
-  title: string;
+interface NavigationDropdownProps extends GenericDropdownProps {
   links: Links[];
 }
 

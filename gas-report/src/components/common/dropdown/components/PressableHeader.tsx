@@ -1,31 +1,24 @@
 import { Dispatch, SetStateAction } from "react";
 import { Pressable as NativePressable, Text } from "react-native";
 import { twJoin } from "tailwind-merge";
-import { tv, VariantProps } from "tailwind-variants";
-
-const pressable = tv({
-  slots: {
-    base: "bg-lightSlate hover:bg-slate active:bg-slate p-3 flex flex-row rounded-sm",
-    text: "text-white text-lg select-none",
-  },
-});
-
-type PressableVariants = VariantProps<typeof pressable>;
+import { dropdown, DropdownVariants } from "../StyleVariants";
 
 // button for all Dropdown types
-interface PressableProps extends PressableVariants {
+interface PressableProps extends DropdownVariants {
   title: string;
   showMenu: boolean;
   setShowMenu: Dispatch<SetStateAction<boolean>>;
+  showPressableArrow?: boolean;
 }
 
 function PressableHeader({
   title,
   showMenu,
   setShowMenu,
+  showPressableArrow = true,
   ...styles
 }: PressableProps) {
-  const { base, text } = pressable(styles);
+  const { base, text } = dropdown(styles);
 
   return (
     <NativePressable
@@ -34,8 +27,14 @@ function PressableHeader({
       }}
       className={twJoin(base())}
       hitSlop={10}>
-      <Text className={twJoin(text(), "w-[95%] text-center")}>{title}</Text>
-      <Text className={twJoin(text(), "align-self-end w-fit")}>v</Text>
+      {showPressableArrow ? (
+        <>
+          <Text className={twJoin(text(), "w-[95%] text-center")}>{title}</Text>
+          <Text className={twJoin(text(), "align-self-end w-fit")}>v</Text>
+        </>
+      ) : (
+        <Text className={twJoin(text(), "w-fit text-center")}>{title}</Text>
+      )}
     </NativePressable>
   );
 }

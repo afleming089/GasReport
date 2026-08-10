@@ -1,9 +1,11 @@
+// ensure {...styles} is added to any Dropdown type so variants apply properly
+
 import { useState, useMemo } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
-import { PressableHeader } from "./PressableHeader";
-import { Menu } from "./Menu";
+import { PressableHeader } from "./components/PressableHeader";
+import { Menu } from "./components/Menu";
 
-import { dropdownStyles } from "./DropdownStyles";
+import { dropdown } from "./StyleVariants";
 import { Link } from "expo-router";
 
 import { twJoin } from "tailwind-merge";
@@ -17,7 +19,12 @@ import {
 } from "./Props";
 
 // any child element
-function CustomDropdown({ title, children, className }: CustomDropdownProps) {
+function CustomDropdown({
+  title,
+  children,
+  className,
+  ...styles
+}: CustomDropdownProps) {
   const [showMenu, setShowMenu] = useState<boolean>(false);
 
   return (
@@ -26,9 +33,10 @@ function CustomDropdown({ title, children, className }: CustomDropdownProps) {
         title={title}
         showMenu={showMenu}
         setShowMenu={setShowMenu}
+        {...styles}
       />
 
-      {showMenu ? <Menu>{children}</Menu> : null}
+      {showMenu ? <Menu {...styles}>{children}</Menu> : null}
     </View>
   );
 }
@@ -42,7 +50,7 @@ function Select({
   fetchConfig,
   ...styles
 }: SelectProps) {
-  const { text } = dropdownStyles(styles);
+  const { text } = dropdown(styles);
 
   const [pressableTitle, setPressableTitle] = useState<string>(title);
   const [showMenu, setShowMenu] = useState<boolean>(false);
@@ -77,7 +85,10 @@ function Select({
   );
 
   // prevents re render when just the title changes
-  const menu = useMemo(() => <Menu>{optionsElements}</Menu>, [optionsElements]);
+  const menu = useMemo(
+    () => <Menu {...styles}>{optionsElements}</Menu>,
+    [optionsElements],
+  );
 
   return (
     <View className={twJoin("flex", className)}>
@@ -85,6 +96,7 @@ function Select({
         title={pressableTitle}
         showMenu={showMenu}
         setShowMenu={setShowMenu}
+        {...styles}
       />
 
       {showMenu ? menu : null}
@@ -97,12 +109,13 @@ function NavigationDropdown({
   title,
   links,
   className,
+  showPressableArrow,
   ...styles
 }: NavigationDropdownProps) {
   const [pressableTitle] = useState<string>(title);
   const [showMenu, setShowMenu] = useState<boolean>(false);
 
-  const { text } = dropdownStyles(styles);
+  const { text } = dropdown(styles);
 
   // saved here in order to avoid a double loop when passing it into <Menu />
   // Time of n instead of n^2
@@ -111,7 +124,7 @@ function NavigationDropdown({
       return (
         <TouchableOpacity key={index} hitSlop={10}>
           <Link href={link.href}>
-            <Text className={text()}>{link.linkTitle}</Text>
+            <Text className={twJoin(text(), link.className)}>{link.title}</Text>
           </Link>
         </TouchableOpacity>
       );
@@ -124,9 +137,11 @@ function NavigationDropdown({
         title={pressableTitle}
         showMenu={showMenu}
         setShowMenu={setShowMenu}
+        showPressableArrow={showPressableArrow}
+        {...styles}
       />
 
-      {showMenu ? <Menu>{linksElements}</Menu> : null}
+      {showMenu ? <Menu {...styles}>{linksElements}</Menu> : null}
     </View>
   );
 }
