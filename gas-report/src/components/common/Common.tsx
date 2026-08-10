@@ -8,7 +8,11 @@ import { RouteWrapper } from "./RouteWrapper";
 import { Text, TextProps } from "./Text";
 import { TextInput, TextInputProps } from "./TextInput";
 import { Alert, AlertProps } from "./Alert";
-import { CustomDropdown, Select, NavigationDropdown } from "./Dropdown";
+import {
+  CustomDropdown,
+  Select,
+  NavigationDropdown,
+} from "./dropdown/DropdownComponents";
 
 export {
   Link,
