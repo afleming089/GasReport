@@ -1,12 +1,5 @@
 import { SignInCard } from "../components/auth/SignInCard";
-import {
-  Link,
-  RouteWrapper,
-  Select,
-  CustomDropdown,
-  Text,
-  NavigationDropdown,
-} from "../components/common/Common";
+import { Link, RouteWrapper } from "../components/common/Common";
 
 import "../../global.css";
 

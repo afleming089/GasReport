@@ -82,7 +82,7 @@ export default function Dashboard() {
   return (
     <RouteWrapper accessibilityLabel="Dashboard Group">
       <View className="h-[100px] z-50">
-        <View className="flex gap-3 absolute w-full bg-navyBlack p-3 rounded-sm">
+        <View className="flex gap-3 absolute w-full bg-lightGray p-3 rounded-sm">
           <Select
             title="Fuel Grade state here"
             options={["Regular", "Mid Grade", "Premium", "Diesel"]}
