@@ -1,7 +1,12 @@
-interface PetroleumPeriod {
-  readonly period: Date;
-  readonly value: number;
-  readonly units: string;
-}
+import * as t from "io-ts";
+import * as td from "io-ts-types";
 
-export { PetroleumPeriod };
+const PetroleumPeriod = t.type({
+  period: td.DateFromUnixTime,
+  value: t.number,
+  units: t.string,
+});
+
+type PetroleumPeriodT = t.TypeOf<typeof PetroleumPeriod>;
+
+export { PetroleumPeriod, PetroleumPeriodT };

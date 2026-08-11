@@ -1,7 +1,15 @@
-interface User {
-  readonly email: string;
-  readonly settings: { defaultRegion: string; defaultFuelType: string };
-  readonly sessionToken: string;
-}
+import * as t from "io-ts";
 
-export { User };
+const User = t.readonly(
+  t.type({
+    email: t.string,
+    settings: t.readonly(
+      t.type({ defaultRegion: t.string, defaultFuelType: t.string }),
+    ),
+    sessionToken: t.string,
+  }),
+);
+
+type UserT = t.TypeOf<typeof User>;
+
+export { User, UserT };

@@ -1,8 +1,14 @@
+import * as t from "io-ts";
+
 import { PetroleumPeriod } from "../PetroleumPeriod";
 
-interface GraphData {
-  readonly frequency: string;
-  readonly periods: PetroleumPeriod[];
-}
+const GraphData = t.readonly(
+  t.type({
+    frequency: t.string,
+    periods: t.array(PetroleumPeriod),
+  }),
+);
 
-export { GraphData };
+type GraphDataT = t.TypeOf<typeof GraphData>;
+
+export { GraphData, GraphDataT };

@@ -1,14 +1,21 @@
+import * as t from "io-ts";
+import * as td from "io-ts-types";
+
 import { GraphData } from "./Graph";
 import { OverallSummary } from "./OverallSummary";
 import { PriceSnapshot } from "./PriceSnapshot";
 
-interface DashboardData {
-  readonly fetchTime: Date;
-  readonly areaName: string;
-  readonly productName: string;
-  readonly overallSummary: OverallSummary;
-  readonly graphData: GraphData;
-  readonly priceSnapShot: PriceSnapshot[];
-}
+const DashboardData = t.readonly(
+  t.type({
+    fetchTime: td.date,
+    areaName: t.string,
+    productName: t.string,
+    overallSummary: OverallSummary,
+    graphData: GraphData,
+    priceSnapShot: t.array(PriceSnapshot),
+  }),
+);
 
-export { DashboardData };
+type DashboardDataT = t.TypeOf<typeof DashboardData>;
+
+export { DashboardData, DashboardDataT };
