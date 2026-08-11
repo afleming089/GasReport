@@ -1,37 +1,19 @@
-import { useContext, useState } from "react";
-import { ReportParametersContext } from "../../context/ReportParametersContext";
+// framework
+import { useState } from "react";
+import { View } from "react-native";
 
-// native
-
-// utility
-import useFetch from "../../utility/customHooks/useFetch";
-import { ApiResponse, FetchConfig } from "../../utility/api/api";
 // models
-import { DashboardData } from "../../models/dashboard/Dashboard";
+import { DashboardDataT } from "../../models/dashboard/Dashboard";
 
 // components
 import { OverallSummary } from "../../components/dashboard/OverallSummary";
 import { RouteWrapper, LoadView } from "../../components/common/Common";
 import { PriceTrackerChart } from "../../components/dashboard/PriceTrackerChart";
 import { Select } from "../../components/common/Common";
-
-//remove
-import * as t from "io-ts";
 import { PriceSnapshot } from "../../components/dashboard/PriceSnapshot";
-import { View } from "react-native";
-const rest = t.type({
-  a: t.string,
-});
-
-type rest = t.TypeOf<typeof rest>;
 
 export default function Dashboard() {
-  // const [dashboardData, useDashboardData] = useState<DashboardData | null>(
-  //   null,
-  // );
-
-  // remove
-  const [dashboardData, useDashboardData] = useState<DashboardData | null>({
+  const [dashboardData, setDashboardData] = useState<DashboardDataT | null>({
     fetchTime: new Date(),
     areaName: "North America",
     productName: "Regular",
@@ -67,15 +49,6 @@ export default function Dashboard() {
       },
     ],
   });
-
-  const reportParameters = useContext(ReportParametersContext);
-  // TO DO add back
-  // const gasReport: ApiResponse<rest> = useFetch<rest>(
-  //   "https://api.kanye.rest",
-  //   { type: rest },
-  // );
-
-  // console.log(gasReport);
 
   if (!dashboardData) return <LoadView />;
 

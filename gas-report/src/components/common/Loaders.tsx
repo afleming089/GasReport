@@ -1,13 +1,11 @@
-import { View } from "react-native";
-import { Text } from "./Text";
+import { View, Text } from "react-native";
 
-// TO DO download a loader animation
-function LoadView() {
+function DefaultLoader() {
   return (
-    <View>
-      <Text>Loading...</Text>
+    <View className="flex justify-center align-center w-full h-fit bg-navyBlack p-3 rounded-sm">
+      <Text className="text-center text-offWhite">Loading...</Text>
     </View>
   );
 }
 
-export { LoadView };
+export { DefaultLoader };

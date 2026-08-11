@@ -3,10 +3,10 @@ import { Text } from "../common/Common";
 import { Card, Line } from "../common/Common";
 
 // model
-import { OverallSummary as OverallSummaryModel } from "../../models/dashboard/OverallSummary";
+import { OverallSummaryT } from "../../models/dashboard/OverallSummary";
 
 interface OverallSummaryProps {
-  OverallSummary: OverallSummaryModel;
+  OverallSummary: OverallSummaryT;
   lastFetch: string;
 }
 

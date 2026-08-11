@@ -1,4 +1,3 @@
-import { View } from "react-native";
 import { RouteWrapper, Card, Link, Text } from "../components/common/Common";
 
 export default function About() {

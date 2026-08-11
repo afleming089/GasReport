@@ -1,7 +1,7 @@
-import { User } from "@/models/User";
+import { UserT } from "@/models/User";
 import { createContext } from "react";
 
-export const UserContext = createContext<User>({
+export const UserContext = createContext<UserT>({
   email: "example@gmail.com",
   // not real token
   sessionToken: "awdwaidnawnfanjnawjd2ed2413d",

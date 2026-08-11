@@ -1,9 +1,9 @@
 import { View } from "react-native";
 import { Card, Text } from "../common/Common";
-import { PriceSnapshot as PriceSnapshotModel } from "../../models/dashboard/PriceSnapshot";
+import { PriceSnapshotT } from "../../models/dashboard/PriceSnapshot";
 
 interface PriceSnapshotProps {
-  priceSnapshot: PriceSnapshotModel[];
+  priceSnapshot: PriceSnapshotT[];
 }
 
 function PriceSnapshot({ priceSnapshot }: PriceSnapshotProps) {

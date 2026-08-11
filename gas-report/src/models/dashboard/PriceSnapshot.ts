@@ -11,4 +11,6 @@ const PriceSnapshot = t.readonly(
   }),
 );
 
-export { PriceSnapshot };
+type PriceSnapshotT = t.TypeOf<typeof PriceSnapshot>;
+
+export { PriceSnapshot, PriceSnapshotT };

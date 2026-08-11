@@ -2,7 +2,7 @@
 import { Button, ButtonProps } from "./Button";
 import { Card, CardProps } from "./Cards";
 import { Line } from "./Line";
-import { LoadView } from "./Loaders";
+import { DefaultLoader } from "./Loaders";
 import { Link, LinkProps } from "./Link";
 import { RouteWrapper } from "./RouteWrapper";
 import { Text, TextProps } from "./Text";
@@ -22,7 +22,7 @@ export {
   Card,
   CardProps,
   Line,
-  LoadView,
+  DefaultLoader,
   RouteWrapper,
   Text,
   TextProps,
