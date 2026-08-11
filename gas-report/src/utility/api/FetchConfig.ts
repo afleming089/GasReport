@@ -1,5 +1,8 @@
+import { ReadonlyC, TypeC } from "io-ts";
+
 interface FetchConfig {
-  type?: Exclude<any, undefined>;
+  // what front end model needs scheme validation
+  model: TypeC<any> | ReadonlyC<any>;
   method?: "GET" | "POST" | "PUT" | "DELETE";
   headers?: Record<string, string>;
   queryParams?: Record<string, string | number>;

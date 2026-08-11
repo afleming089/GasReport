@@ -1,10 +1,17 @@
 import { ApiResponse, FetchConfig } from "./api";
 
-async function Fetch<T>(
-  url: string,
-  config: FetchConfig = {},
-): Promise<ApiResponse<T>> {
+// schema validation
+import * as t from "io-ts";
+import { PathReporter } from "io-ts/PathReporter";
+import { isLeft } from "fp-ts/Either";
+
+async function Fetch(url: string, config: FetchConfig): Promise<ApiResponse> {
   try {
+    if (!config.model)
+      throw new Error(
+        "Model can not be undefined. Needed for schema validation.",
+      );
+
     // Construct URL with query parameters
     let finalUrl = url;
     if (config.queryParams) {
@@ -20,38 +27,26 @@ async function Fetch<T>(
       headers: config.headers,
     });
 
-    console.log(config);
+    const data: unknown = await response.json();
 
-    const data: T = (await response.json()) as T;
+    const decoded = config.model.decode(data);
+    if (isLeft(decoded)) {
+      throw Error(
+        `Could not validate data: ${PathReporter.report(decoded).join("\n")}`,
+      );
+    }
 
-    const decoded = config.type.decoded(data);
-    // if (isLeft(decoded)) {
-    //   throw Error(
-    //     `Could not validate data: ${PathReporter.report(decoded).join("\n")}`,
-    //   );
-    //   // e.g.: Could not validate data: Invalid value "foo" supplied to : { userId: number, name: string }/userId: number
-    // }
+    type DataT = t.TypeOf<typeof config.model>; // compile-time type
+    const decodedData: DataT = decoded.right; // now safely the correct type
 
-    // type DataT = t.TypeOf<typeof config.type>; // compile-time type
-    // const decodedData: DataT = decoded.right; // now safely the correct type
-
-    // return { decodedData } as ApiResponse<T>;
-    // // Check for HTTP errors
-    // if (!response.ok) {
-    //   return {
-    //     error: {
-    //       message: `HTTP error: ${response.statusText}`,
-    //       status: response.status,
-    //     },
-    //   } as ApiResponse<T>;
-    // }
+    return { decodedData } as ApiResponse;
   } catch (error) {
     return {
       error: {
         message:
           error instanceof Error ? error.message : "Unknown error occurred",
       },
-    } as ApiResponse<T>;
+    } as ApiResponse;
   }
 }
 

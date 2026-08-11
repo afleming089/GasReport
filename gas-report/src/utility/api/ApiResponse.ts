@@ -1,7 +1,7 @@
 import { ApiError } from "./ApiError";
 
-interface ApiResponse<T> {
-  data?: T;
+interface ApiResponse {
+  data?: any;
   error?: ApiError;
 }
 
