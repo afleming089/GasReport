@@ -1,0 +1,1 @@
+// cache some data that is used often
