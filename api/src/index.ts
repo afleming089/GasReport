@@ -1,26 +1,14 @@
-import { fromHono } from "chanfana";
+// follows best practice according to hono docs
+// https://hono.dev/docs/guides/best-practices
+
 import { Hono } from "hono";
-import { TaskCreate } from "./endpoints/taskCreate";
-import { TaskDelete } from "./endpoints/taskDelete";
-import { TaskFetch } from "./endpoints/taskFetch";
-import { TaskList } from "./endpoints/taskList";
+import gasPeriods from "./controllers/gasPeriods";
+import users from "./controllers/users";
 
-// Start a Hono app
-const app = new Hono<{ Bindings: Env }>();
+const app = new Hono();
 
-// Setup OpenAPI registry
-const openapi = fromHono(app, {
-	docs_url: "/",
-});
+app.get("/", (c) => c.json("Hello"));
+app.route("api/v1/users", users);
+app.route("api/v1/gas-periods", gasPeriods);
 
-// Register OpenAPI endpoints
-openapi.get("/api/tasks", TaskList);
-openapi.post("/api/tasks", TaskCreate);
-openapi.get("/api/tasks/:taskSlug", TaskFetch);
-openapi.delete("/api/tasks/:taskSlug", TaskDelete);
-
-// You may also register routes for non OpenAPI directly on Hono
-// app.get('/test', (c) => c.text('Hono!'))
-
-// Export the Hono app
 export default app;
