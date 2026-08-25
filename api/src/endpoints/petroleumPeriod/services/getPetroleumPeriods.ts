@@ -7,30 +7,33 @@
 
 import { OpenAPIRoute } from "chanfana";
 import { z } from "zod";
-import { type AppContext, Task } from "../types";
+import { type AppContext, GasPeriod } from "../types";
 
-export class GetGasPeriods extends OpenAPIRoute {
+export class GetPetroleumPeriods extends OpenAPIRoute {
   schema = {
     tags: ["GasPeriods"],
     summary:
       "Get gas periods based on location, fuel type and period timeline frequency. Can also add an optional date range parameter.",
     request: {
-      query: z.object({
-        page: z.number().default(0).describe("Page number"),
-        isCompleted: z
-          .boolean()
-          .optional()
-          .describe("Filter by completed flag"),
+      params: z.object({
+        frequency: z.string(),
+        location: z.string(),
+        fuelType: z.string(),
+        dateRange: z.object({
+          startDate: z.date().optional(),
+          endDate: z.date().optional(),
+        }),
       }),
     },
     responses: {
       "200": {
-        description: "Returns a list of tasks",
+        description: "Returns a list Gas Periods",
         content: {
           "application/json": {
             schema: z.object({
-              success: z.boolean(),
-              tasks: Task.array(),
+              status: z.int(),
+              numberOfPeriods: z.int().optional(),
+              gasPeriods: GasPeriod.array(),
             }),
           },
         },
@@ -43,7 +46,7 @@ export class GetGasPeriods extends OpenAPIRoute {
     const data = await this.getValidatedData<typeof this.schema>();
 
     // Retrieve the validated parameters
-    const { page, isCompleted } = data.query;
+    const { frequency, location, fuelType, dateRange } = data.params;
 
     // Implement your own object list here
 
