@@ -5,9 +5,12 @@
 
 // optional date range parameter. Defaults to max amount of data
 
-import { OpenAPIRoute } from "chanfana";
+import { InputValidationException, OpenAPIRoute } from "chanfana";
 import { z } from "zod";
-import { type AppContext, GasPeriod } from "../types";
+
+// types
+import { GasPeriod, locations, fuelType, frequency } from "../petroleumTypes";
+import { type AppContext } from "../../../types";
 
 export class GetPetroleumPeriods extends OpenAPIRoute {
   schema = {
@@ -16,13 +19,11 @@ export class GetPetroleumPeriods extends OpenAPIRoute {
       "Get gas periods based on location, fuel type and period timeline frequency. Can also add an optional date range parameter.",
     request: {
       params: z.object({
-        frequency: z.string(),
-        location: z.string(),
-        fuelType: z.string(),
-        dateRange: z.object({
-          startDate: z.date().optional(),
-          endDate: z.date().optional(),
-        }),
+        frequency: z.enum(frequency),
+        location: z.enum(locations),
+        fuelType: z.enum(fuelType),
+        startDate: z.date().optional(),
+        endDate: z.date().optional(),
       }),
     },
     responses: {
@@ -37,6 +38,7 @@ export class GetPetroleumPeriods extends OpenAPIRoute {
             }),
           },
         },
+        ...InputValidationException.schema(), // Document HTTP 400 error
       },
     },
   };
@@ -46,7 +48,7 @@ export class GetPetroleumPeriods extends OpenAPIRoute {
     const data = await this.getValidatedData<typeof this.schema>();
 
     // Retrieve the validated parameters
-    const { frequency, location, fuelType, dateRange } = data.params;
+    const { frequency, location, fuelType, startDate, endDate } = data.params;
 
     // Implement your own object list here
 

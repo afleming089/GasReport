@@ -5,7 +5,8 @@ import { fromHono } from "chanfana";
 import { Hono } from "hono";
 
 // endpoints
-import PetroleumPeriods from "./endpoints/petroleumPeriod/routes";
+// import Users from "./endpoints/"
+import PetroleumPeriods from "./endpoints/petroleumPeriod/petroleumEndpoints";
 
 const app = new Hono<{ Bindings: Env }>();
 app.get("/", (c) => c.text("Welcome to GasReport API"));

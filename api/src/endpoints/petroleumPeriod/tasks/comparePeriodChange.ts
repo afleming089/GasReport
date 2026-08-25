@@ -4,7 +4,10 @@
 
 import { OpenAPIRoute } from "chanfana";
 import { z } from "zod";
-import { type AppContext, GasPeriod } from "../types";
+
+// types
+import { locations, fuelType, frequency } from "../petroleumTypes";
+import { type AppContext } from "../../../types";
 
 export class ComparePeriodChanges extends OpenAPIRoute {
   schema = {
@@ -13,9 +16,9 @@ export class ComparePeriodChanges extends OpenAPIRoute {
       "Compares the change from selected date period and compares it to the period before it. Can return percentage change of the two and or the price change of the two.",
     request: {
       params: z.object({
-        frequency: z.string(),
-        location: z.string(),
-        fuelType: z.string(),
+        frequency: z.enum(frequency),
+        location: z.enum(locations),
+        fuelType: z.enum(fuelType),
         date: z.date(),
       }),
     },
@@ -44,7 +47,6 @@ export class ComparePeriodChanges extends OpenAPIRoute {
     const { frequency, location, fuelType, date } = data.params;
 
     // Implement your own object list here
-
     return {
       success: true,
       tasks: [
