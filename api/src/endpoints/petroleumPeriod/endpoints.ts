@@ -3,8 +3,8 @@ import { Hono, type Context } from "hono";
 import { fromHono } from "chanfana";
 
 // services
-import { GetPetroleumPeriods } from "./services/getPetroleumPeriods";
-import { ComparePeriodChanges } from "./services/comparePeriodChange";
+import { GetPetroleumPeriods } from "./tasks/getPetroleumPeriods";
+import { ComparePeriodChanges } from "./tasks/comparePeriodChange";
 
 export type Env = {
   // Example bindings, use your own

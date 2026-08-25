@@ -1,5 +1,6 @@
 # SECRET FILES
 *.env
+.dev.vars*
 
 # Logs
 logs

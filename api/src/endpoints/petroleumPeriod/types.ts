@@ -8,3 +8,9 @@ export const GasPeriod = z.object({
   value: z.number(),
   units: z.string(),
 });
+
+// add api formats and have it be one of these but can be any of them.
+export const DateFormat = z.object({
+  year: z.string().regex(""); // 4 numbers
+  month
+})
