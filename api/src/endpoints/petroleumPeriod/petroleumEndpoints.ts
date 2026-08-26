@@ -13,7 +13,7 @@ export type Env = {
 };
 export type AppContext = Context<{ Bindings: Env }>;
 
-const app = new Hono<{ Bindings: Env }>();
+const app = fromHono(new Hono<{ Bindings: Env }>());
 const openapi = fromHono(app);
 
 openapi.get("/", GetPetroleumPeriods);

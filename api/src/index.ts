@@ -9,20 +9,41 @@ import { Hono } from "hono";
 import PetroleumPeriods from "./endpoints/petroleumPeriod/petroleumEndpoints";
 
 const app = new Hono<{ Bindings: Env }>();
-app.get("/", (c) => c.text("Welcome to GasReport API"));
-
-// V1
-const apiV1 = new Hono();
-apiV1.get("/", (c) => c.text("Welcome to V1 of GasReport API"));
-// apiV1.route("/users", users);
-apiV1.route("/petroleum-periods", PetroleumPeriods);
 
 // Setup OpenAPI registry
 const openapi = fromHono(app, {
-  docs_url: "/",
+  base: "/api/v1", // Base path for all API routes
+  schema: {
+    info: {
+      title: "GasReport",
+      version: "2.0.0",
+      description:
+        "Backend for GasReport application. Can retrieve data on Gas prices across the US.",
+    },
+    servers: [
+      {
+        url: "https://api.example.com/api/v1",
+        description: "Production server",
+      },
+      {
+        url: "http://localhost:3000/api/v1",
+        description: "Development server",
+      },
+    ],
+    tags: [
+      { name: "users", description: "Operations related to users" },
+      { name: "products", description: "Operations related to products" },
+    ],
+  },
+  docs_url: "/docs",
+  openapi_url: "/openapi.json",
+  openapiVersion: "3.1", // or '3' for OpenAPI v3.0.3
+  generateOperationIds: true,
+  raiseUnknownParameters: false,
 });
 
-openapi.route("/api/v1", apiV1);
+// openapi.route("/users", users);
+openapi.route("/petroleum-periods", PetroleumPeriods);
 
 export default app;
 
