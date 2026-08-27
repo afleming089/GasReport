@@ -1,5 +1,5 @@
 {
-  "name": "gas-report",
+  "name": "gas-report-frontend",
   "main": "expo-router/entry",
   "version": "1.0.0",
   "dependencies": {
