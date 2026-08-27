@@ -52,7 +52,27 @@ export class GetPetroleumPeriods extends OpenAPIRoute {
     // Retrieve the validated parameters
     const { frequency, location, fuelType, startDate, endDate } = data.params;
 
-    // Implement your own object list here
+    // check
+    // try {
+    //   const url = new URL(c.env.END_POINT);
+
+    //   // Append all parameters cleanly
+    //   url.searchParams.append("api_key", c.env.API_TOKEN);
+    //   url.searchParams.append("frequency", frequency);
+    //   url.searchParams.append("facets[product][]", fuelType);
+    //   url.searchParams.append("facets[duoarea][]", location);
+    //   url.searchParams.append("data[]", "value");
+    //   startDate
+    //     ? url.searchParams.append("start", startDate?.toString())
+    //     : null;
+    //   endDate ? url.searchParams.append("end", endDate?.toString()) : null;
+
+    //   const response = await fetch(url.toString());
+
+    //   // Add your response handling here (e.g., const result = await response.json();)
+    // } catch (error) {
+    //   console.error("Fetch failed:", error);
+    // }
 
     return {
       success: true,
