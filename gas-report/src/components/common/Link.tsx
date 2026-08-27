@@ -1,9 +1,14 @@
+/**
+ * Expands on Link from React Native
+ * @module
+ */
+
 import {
   Href,
   Link as NativeLink,
   LinkProps as NativeLinkProps,
 } from "expo-router";
-import { Text, Pressable } from "react-native";
+import { Pressable, Text } from "react-native";
 import { twJoin } from "tailwind-merge";
 import { tv, VariantProps } from "tailwind-variants";
 

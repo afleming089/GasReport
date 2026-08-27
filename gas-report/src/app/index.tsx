@@ -1,3 +1,10 @@
+/**
+ * (app) hold authenticated views
+ *
+ * app holds unauthenticated views
+ * @module
+ */
+
 import { SignInCard } from "../components/auth/SignInCard";
 import { Link, RouteWrapper } from "../components/common/Common";
 

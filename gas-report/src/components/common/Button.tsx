@@ -1,11 +1,16 @@
+/**
+ * Expands on Pressable from React Native
+ * @module
+ */
+
 import {
   Pressable as NativeButton,
   PressableProps as NativeButtonProps,
 } from "react-native";
 
+import { Text } from "react-native";
 import { twJoin } from "tailwind-merge";
 import { tv, VariantProps } from "tailwind-variants";
-import { Text } from "react-native";
 
 const button = tv({
   slots: {

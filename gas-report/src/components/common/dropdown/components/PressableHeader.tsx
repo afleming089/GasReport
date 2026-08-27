@@ -1,3 +1,8 @@
+/**
+ * Generic Button for for all drop downs
+ * @module
+ */
+
 import { Dispatch, SetStateAction } from "react";
 import { Pressable as NativePressable, Text } from "react-native";
 import { twJoin } from "tailwind-merge";
@@ -39,4 +44,4 @@ function PressableHeader({
   );
 }
 
-export { PressableHeader };
+export { PressableHeader, PressableProps };

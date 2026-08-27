@@ -1,19 +1,21 @@
+/**
+ * Account view
+ * @module
+ */
+
 import { useSession } from "@/context/AuthContext";
+import { router } from "expo-router";
 import {
-  RouteWrapper,
-  Text,
-  Line,
-  Link,
   Alert,
   AlertProps,
   Button,
+  Line,
+  Link,
+  RouteWrapper,
+  Text,
 } from "../../components/common/Common";
-import { router } from "expo-router";
 
 import { useContext, useState } from "react";
-
-// model
-import { User } from "../../models/User";
 
 // add proper account context with correct secure auth. REMOVE LATER
 import { UserContext } from "../../context/UserContext";

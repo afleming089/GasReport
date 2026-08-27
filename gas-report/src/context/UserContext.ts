@@ -3,7 +3,6 @@ import { createContext } from "react";
 
 export const UserContext = createContext<UserT>({
   email: "example@gmail.com",
-  // not real token
-  sessionToken: "awdwaidnawnfanjnawjd2ed2413d",
+  sessionToken: "TOKEN",
   settings: { defaultFuelType: "Regular", defaultRegion: "Midwest" },
 });

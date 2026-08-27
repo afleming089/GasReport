@@ -1,36 +1,43 @@
-// commonly use components in my application
+/**
+ * Commonly used components
+ *
+ * Some expand upon React Native base components functionality
+ * @module
+ */
+
+import { Alert, AlertProps } from "./Alert";
 import { Button, ButtonProps } from "./Button";
 import { Card, CardProps } from "./Cards";
-import { Line } from "./Line";
-import { DefaultLoader } from "./Loaders";
-import { Link, LinkProps } from "./Link";
-import { RouteWrapper } from "./RouteWrapper";
-import { Text, TextProps } from "./Text";
-import { TextInput, TextInputProps } from "./TextInput";
-import { Alert, AlertProps } from "./Alert";
 import {
   CustomDropdown,
-  Select,
   NavigationDropdown,
+  Select,
 } from "./dropdown/DropdownComponents";
+import { Line } from "./Line";
+import { Link, LinkProps } from "./Link";
+import { DefaultLoader } from "./Loaders";
+import { RouteWrapper, RouteWrapperProps } from "./RouteWrapper";
+import { Text, TextProps } from "./Text";
+import { TextInput, TextInputProps } from "./TextInput";
 
 export {
-  Link,
-  LinkProps,
+  Alert,
+  AlertProps,
   Button,
   ButtonProps,
   Card,
   CardProps,
-  Line,
+  CustomDropdown,
   DefaultLoader,
+  Line,
+  Link,
+  LinkProps,
+  NavigationDropdown,
   RouteWrapper,
+  RouteWrapperProps,
+  Select,
   Text,
-  TextProps,
   TextInput,
   TextInputProps,
-  Alert,
-  AlertProps,
-  CustomDropdown,
-  Select,
-  NavigationDropdown,
+  TextProps,
 };

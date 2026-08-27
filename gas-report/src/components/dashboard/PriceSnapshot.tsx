@@ -1,6 +1,11 @@
+/**
+ * Displays current gas price and ones from a week ago, a month ago, a year ago, and etc.
+ * @module
+ */
+
 import { View } from "react-native";
-import { Card, Text } from "../common/Common";
 import { PriceSnapshotT } from "../../models/dashboard/PriceSnapshot";
+import { Card, Text } from "../common/Common";
 
 interface PriceSnapshotProps {
   priceSnapshot: PriceSnapshotT[];
@@ -44,4 +49,4 @@ function PriceSnapshot({ priceSnapshot }: PriceSnapshotProps) {
   );
 }
 
-export { PriceSnapshot };
+export { PriceSnapshot, PriceSnapshotProps };

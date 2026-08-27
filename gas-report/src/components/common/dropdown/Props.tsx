@@ -8,12 +8,12 @@ interface GenericDropdownProps extends DropdownVariants {
   className?: string;
 }
 
-// generic dropdown where you can put any component in
+/// Generic dropdown where you can put any component in
 interface CustomDropdownProps extends GenericDropdownProps {
   children: React.ReactNode;
 }
 
-// Select from different options and has option to add a useForm hook if need to make calls to backend
+/// Select from different options and has option to add a useForm hook if need to make calls to backend
 interface SelectProps extends GenericDropdownProps {
   options: string[];
   url?: string;
@@ -21,7 +21,7 @@ interface SelectProps extends GenericDropdownProps {
   handleSelect?(): void;
 }
 
-// Dropdown for navigation. Only accepts of type link
+/// Dropdown for navigation. Only accepts of type link
 interface Links extends LinkProps {
   title: string;
   className?: string;
@@ -31,4 +31,4 @@ interface NavigationDropdownProps extends GenericDropdownProps {
   links: Links[];
 }
 
-export { CustomDropdownProps, SelectProps, NavigationDropdownProps };
+export { CustomDropdownProps, NavigationDropdownProps, SelectProps };

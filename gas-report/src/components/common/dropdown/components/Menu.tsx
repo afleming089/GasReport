@@ -1,3 +1,8 @@
+/**
+ * Generic Menu for all drop downs
+ * @module
+ */
+
 import React from "react";
 import { FlatList, View } from "react-native";
 import { dropdown, DropdownVariants } from "../StyleVariants";
@@ -23,4 +28,4 @@ function Menu({ children, ...styles }: MenuProps) {
   );
 }
 
-export { Menu };
+export { Menu, MenuProps };

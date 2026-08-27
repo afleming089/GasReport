@@ -1,3 +1,8 @@
+/**
+ * Wraps Views in app layout. Adds custom styles and a scroll view to applied pages.
+ * @module
+ */
+
 import { ScrollView, ScrollViewProps } from "react-native";
 import { twJoin } from "tailwind-merge";
 
@@ -32,4 +37,4 @@ function RouteWrapper({
   );
 }
 
-export { RouteWrapper };
+export { RouteWrapper, RouteWrapperProps };

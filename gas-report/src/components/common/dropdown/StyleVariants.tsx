@@ -1,3 +1,10 @@
+/**
+ * Tailwind-Variants styles for dropdown
+ *
+ * https://www.tailwind-variants.org/
+ * @module
+ */
+
 import { tv, VariantProps } from "tailwind-variants";
 
 const dropdown = tv({

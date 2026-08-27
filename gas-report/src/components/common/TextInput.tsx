@@ -1,3 +1,8 @@
+/**
+ * Expands on TextInput from React Native
+ * @module
+ */
+
 import {
   TextInput as NativeTextInput,
   TextInputProps as NativeTextInputProps,

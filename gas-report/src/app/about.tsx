@@ -1,4 +1,11 @@
-import { RouteWrapper, Card, Link, Text } from "../components/common/Common";
+/**
+ * About view
+ *
+ *
+ * @module
+ */
+
+import { Card, Link, RouteWrapper, Text } from "../components/common/Common";
 
 export default function About() {
   return (

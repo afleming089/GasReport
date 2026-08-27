@@ -1,5 +1,12 @@
-import { Header } from "../components/Header";
+/**
+ * Unauthenticated Layout
+ *
+ * Includes about.tsx, index.tsx, sign-up.tsx
+ * @module
+ */
+
 import { Stack } from "expo-router";
+import { Header } from "../components/Header";
 
 import { SessionProvider, useSession } from "@/context/AuthContext";
 import { SplashScreenController } from "@/utility/splash";
@@ -16,6 +23,9 @@ export default function Root() {
   );
 }
 
+/**
+ * expo-router Stack with custom header
+ */
 // Create a new component that can access the SessionProvider context later.
 function RootNavigator() {
   const { session } = useSession();

@@ -1,6 +1,12 @@
+/**
+ * Sums up the weekly price and shows change from last week and last month of select fuel type and region.
+ *
+ * Show time of fetch to.
+ * @module
+ */
+
 import { View } from "react-native";
-import { Text } from "../common/Common";
-import { Card, Line } from "../common/Common";
+import { Card, Line, Text } from "../common/Common";
 
 // model
 import { OverallSummaryT } from "../../models/dashboard/OverallSummary";
@@ -34,4 +40,4 @@ function OverallSummary({ OverallSummary, lastFetch }: OverallSummaryProps) {
   );
 }
 
-export { OverallSummary };
+export { OverallSummary, OverallSummaryProps };

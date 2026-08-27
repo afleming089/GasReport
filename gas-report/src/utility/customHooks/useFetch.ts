@@ -1,5 +1,10 @@
-import { useState, useEffect } from "react";
-import { Fetch, ApiResponse, FetchConfig } from "../../utility/api/api";
+/**
+ * Generic Fetch hook
+ * @module
+ */
+
+import { useEffect, useState } from "react";
+import { ApiResponse, Fetch, FetchConfig } from "../../utility/api/api";
 
 function useFetch(url: string, config: FetchConfig): ApiResponse {
   const [response, setResponse] = useState<ApiResponse>({

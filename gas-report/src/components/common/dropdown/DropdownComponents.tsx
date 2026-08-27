@@ -1,12 +1,17 @@
+/**
+ * Dropdowns with generic and specific functionality
+ * @module
+ */
+
 // ensure {...styles} is added to any Dropdown type so variants apply properly
 
-import { useState, useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
-import { PressableHeader } from "./components/PressableHeader";
 import { Menu } from "./components/Menu";
+import { PressableHeader } from "./components/PressableHeader";
 
-import { dropdown } from "./StyleVariants";
 import { Link } from "expo-router";
+import { dropdown } from "./StyleVariants";
 
 import { twJoin } from "tailwind-merge";
 
@@ -14,11 +19,11 @@ import useFetch from "../../../utility/customHooks/useFetch";
 
 import {
   CustomDropdownProps,
-  SelectProps,
   NavigationDropdownProps,
+  SelectProps,
 } from "./Props";
 
-// any child element
+/// Can place in child element type into the dropdown menu
 function CustomDropdown({
   title,
   children,
@@ -41,7 +46,7 @@ function CustomDropdown({
   );
 }
 
-// Select and handle submit dropdown
+/// Select and handle submit dropdown. Similar to HTML select and option
 function Select({
   title,
   className,
@@ -61,14 +66,14 @@ function Select({
     setSelectedOption(optionValue);
     setPressableTitle(optionValue);
 
-    // add to selectedOption to prams
+    /// add to selectedOption to prams
     if (url && fetchConfig) useFetch(url.concat(selectedOption), fetchConfig);
 
     setShowMenu(false);
   }
 
-  // saved here in order to avoid a double loop when passing it into <Menu />
-  // Time of n instead of n^2
+  /// saved here in order to avoid a double loop when passing it into <Menu />
+  /// Time of n instead of n^2
   const [optionsElements] = useState(
     options.map((option, index) => {
       return (
@@ -84,7 +89,7 @@ function Select({
     }),
   );
 
-  // prevents re render when just the title changes
+  /// prevents re render when just the title changes
   const menu = useMemo(
     () => <Menu {...styles}>{optionsElements}</Menu>,
     [optionsElements],
@@ -104,7 +109,7 @@ function Select({
   );
 }
 
-// For navigation and array of links
+/// For navigation and array of links
 function NavigationDropdown({
   title,
   links,
@@ -146,4 +151,4 @@ function NavigationDropdown({
   );
 }
 
-export { CustomDropdown, Select, NavigationDropdown };
+export { CustomDropdown, NavigationDropdown, Select };

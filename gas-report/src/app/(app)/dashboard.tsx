@@ -1,3 +1,8 @@
+/**
+ * Dashboard view
+ * @module
+ */
+
 // framework
 import { useState } from "react";
 import { View } from "react-native";
@@ -6,11 +11,14 @@ import { View } from "react-native";
 import { DashboardDataT } from "../../models/dashboard/Dashboard";
 
 // components
+import {
+  DefaultLoader,
+  RouteWrapper,
+  Select,
+} from "../../components/common/Common";
 import { OverallSummary } from "../../components/dashboard/OverallSummary";
-import { RouteWrapper, LoadView } from "../../components/common/Common";
-import { PriceTrackerChart } from "../../components/dashboard/PriceTrackerChart";
-import { Select } from "../../components/common/Common";
 import { PriceSnapshot } from "../../components/dashboard/PriceSnapshot";
+import { PriceTrackerChart } from "../../components/dashboard/PriceTrackerChart";
 
 export default function Dashboard() {
   const [dashboardData, setDashboardData] = useState<DashboardDataT | null>({
@@ -50,7 +58,7 @@ export default function Dashboard() {
     ],
   });
 
-  if (!dashboardData) return <LoadView />;
+  if (!dashboardData) return <DefaultLoader />;
 
   return (
     <RouteWrapper accessibilityLabel="Dashboard Group">

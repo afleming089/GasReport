@@ -1,3 +1,8 @@
+/**
+ * Chart showing trends overtime. Can select different periods to view in the chart its self.
+ * @module
+ */
+
 import { useEffect, useRef, useState } from "react";
 import { useWindowDimensions, View } from "react-native";
 import { LineChart } from "react-native-chart-kit/v2";

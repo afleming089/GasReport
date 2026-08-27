@@ -1,19 +1,31 @@
+/**
+ * Uses react-hook-form for form validation
+ * https://www.npmjs.com/package/react-hook-form
+ *
+ * Use {@link components/common/Alert} to notify user of login issues
+ *
+ * Made up of {@link components/common/Common} components
+ *
+ * Has api error handling
+ * @module
+ */
+
 import {
-  Card,
-  TextInput,
-  Text,
-  Button,
   Alert,
   AlertProps,
+  Button,
+  Card,
+  Text,
+  TextInput,
 } from "../common/Common";
 
 import { ApiError } from "../../utility/api/ApiError";
 
-import { useState } from "react";
 import { useSession } from "@/context/AuthContext";
 import { router } from "expo-router";
+import { useState } from "react";
 
-import { useForm, Controller } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { View } from "react-native";
 
 function SignUpCard() {

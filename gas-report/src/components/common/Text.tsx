@@ -1,6 +1,11 @@
-import { tv, VariantProps } from "tailwind-variants";
-import { twJoin } from "tailwind-merge";
+/**
+ * Expands on Text from React Native
+ * @module
+ */
+
 import { Text as NativeText, TextProps as NativeTextProps } from "react-native";
+import { twJoin } from "tailwind-merge";
+import { tv, VariantProps } from "tailwind-variants";
 
 const text = tv({
   slots: {

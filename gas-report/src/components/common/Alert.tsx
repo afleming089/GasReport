@@ -1,10 +1,17 @@
+/**
+ * Alert that allows for much flexibility in how it is displayed
+ *
+ * Shows over all other content.
+ * @module
+ */
+
 import { Button, ButtonProps } from "./Button";
 import { Text } from "./Text";
 import { TextInput, TextInputProps } from "./TextInput";
 
+import { Dispatch, SetStateAction } from "react";
 import { View } from "react-native";
 import { twJoin } from "tailwind-merge";
-import { Dispatch, SetStateAction } from "react";
 
 interface AlertProps {
   title?: string;
