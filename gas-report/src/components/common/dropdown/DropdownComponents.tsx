@@ -23,7 +23,7 @@ import {
   SelectProps,
 } from "./Props";
 
-/// Can place in child element type into the dropdown menu
+/// Can place in any child element type into the dropdown menu
 function CustomDropdown({
   title,
   children,
@@ -66,7 +66,7 @@ function Select({
     setSelectedOption(optionValue);
     setPressableTitle(optionValue);
 
-    /// add to selectedOption to prams
+    // add to selectedOption to prams
     if (url && fetchConfig) useFetch(url.concat(selectedOption), fetchConfig);
 
     setShowMenu(false);
