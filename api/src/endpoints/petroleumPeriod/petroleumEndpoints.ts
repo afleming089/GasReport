@@ -1,8 +1,8 @@
-// Endpoints for price periods overtime of consumer grade fuel
+/// Endpoints for price periods overtime of consumer grade fuel
 import { Hono, type Context } from "hono";
 import { fromHono } from "chanfana";
 
-// services
+/// services
 import { GetPetroleumPeriods } from "./tasks/getPetroleumPeriods";
 import { ComparePeriodChanges } from "./tasks/comparePeriodChange";
 

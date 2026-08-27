@@ -1,6 +1,10 @@
-// compares price from current period to the pervious period
-// returns percent up or down
-// returns dollar differences
+/**
+ * Compares price from current period to the pervious period.
+ *
+ * Returns percent up or down
+ * Returns dollar differences
+ * @module
+ */
 
 import { OpenAPIRoute } from "chanfana";
 import { z } from "zod";

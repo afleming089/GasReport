@@ -1,18 +1,15 @@
-// follows best practice according to hono docs
-// https://hono.dev/docs/guides/best-practices
-
 import { fromHono } from "chanfana";
 import { Hono } from "hono";
 
-// endpoints
+/// endpoints
 // import Users from "./endpoints/"
 import PetroleumPeriods from "./endpoints/petroleumPeriod/petroleumEndpoints";
 
 const app = new Hono<{ Bindings: Env }>();
 
-// Setup OpenAPI registry
+/// Setup OpenAPI registry
 const openapi = fromHono(app, {
-  base: "/api/v1", // Base path for all API routes
+  base: "/api/v1", /// Base path for all API routes
   schema: {
     info: {
       title: "GasReport",

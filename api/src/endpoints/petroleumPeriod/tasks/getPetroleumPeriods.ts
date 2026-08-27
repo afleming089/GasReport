@@ -1,14 +1,16 @@
-// get gas periods based on location, fuel type and period timeline frequency
-// fuel type : regular, mid grade, premium or diesel
-// frequency : weekly, monthly or yearly
-// locations :
-
-// optional date range parameter. Defaults to max amount of data
+/**
+ * Get gas periods based on location, fuel-type and period frequency.
+ *
+ * Refer to {@link petroleumTypes} for info on location, fuel type and frequency parameters.
+ *
+ * Optional date range parameter. Defaults to max amount of data.
+ * @module
+ */
 
 import { InputValidationException, OpenAPIRoute } from "chanfana";
 import { z } from "zod";
 
-// types
+/// types
 import { GasPeriod, locations, fuelType, frequency } from "../petroleumTypes";
 import { type AppContext } from "../../../types";
 
