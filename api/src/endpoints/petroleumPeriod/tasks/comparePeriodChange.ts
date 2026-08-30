@@ -32,7 +32,6 @@ export class ComparePeriodChanges extends OpenAPIRoute {
         content: {
           "application/json": {
             schema: z.object({
-              status: z.int(),
               comparisonName: z.string(),
               percentChange: z.number().optional(),
               priceChange: z.number().optional(),

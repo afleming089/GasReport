@@ -2,9 +2,13 @@ import { z } from "zod";
 
 export const GasPeriod = z.object({
   period: z.string(),
+  areaName: z.string(),
+  productName: z.string(),
   value: z.number(),
   units: z.string(),
 });
+
+export type GasPeriodT = z.infer<typeof GasPeriod>;
 
 // // add api formats and have it be one of these but can be any of them.
 // export const DateFormat = z.object({

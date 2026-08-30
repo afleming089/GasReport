@@ -10,8 +10,16 @@
 import { InputValidationException, OpenAPIRoute } from "chanfana";
 import { z } from "zod";
 
+import { PickSchemaValues } from "../../../utility/PickSchemaValues";
+
 /// types
-import { GasPeriod, locations, fuelType, frequency } from "../petroleumTypes";
+import {
+  GasPeriod,
+  GasPeriodT,
+  locations,
+  fuelType,
+  frequency,
+} from "../petroleumTypes";
 import { type AppContext } from "../../../types";
 
 export class GetPetroleumPeriods extends OpenAPIRoute {
@@ -20,7 +28,7 @@ export class GetPetroleumPeriods extends OpenAPIRoute {
     summary:
       "Get gas periods based on location, fuel type and period timeline frequency. Can also add an optional date range parameter.",
     request: {
-      params: z.object({
+      query: z.object({
         frequency: z.enum(frequency),
         location: z.enum(locations),
         fuelType: z.enum(fuelType),
@@ -34,8 +42,8 @@ export class GetPetroleumPeriods extends OpenAPIRoute {
         content: {
           "application/json": {
             schema: z.object({
-              status: z.int(),
-              numberOfPeriods: z.int().optional(),
+              total: z.int(),
+              frequency: z.string(),
               gasPeriods: GasPeriod.array(),
             }),
           },
@@ -50,48 +58,56 @@ export class GetPetroleumPeriods extends OpenAPIRoute {
     const data = await this.getValidatedData<typeof this.schema>();
 
     // Retrieve the validated parameters
-    const { frequency, location, fuelType, startDate, endDate } = data.params;
+    const { frequency, location, fuelType, startDate, endDate } = data.query;
 
-    // check
-    // try {
-    //   const url = new URL(c.env.END_POINT);
+    try {
+      const url = new URL(c.env.END_POINT);
 
-    //   // Append all parameters cleanly
-    //   url.searchParams.append("api_key", c.env.API_TOKEN);
-    //   url.searchParams.append("frequency", frequency);
-    //   url.searchParams.append("facets[product][]", fuelType);
-    //   url.searchParams.append("facets[duoarea][]", location);
-    //   url.searchParams.append("data[]", "value");
-    //   startDate
-    //     ? url.searchParams.append("start", startDate?.toString())
-    //     : null;
-    //   endDate ? url.searchParams.append("end", endDate?.toString()) : null;
+      url.searchParams.append("api_key", c.env.API_TOKEN);
+      url.searchParams.append("frequency", frequency);
+      url.searchParams.append("facets[product][]", fuelType);
+      url.searchParams.append("facets[duoarea][]", location);
+      url.searchParams.append("data[]", "value");
+      startDate
+        ? url.searchParams.append("start", startDate?.toString())
+        : null;
+      endDate ? url.searchParams.append("end", endDate?.toString()) : null;
 
-    //   const response = await fetch(url.toString());
+      const response = await fetch(url.toString());
 
-    //   // Add your response handling here (e.g., const result = await response.json();)
-    // } catch (error) {
-    //   console.error("Fetch failed:", error);
-    // }
+      const result: any = await response.json();
 
-    return {
-      success: true,
-      tasks: [
-        {
-          name: "Clean my room",
-          slug: "clean-room",
-          description: undefined,
-          completed: false,
-          due_date: "2025-01-05",
-        },
-        {
-          name: "Build something awesome with Cloudflare Workers",
-          slug: "cloudflare-workers",
-          description: "Lorem Ipsum",
-          completed: true,
-          due_date: "2022-12-24",
-        },
-      ],
-    };
+      if (response.ok) {
+        console.log("okay");
+
+        const pickSchemaValues = new PickSchemaValues(
+          z.object({ name: z.string(), age: z.number() }),
+          { age: true },
+        );
+
+        pickSchemaValues.getParsedObject({ name: "gabe", age: 20 });
+
+        const gasPeriods = z.object(result.response.data);
+        // console.log(result.response.data);
+
+        const parsedGasPeriods = gasPeriods.pick({
+          period: true,
+          // areaName: true,
+          // productName: true,
+          value: true,
+          units: true,
+        });
+
+        // console.log(parsedGasPeriods);
+
+        return {
+          total: parseInt(result.response.total),
+          frequency: result.response.frequency,
+          GasPeriods: z.array(parsedGasPeriods),
+        };
+      }
+    } catch (error) {
+      console.error("Fetch failed:", error);
+    }
   }
 }
