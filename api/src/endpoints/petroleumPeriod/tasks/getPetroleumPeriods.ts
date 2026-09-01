@@ -15,10 +15,10 @@ import { PickSchemaValues } from "../../../utility/PickSchemaValues";
 /// types
 import {
   GasPeriod,
-  GasPeriodT,
   locations,
   fuelType,
   frequency,
+  dateRegex,
 } from "../petroleumTypes";
 import { type AppContext } from "../../../types";
 
@@ -32,8 +32,14 @@ export class GetPetroleumPeriods extends OpenAPIRoute {
         frequency: z.enum(frequency),
         location: z.enum(locations),
         fuelType: z.enum(fuelType),
-        startDate: z.date().optional(),
-        endDate: z.date().optional(),
+        start: z
+          .string()
+          .regex(dateRegex, "Must be YYYY, YYYY-MM, or YYYY-MM-DD")
+          .optional(),
+        end: z
+          .string()
+          .regex(dateRegex, "Must be YYYY, YYYY-MM, or YYYY-MM-DD")
+          .optional(),
       }),
     },
     responses: {
@@ -58,7 +64,7 @@ export class GetPetroleumPeriods extends OpenAPIRoute {
     const data = await this.getValidatedData<typeof this.schema>();
 
     // Retrieve the validated parameters
-    const { frequency, location, fuelType, startDate, endDate } = data.query;
+    const { frequency, location, fuelType, start, end } = data.query;
 
     try {
       const url = new URL(c.env.END_POINT);
@@ -68,42 +74,49 @@ export class GetPetroleumPeriods extends OpenAPIRoute {
       url.searchParams.append("facets[product][]", fuelType);
       url.searchParams.append("facets[duoarea][]", location);
       url.searchParams.append("data[]", "value");
-      startDate
-        ? url.searchParams.append("start", startDate?.toString())
-        : null;
-      endDate ? url.searchParams.append("end", endDate?.toString()) : null;
+      start ? url.searchParams.append("start", start?.toString()) : null;
+      end ? url.searchParams.append("end", end?.toString()) : null;
 
       const response = await fetch(url.toString());
 
       const result: any = await response.json();
 
       if (response.ok) {
-        console.log("okay");
-
         const pickSchemaValues = new PickSchemaValues(
           z.object({ name: z.string(), age: z.number() }),
-          { age: true },
+          { name: true },
         );
 
         pickSchemaValues.getParsedObject({ name: "gabe", age: 20 });
 
-        const gasPeriods = z.object(result.response.data);
-        // console.log(result.response.data);
-
-        const parsedGasPeriods = gasPeriods.pick({
-          period: true,
-          // areaName: true,
-          // productName: true,
-          value: true,
-          units: true,
-        });
-
-        // console.log(parsedGasPeriods);
+        /// response schema from api endpoint and the desired values
+        const gasPeriods = new PickSchemaValues(
+          z.object({
+            period: z.string(),
+            duoarea: z.string(),
+            "area-name": z.string(),
+            product: z.string(),
+            "product-name": z.string(),
+            process: z.string(),
+            "process-name": z.string(),
+            series: z.string(),
+            "series-description": z.string(),
+            value: z.coerce.number(), // Automatically converts string to number
+            units: z.string(),
+          }),
+          {
+            period: true,
+            "area-name": true,
+            "product-name": true,
+            value: true,
+            units: true,
+          },
+        );
 
         return {
           total: parseInt(result.response.total),
           frequency: result.response.frequency,
-          GasPeriods: z.array(parsedGasPeriods),
+          GasPeriods: gasPeriods.getParsedArray(result.response.data),
         };
       }
     } catch (error) {

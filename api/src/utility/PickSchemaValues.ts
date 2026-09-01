@@ -22,7 +22,7 @@ class PickSchemaValues {
   private schema: ZodObject;
   private picked: any;
 
-  constructor(schema: ZodObject, picked: picked<string>) {
+  constructor(schema: ZodObject, picked: picked<any>) {
     this.schema = schema;
     this.picked = picked;
   }
