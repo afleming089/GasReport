@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+/** Types */
 export const GasPeriod = z.object({
   period: z.string(),
   "area-name": z.string(),
@@ -8,15 +9,57 @@ export const GasPeriod = z.object({
   units: z.string(),
 });
 
+/** Models http://api.eia.gov/v2/petroleum/pri/gnd/data endpoint responses */
+export const EIAGasPeriod = z.object({
+  period: z.string(),
+  duoarea: z.string(),
+  "area-name": z.string(),
+  product: z.string(),
+  "product-name": z.string(),
+  process: z.string(),
+  "process-name": z.string(),
+  series: z.string(),
+  "series-description": z.string(),
+  value: z.coerce.number(), // Automatically converts string to number
+  units: z.string(),
+});
+
 export type GasPeriodT = z.infer<typeof GasPeriod>;
 
-// for YYYY or YYYY-MM or YYYY-MM-DD formats
-export const dateRegex = /^\d{4}-\d{2}-\d{2}$|^\d{4}-\d{2}$|^\d{4}$/;
+/**
+ *  period: date
+ *
+ *  value: price at this period
+ *
+ *  units: string of measurement type
+ *
+ *  percentChange: percent change from a reference period
+ *
+ *  priceChange: price change from a reference period
+ */
+export const ComparedPeriod = z.object({
+  period: z.string(), // date
+  value: z.string(), // price at this period
+  units: z.string(),
+  percentChange: z.number().optional(), // percent change from a reference period
+  priceChange: z.number().optional(), // price change from a reference period
+});
 
-/// options
+/** Regular Expression */
+/** for YYYY or YYYY-MM or YYYY-MM-DD formats */
+export const Year_Month_Day = /^\d{4}-\d{2}-\d{2}$|^\d{4}-\d{2}$|^\d{4}$/;
+
+/** for YYYY or YYYY-MM formats */
+export const Year_Month = /^\d{4}-\d{2}-\d{2}$|^\d{4}-\d{2}$|^\d{4}$/;
+
+/** options */
 export const frequency = ["weekly", "monthly", "annual"] as const;
 
+/** Query Parameter Options */
 /**
+ * docs https://www.eia.gov/petroleum/gasdiesel/gas_geographies.php#pricesbyregion
+ * PADD means Petroleum Administration for Defense Districts
+ *
  *  NUS: U.S. [All Below]
  *
  *  R10: PADD 1 East Coast [New England, Central Atlantic, Lower Atlantic]
@@ -74,44 +117,40 @@ export const frequency = ["weekly", "monthly", "annual"] as const;
  *  YMIA: MIAMI
  *
  *  YORD: CHICAGO
- *
  */
-
-/// docs https://www.eia.gov/petroleum/gasdiesel/gas_geographies.php#pricesbyregion
-/// PADD means Petroleum Administration for Defense Districts
 export const locations = [
-  "NUS", /// U.S. [All Below]
-  "R10", /// PADD 1 East Coast [New England, Central Atlantic, Lower Atlantic]
-  "R1X", /// PADD 1A New England [ME, VT, NH, MA, CT, RI]
-  "R1Y", /// PADD 1B Central Atlantic [NY, PA, MD, NJ, DE]
-  "R1Z", /// PADD 1C Lower Atlantic [WV, VA, NC, SC, GA, FL]
-  "R20", /// PADD 2 Midwest [ND, SD, NE, KS, OK, MO, IA, MN, WI, IL, IN, MI, OH, KY, TN]
-  "R30", /// PADD 3 Gulf Coast [NM, TX, AR, LA, MS, AL]
-  "R40", /// PADD 4 Rocky Mountain [MT, ID, WY, UT, CO]
-  "R50", /// PADD 5 West Coast [WA, OR, NV, CA, AZ, AK, HI]
-  "R5XCA", /// PADD 5 EXCEPT CALIFORNIA
-  "SCA", /// CALIFORNIA
-  "SCO", /// COLORADO
-  "SFL", /// FLORIDA
-  "SMA", /// MASSACHUSETTS
-  "SMN", /// MINNESOTA
-  "SNY", /// NEW YORK
-  "SOH", /// OHIO
-  "STX", /// TEXAS
-  "SWA", /// WASHINGTON
-  "Y05LA", ///  LOS ANGELES
-  "Y05SF", ///  SAN FRANCISCO
-  "Y35NY", ///  NEW YORK CITY
-  "Y44HO", ///  HOUSTON
-  "Y48SE", ///  SEATTLE
-  "YBOS", /// BOSTON
-  "YCLE", /// CLEVELAND
-  "YDEN", /// DENVER
-  "YMIA", /// MIAMI
-  "YORD", /// CHICAGO
+  "NUS", // U.S. [All Below]
+  "R10", // PADD 1 East Coast [New England, Central Atlantic, Lower Atlantic]
+  "R1X", // PADD 1A New England [ME, VT, NH, MA, CT, RI]
+  "R1Y", // PADD 1B Central Atlantic [NY, PA, MD, NJ, DE]
+  "R1Z", // PADD 1C Lower Atlantic [WV, VA, NC, SC, GA, FL]
+  "R20", // PADD 2 Midwest [ND, SD, NE, KS, OK, MO, IA, MN, WI, IL, IN, MI, OH, KY, TN]
+  "R30", // PADD 3 Gulf Coast [NM, TX, AR, LA, MS, AL]
+  "R40", // PADD 4 Rocky Mountain [MT, ID, WY, UT, CO]
+  "R50", // PADD 5 West Coast [WA, OR, NV, CA, AZ, AK, HI]
+  "R5XCA", // PADD 5 EXCEPT CALIFORNIA
+  "SCA", // CALIFORNIA
+  "SCO", // COLORADO
+  "SFL", // FLORIDA
+  "SMA", // MASSACHUSETTS
+  "SMN", // MINNESOTA
+  "SNY", // NEW YORK
+  "SOH", // OHIO
+  "STX", // TEXAS
+  "SWA", // WASHINGTON
+  "Y05LA", // LOS ANGELES
+  "Y05SF", // SAN FRANCISCO
+  "Y35NY", // NEW YORK CITY
+  "Y44HO", // HOUSTON
+  "Y48SE", // SEATTLE
+  "YBOS", // BOSTON
+  "YCLE", // CLEVELAND
+  "YDEN", // DENVER
+  "YMIA", // MIAMI
+  "YORD", // CHICAGO
 ] as const;
 
-/**
+/** includes subsets in each such as low sulfur, reformulated and conventional
  * EPMR: Regular Gasoline
  *
  * EPMM: Mid-grade
@@ -121,13 +160,12 @@ export const locations = [
  * EPD2D: No 2 Diesel
  *
  * EPM0: Total Gasoline
+ *
  */
-
-/// includes subsets in each such as low sulfur, reformulated and conventional
 export const fuelType = [
-  "EPMR", /// Regular Gasoline
-  "EPMM", /// Mid-grade
-  "EPMP", /// Premium Gasoline
-  "EPD2D", /// No 2 Diesel
-  "EPM0", /// Total Gasoline
+  "EPMR", // Regular Gasoline
+  "EPMM", // Mid-grade
+  "EPMP", // Premium Gasoline
+  "EPD2D", // No 2 Diesel
+  "EPM0", // Total Gasoline
 ] as const;
