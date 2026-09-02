@@ -7,8 +7,8 @@
  * @module
  */
 
-import { OpenAPIRoute } from "chanfana";
 import { z } from "zod";
+import { ApiException, OpenAPIRoute } from "chanfana";
 
 import { PickSchemaValues } from "../../../utility/PickSchemaValues";
 
@@ -98,7 +98,8 @@ export class GetPetroleumPeriods extends OpenAPIRoute {
         };
       }
     } catch (error) {
-      console.error("Fetch failed:", error);
+      console.log(error);
+      throw new ApiException("Operation failed due to an unexpected error");
     }
   }
 }

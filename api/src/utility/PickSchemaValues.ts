@@ -21,25 +21,43 @@ type picked<T> = {
 class PickSchemaValues {
   private schema: ZodObject;
   private picked: any;
+  private pickedSchema: any;
 
   constructor(schema: ZodObject, picked: picked<any>) {
     this.schema = schema;
     this.picked = picked;
+
+    /** so type can be inferred on return values. Just abstract schema not implemented with concrete data  */
+    this.pickedSchema = this.schema.pick(this.picked);
   }
 
   /**
    * Of type schema
    *
+   * returns a type of pickedSchema from constructor
+   *
    * Picks wanted data then adds them to the schema structure
-   * @param data
+   * @function
    */
-  getParsedObject(data: z.infer<typeof this.schema>) {
+  getParsedObject(
+    data: z.infer<typeof this.schema>,
+  ): z.infer<typeof this.pickedSchema> {
     const parsedData = this.schema.pick(this.picked).parse(data);
 
     return parsedData;
   }
 
-  getParsedArray(dataArray: z.infer<(typeof this.schema)[]>) {
+  /**
+   * Of type schema
+   *
+   * returns a type of pickedSchema array from constructor
+   *
+   * Picks wanted data then adds them to the schema structure
+   * @function
+   */
+  getParsedArray(
+    dataArray: z.infer<(typeof this.schema)[]>,
+  ): z.infer<(typeof this.pickedSchema)[]> {
     const pickedSchema = this.schema.pick(this.picked);
 
     const pickedSchemaArray = z.array(pickedSchema);

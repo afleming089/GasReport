@@ -45,6 +45,21 @@ export const ComparedPeriod = z.object({
   priceChange: z.number().optional(), // price change from a reference period
 });
 
+/**
+ * Incases there is a non existent value in the data set. Like the user request all the way at the end of the data set.
+ */
+export const PeriodNull = z.object({
+  message: z
+    .string()
+    .regex(
+      /^Period \d+ (?:weeks|months|years) before \d{4}-\d{2}-\d{2}$|^\d{4}-\d{2}$|^\d{4} dose not exit\.$/,
+      "Example output: Period 3 weeks before 2026-01-04 dose not exist.",
+    )
+    .describe(
+      "A formatted error for if a period dose not exist in a data set. Example Period [int 1 or more] [string with value of 'weeks', 'months' or 'years'] before [referencePeriod] dose not exist.",
+    ),
+});
+
 /** Regular Expression */
 /** for YYYY or YYYY-MM or YYYY-MM-DD formats */
 export const Year_Month_Day = /^\d{4}-\d{2}-\d{2}$|^\d{4}-\d{2}$|^\d{4}$/;
@@ -160,7 +175,6 @@ export const locations = [
  * EPD2D: No 2 Diesel
  *
  * EPM0: Total Gasoline
- *
  */
 export const fuelType = [
   "EPMR", // Regular Gasoline
