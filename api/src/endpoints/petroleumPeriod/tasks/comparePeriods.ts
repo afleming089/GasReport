@@ -59,26 +59,36 @@ export class ComparePeriods extends OpenAPIRoute {
          *
          * Is an array so you can pass in multiple periodsToCompare
          *
-         * It is easier to say compare this date, referencePeriod, to a date 3 weeks ago instead of needing to find the exact date that was three weeks before referencePeriod. 3 weeks may be easy to find but say compare this date to one 6 years ago. Finding that exact date manually would get repetitive given leap years and what not. Here you just put in a reference date and say compare this date to one 3 weeks ago or 5 month ago and etc.
+         * It is easier to say compare this date, referencePeriod, to a date 3 weeks ago instead of needing to find the
+         * exact date that was three weeks before referencePeriod. 3 weeks may be easy to find but say compare this
+         * date to one 6 years ago. Finding that exact date manually would get repetitive given leap years and what
+         * not. Here you just put in a reference date and say compare this date to one 3 weeks ago or 5 month ago and
+         * etc.
          */
-        periodsToCompare: z
-          .array(
-            z.object({
-              count: z.number().int().positive().meta({
-                description:
-                  "The number of intervals to look back from the reference period.",
+        periodsToCompare: z.preprocess(
+          (jsonString: string) => {
+            return JSON.parse(jsonString);
+          },
+          z
+            .array(
+              z.object({
+                count: z.number().int().positive().meta({
+                  description:
+                    "The number of intervals to look back from the reference period.",
+                }),
+                unit: z.enum(["week", "month", "year"]).meta({
+                  description: "Interval units.",
+                }),
               }),
-              unit: z.enum(["week", "month", "year"]).meta({
-                description: "Interval units.",
-              }),
+            )
+            .meta({
+              description:
+                "periodsToCompare is how ever many intervals back from the referencePeriod. Interval count is the number of intervals and intervalUnit is the unit of time frames such as week, month or year. Has an array so you can pass in as many periodsToCompare as you like. Max of 10 years back.",
             }),
-          )
-          .meta({
-            description:
-              "periodsToCompare is how ever many intervals back from the referencePeriod. Interval count is the number of intervals and intervalUnit is the unit of time frames such as week, month or year. Has an array so you can pass in as many periodsToCompare as you like. Max of 10 years back.",
-          }),
-        getPercentChange: z.boolean().default(true),
-        getPriceChange: z.boolean().default(false),
+        ),
+
+        // getPercentChange: z.boolean().default(true),
+        // getPriceChange: z.boolean().default(false),
       }),
     },
     responses: {
@@ -137,7 +147,6 @@ export class ComparePeriods extends OpenAPIRoute {
       const result: any = await response.json();
 
       if (response.ok) {
-        /** response schema from api endpoint and the desired values */
         const gasPeriods = new PickSchemaValues(ResponseSchema, {
           period: true,
           "area-name": true,
@@ -146,25 +155,30 @@ export class ComparePeriods extends OpenAPIRoute {
           units: true,
         });
 
-        const resultLength: number = result.response.total - 1;
+        const comparedPeriod = new PickSchemaValues(ResponseSchema, {
+          period: true,
 
+          value: true,
+          units: true,
+        });
+
+        const periodDataIndexes = result.response.data.length - 1;
         // get top and set as referenceDatePeriod
         const referencePeriod: GasPeriodT = gasPeriods.getParsedObject(
-          result.response.data[resultLength],
+          result.response.data[periodDataIndexes],
         );
         // go through data set based on periodsToCompare and find the right date for each of those and add to comparedPeriods return array. if dose not exist, like end of dataset return PeriodNull object
-        console.log(result.response);
-        console.log(referencePeriod);
 
-        const comparedPeriods = z.array(ComparedPeriod.or(PeriodNull));
+        const array: any = [];
         /**
          * For each periodToCompare go back how ever many intervals from the reference period and add the found period
          * to a ComparedPeriod schema if exist or a PeriodNull if it dose not exist. Pushes to an array that will be
          * returned in response.
          */
+        // if undefined just return null period
         periodsToCompare.forEach((period) => {
           /** Multiple of the a week */
-          let multiple: number;
+          let multiple: number = 1;
           switch (period.unit) {
             case "week":
               multiple = 1;
@@ -176,16 +190,21 @@ export class ComparePeriods extends OpenAPIRoute {
               multiple = 52;
               break;
             default:
-              multiple = 0;
               break;
           }
 
+          const dataPoint =
+            result.response.data[periodDataIndexes - period.count * multiple];
           // see what happens when you are at the end of the data. what is returned
-          const comparedPeriod =
-            result.response.data[resultLength - period.count * multiple];
 
-          // if (comparedPeriod) comparedPeriods.parse(ComparedPeriod.parse(data));
+          console.log(dataPoint);
+          array.push(dataPoint);
         });
+        const comparedPeriods = z.array(ComparedPeriod.or(PeriodNull));
+        comparedPeriods.parse(array);
+
+        // console.log(array);
+        // console.log(comparedPeriods);
       }
 
       // return {
