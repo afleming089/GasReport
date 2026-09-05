@@ -4,8 +4,53 @@ import { Hono } from "hono";
 /// endpoints
 // import Users from "./endpoints/"
 import PetroleumPeriods from "./endpoints/petroleumPeriod/petroleumEndpoints";
+import { UnauthorizedException } from "chanfana";
+import { TooManyRequestsException } from "chanfana";
+import { HTTPException } from "hono/http-exception";
+import { ZodError } from "zod";
 
 const app = new Hono<{ Bindings: Env }>();
+
+app.onError((err, c) => {
+  console.error("Global error handler caught:", err);
+
+  /**
+   * Chanfana errors arrive as HTTPException with the formatted response attached.
+   * Call getResponse() to return chanfana's standard error format.
+   */
+  if (err instanceof HTTPException) {
+    return err.getResponse();
+  }
+
+  if (err instanceof ZodError) {
+    return c.json(
+      {
+        ok: false,
+        validationErrors: err.issues,
+      },
+      400,
+    );
+  }
+
+  //   if (!authToken) {
+  //     throw new UnauthorizedException("Authentication token is required.");
+  //   }
+
+  // In your endpoint
+  // if (rateLimitExceeded) {
+  //   throw new TooManyRequestsException("Rate limit exceeded", 60); // Retry after 60 seconds
+  // }
+  // Response will include header: Retry-After: 60
+
+  /** For non-chanfana errors, return a generic 500 response */
+  return c.json(
+    {
+      success: false,
+      errors: [{ code: 7000, message: "Internal Server Error" }],
+    },
+    500,
+  );
+});
 
 /// Setup OpenAPI registry
 const openapi = fromHono(app, {
@@ -43,30 +88,3 @@ const openapi = fromHono(app, {
 openapi.route("/petroleum-periods", PetroleumPeriods);
 
 export default app;
-
-// import { fromHono } from "chanfana";
-// import { Hono } from "hono";
-// import { TaskCreate } from "./endpoints/taskCreate";
-// import { TaskDelete } from "./endpoints/taskDelete";
-// import { TaskFetch } from "./endpoints/taskFetch";
-// import { TaskList } from "./endpoints/taskList";
-
-// // Start a Hono app
-// const app = new Hono<{ Bindings: Env }>();
-
-// // Setup OpenAPI registry
-// const openapi = fromHono(app, {
-//   docs_url: "/",
-// });
-
-// // Register OpenAPI endpoints
-// openapi.get("/api/tasks", TaskList);
-// openapi.post("/api/tasks", TaskCreate);
-// openapi.get("/api/tasks/:taskSlug", TaskFetch);
-// openapi.delete("/api/tasks/:taskSlug", TaskDelete);
-
-// // You may also register routes for non OpenAPI directly on Hono
-// // app.get('/test', (c) => c.text('Hono!'))
-
-// // Export the Hono app
-// export default app;

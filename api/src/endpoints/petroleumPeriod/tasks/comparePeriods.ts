@@ -21,7 +21,7 @@
  */
 
 import { z } from "zod";
-import { ApiException, InputValidationException, OpenAPIRoute } from "chanfana";
+import { contentJson, NotFoundException, OpenAPIRoute } from "chanfana";
 
 // types
 import {
@@ -90,24 +90,22 @@ export class ComparePeriods extends OpenAPIRoute {
     responses: {
       "200": {
         description: "Returns a list of compared GasPeriods",
-        content: {
-          "application/json": {
-            schema: z.object({
-              referencePeriod: z
-                .object(GasPeriod)
-                .describe(
-                  "Period date is the date most close to the requested date. If there is not a period on 2026-04-01 for example it will return a period that actually exist in the database that is closest to that date. It will be with in a week of the requested date. The API only tracks data over the span of a week not each day.",
-                ),
-              comparedGasPeriods: z
-                .array(ComparedGasPeriod.or(NullPeriod))
-                .describe(
-                  "Final comparison of priorPeriods to the referencePeriod.",
-                ),
-            }),
-          },
-        },
+        ...contentJson(
+          z.object({
+            referencePeriod: z
+              .object(GasPeriod)
+              .describe(
+                "Period date is the date most close to the requested date. If there is not a period on 2026-04-01 for example it will return a period that actually exist in the database that is closest to that date. It will be with in a week of the requested date. The API only tracks data over the span of a week not each day.",
+              ),
+            comparedGasPeriods: z
+              .array(ComparedGasPeriod.or(NullPeriod))
+              .describe(
+                "Final comparison of priorPeriods to the referencePeriod.",
+              ),
+          }),
+        ),
       },
-      ...InputValidationException.schema(),
+      ...NotFoundException.schema(), // Document HTTP 404 error
     },
   };
 
@@ -118,103 +116,105 @@ export class ComparePeriods extends OpenAPIRoute {
     // Retrieve the validated parameters
     const { location, fuelType, referenceDate, priorPeriods } = data.query;
 
-    try {
-      const url = new URL(c.env.END_POINT);
+    const url = new URL(c.env.END_POINT);
 
-      url.searchParams.append("api_key", c.env.API_TOKEN);
-      url.searchParams.append("facets[product][]", fuelType);
-      url.searchParams.append("frequency", "weekly");
-      url.searchParams.append("facets[duoarea][]", location);
-      url.searchParams.append("data[]", "value");
-      url.searchParams.append("end", referenceDate); // end date
+    url.searchParams.append("api_key", c.env.API_TOKEN);
+    url.searchParams.append("facets[product][]", fuelType);
+    url.searchParams.append("frequency", "weekly");
+    url.searchParams.append("facets[duoarea][]", location);
+    url.searchParams.append("data[]", "value");
+    url.searchParams.append("end", referenceDate); // end date
 
-      const response = await fetch(url.toString());
-      const result: any = await response.json();
+    const response = await fetch(url.toString());
+    const result: any = await response.json();
 
-      const rawData = result.response.data;
+    /**In case third part api is out of service */
+    if (!result)
+      throw new NotFoundException("Failed to fetch from https://api.eia.gov");
 
-      /** Takes raw response EIA api and picks desired values from it. Only the schema is created here. Need to pass in object to be picked still */
-      const pick = new PickSchemaValues(EIAResponse, {
-        period: true,
-        "area-name": true,
-        "product-name": true,
-        value: true,
-        units: true,
-      });
+    const rawData = result.response.data;
 
-      /**  referenceDate period data */
-      const referencePeriod: GasPeriodT = pick.getParsedObject(
-        rawData[rawData.length - 1],
+    if (rawData.length === 0)
+      throw new NotFoundException(
+        `No period data found with current parameters.}`,
       );
 
-      /** To be parsed into comparedGasPeriods schema then responded parameter returned to user.*/
-      const comparedGasPeriods: Array<ComparedGasPeriodT | NullPeriodT> = [];
+    /** Takes raw response EIA api and picks desired values from it. Only the schema is created here. Need to pass in object to be picked still */
+    const pick = new PickSchemaValues(EIAResponse, {
+      period: true,
+      "area-name": true,
+      "product-name": true,
+      value: true,
+      units: true,
+    });
 
-      if (response.ok) {
-        /**
-         * Each data index holds a week of gas period data.
-         *
-         * Last item of the data array is the referenceDate. It is the latest date in the data set and is what is compared to other periods before it.
-         *
-         * Uses period.unit to see how many weeks to go back in the data.
-         * So a month would hold four weeks so to go back 1 month you multiply period.unitCount, number of months, by weeksInUnit. weeksInUnit is found by the switch statement. So if period.unit was month that would mean the number of weeks in that unit would be four since there is about four weeks in a month.
-         *
-         * Then to find the desired period it starts at the top of data array and subtracts the number of weeks from the data length to get the week of the desired period.
-         */
-        priorPeriods.forEach((period) => {
-          /** the approximant number of weeks for each unit */
-          let weeksInUnit: number = 0;
-          switch (period.unit) {
-            case "week":
-              weeksInUnit = 1;
-              break;
-            case "month":
-              weeksInUnit = 4;
-              break;
-            case "year":
-              weeksInUnit = 52;
-              break;
-          }
+    /**  referenceDate period data */
+    const referencePeriod: GasPeriodT = pick.getParsedObject(
+      rawData[rawData.length - 1],
+    );
 
-          /** Finds period to compare in rawData then adds the desired values defined in pick and then returns a parsed zod object.*/
-          const priorPeriod = pick.getParsedObject(
-            rawData[rawData.length - 1 - period.unitCount * weeksInUnit],
-          );
+    /** To be parsed into comparedGasPeriods schema then responded parameter returned to user.*/
+    const comparedGasPeriods: Array<ComparedGasPeriodT | NullPeriodT> = [];
 
-          // if exist
-          if (priorPeriod !== undefined) {
-            const comparedGasPeriod: ComparedGasPeriodT = {
-              ...priorPeriod,
-              timeAgo: `${period.unitCount} ${period.unit}`,
-              percentChange: (
-                ((referencePeriod.value - priorPeriod.value) /
-                  Math.abs(priorPeriod.value)) *
-                100
-              ).toFixed(2),
-              priceChange: (referencePeriod.value - priorPeriod.value).toFixed(
-                2,
-              ),
-            };
+    if (response.ok) {
+      /**
+       * Each data index holds a week of gas period data.
+       *
+       * Last item of the data array is the referenceDate. It is the latest date in the data set and is what is compared to other periods before it.
+       *
+       * Uses period.unit to see how many weeks to go back in the data.
+       * So a month would hold four weeks so to go back 1 month you multiply period.unitCount, number of months, by weeksInUnit. weeksInUnit is found by the switch statement. So if period.unit was month that would mean the number of weeks in that unit would be four since there is about four weeks in a month.
+       *
+       * Then to find the desired period it starts at the top of data array and subtracts the number of weeks from the data length to get the week of the desired period.
+       */
+      priorPeriods.forEach((period) => {
+        /** the approximant number of weeks for each unit */
+        let weeksInUnit: number = 0;
+        switch (period.unit) {
+          case "week":
+            weeksInUnit = 1;
+            break;
+          case "month":
+            weeksInUnit = 4;
+            break;
+          case "year":
+            weeksInUnit = 52;
+            break;
+        }
 
-            comparedGasPeriods.push(comparedGasPeriod);
-          } else {
-            const nullPeriod: NullPeriodT = {
-              success: false,
-              message: `Period ${period.unitCount} ${period.unit} before ${referenceDate} dose not exist.`,
-            };
+        /** Finds period to compare in rawData then adds the desired values defined in pick and then returns a parsed zod object.*/
+        const priorPeriod = pick.getParsedObject(
+          rawData[rawData.length - 1 - period.unitCount * weeksInUnit],
+        );
 
-            comparedGasPeriods.push(nullPeriod);
-          }
-        });
-      }
+        // if exist
+        if (priorPeriod !== undefined) {
+          const comparedGasPeriod: ComparedGasPeriodT = {
+            ...priorPeriod,
+            timeAgo: `${period.unitCount} ${period.unit}`,
+            percentChange: (
+              ((referencePeriod.value - priorPeriod.value) /
+                Math.abs(priorPeriod.value)) *
+              100
+            ).toFixed(2),
+            priceChange: (referencePeriod.value - priorPeriod.value).toFixed(2),
+          };
 
-      return {
-        referencePeriod: referencePeriod,
-        comparedGasPeriods: comparedGasPeriods,
-      };
-    } catch (error) {
-      console.log(error);
-      throw new ApiException("Operation failed due to an unexpected error");
+          comparedGasPeriods.push(comparedGasPeriod);
+        } else {
+          const nullPeriod: NullPeriodT = {
+            success: false,
+            message: `Period ${period.unitCount} ${period.unit} before ${referenceDate} dose not exist.`,
+          };
+
+          comparedGasPeriods.push(nullPeriod);
+        }
+      });
     }
+
+    return {
+      referencePeriod: referencePeriod,
+      comparedGasPeriods: comparedGasPeriods,
+    };
   }
 }
