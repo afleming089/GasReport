@@ -8,14 +8,14 @@
  */
 
 import { z } from "zod";
-import { ApiException, OpenAPIRoute } from "chanfana";
+import { ApiException, InputValidationException, OpenAPIRoute } from "chanfana";
 
 import { PickSchemaValues } from "../../../utility/PickSchemaValues";
 
 // types
 import {
   GasPeriod,
-  EIAGasPeriod as ResponseSchema,
+  EIAResponse,
   locations,
   fuelType,
   frequency,
@@ -56,6 +56,7 @@ export class GetPetroleumPeriods extends OpenAPIRoute {
           },
         },
       },
+      ...InputValidationException.schema(),
     },
   };
 
@@ -82,8 +83,8 @@ export class GetPetroleumPeriods extends OpenAPIRoute {
       const result: any = await response.json();
 
       if (response.ok) {
-        /** response schema from api endpoint and the desired values */
-        const gasPeriods = new PickSchemaValues(ResponseSchema, {
+        /** Takes raw response EIA api and picks desired values from it. Only the schema is created here. Need to pass in object to be picked still */
+        const pick = new PickSchemaValues(EIAResponse, {
           period: true,
           "area-name": true,
           "product-name": true,
@@ -94,7 +95,7 @@ export class GetPetroleumPeriods extends OpenAPIRoute {
         return {
           total: parseInt(result.response.total),
           frequency: result.response.frequency,
-          GasPeriods: gasPeriods.getParsedArray(result.response.data),
+          GasPeriods: pick.getParsedArray(result.response.data),
         };
       }
     } catch (error) {

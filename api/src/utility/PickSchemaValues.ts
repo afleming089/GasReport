@@ -42,7 +42,7 @@ class PickSchemaValues {
   getParsedObject(
     data: z.infer<typeof this.schema>,
   ): z.infer<typeof this.pickedSchema> {
-    if (data == undefined) throw new Error("Object undefined");
+    if (data === undefined) return undefined;
 
     const parsedData = this.schema.pick(this.picked).parse(data);
 
@@ -60,7 +60,7 @@ class PickSchemaValues {
   getParsedArray(
     dataArray: z.infer<(typeof this.schema)[]>,
   ): z.infer<(typeof this.pickedSchema)[]> {
-    if (dataArray == undefined) throw new Error("Array undefined");
+    if (dataArray === undefined) return undefined;
 
     const pickedSchema = this.schema.pick(this.picked);
 

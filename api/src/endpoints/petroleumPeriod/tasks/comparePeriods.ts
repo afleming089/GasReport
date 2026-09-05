@@ -2,36 +2,35 @@
  * Compares gas periods from a reference date to periods before it.
  *
  * Query Params:
- * referenceDate: the date you want to compare to dates before it
+ * referenceDate: the date you want to compare to dates before it.
  *
- * periodsBefore array:
- * periodsBefore holds objects that have a weeksBefore attribute and a frequency attribute
+ * periodsBefore array: Periods before referenceDate. Will be compared to referenceDates period.
+ * periodsBefore holds objects that have a unitCount attribute and a unit attribute.
  *
  * periodsBefore schema example
  *
  * {
- *    amountBefore: int,
- *    frequency: "weekly" | "monthly" | "annual"
+ *    unitCount: int,
+ *    unit: "week" | "month" | "year"
  * }
  *
- * Max of 10 years on comparisons
- *
- * Returns percent up or down for each period compared to referenceDate
- * Returns dollar differences for each period compared to referenceDate
- * Returns the price for each period before
- *
+ * Returns percent change from compared periods to referenceDate
+ * Returns price change from compared periods to referenceDate
+ * Returns the price of the product at the compared periods date
  * @module
  */
 
 import { z } from "zod";
-import { ApiException, OpenAPIRoute } from "chanfana";
+import { ApiException, InputValidationException, OpenAPIRoute } from "chanfana";
 
 // types
 import {
   GasPeriod,
-  EIAGasPeriod as ResponseSchema,
-  ComparedPeriod,
-  PeriodNull,
+  EIAResponse,
+  ComparedGasPeriod,
+  ComparedGasPeriodT,
+  NullPeriod,
+  NullPeriodT,
   locations,
   fuelType,
   Year_Month_Day,
@@ -44,7 +43,7 @@ export class ComparePeriods extends OpenAPIRoute {
   schema = {
     tags: ["Compare Periods"],
     summary:
-      "Compares the change from selected date period and compares it to the period before it. Can return percentage change of the two and or the price change of the two.",
+      "Takes a reference periods price and compares it to period prices before it. Returns the difference in dollars, and percentage change between the reference period and the compared period. Compared periods price is returned as well. Can compare multiple periods to the reference period in one call. Returns an array of ComparedGasPeriod.",
     request: {
       query: z.object({
         location: z.enum(locations),
@@ -53,11 +52,11 @@ export class ComparePeriods extends OpenAPIRoute {
           .string()
           .regex(Year_Month_Day, "Must be YYYY, YYYY-MM, YYYY-MM-DD"),
         /**
-         * periodsToCompare is how ever many intervals back from the referencePeriod
+         * priorPeriods is how ever many intervals back from the referencePeriod
          *
          * So count: 2 and unit: week would get the period two weeks before referencePeriod
          *
-         * Is an array so you can pass in multiple periodsToCompare
+         * Is an array so you can pass in multiple priorPeriods
          *
          * It is easier to say compare this date, referencePeriod, to a date 3 weeks ago instead of needing to find the
          * exact date that was three weeks before referencePeriod. 3 weeks may be easy to find but say compare this
@@ -65,14 +64,14 @@ export class ComparePeriods extends OpenAPIRoute {
          * not. Here you just put in a reference date and say compare this date to one 3 weeks ago or 5 month ago and
          * etc.
          */
-        periodsToCompare: z.preprocess(
+        priorPeriods: z.preprocess(
           (jsonString: string) => {
             return JSON.parse(jsonString);
           },
           z
             .array(
               z.object({
-                count: z.number().int().positive().meta({
+                unitCount: z.number().int().positive().meta({
                   description:
                     "The number of intervals to look back from the reference period.",
                 }),
@@ -83,17 +82,14 @@ export class ComparePeriods extends OpenAPIRoute {
             )
             .meta({
               description:
-                "periodsToCompare is how ever many intervals back from the referencePeriod. Interval count is the number of intervals and intervalUnit is the unit of time frames such as week, month or year. Has an array so you can pass in as many periodsToCompare as you like. Max of 10 years back.",
+                "priorPeriods is how ever many intervals back from the referencePeriod. Interval count is the number of intervals and intervalUnit is the unit of time frames such as week, month or year. Has an array so you can pass in as many priorPeriods as you like. Max of 10 years back.",
             }),
         ),
-
-        // getPercentChange: z.boolean().default(true),
-        // getPriceChange: z.boolean().default(false),
       }),
     },
     responses: {
       "200": {
-        description: "Returns a list Gas Periods",
+        description: "Returns a list of compared GasPeriods",
         content: {
           "application/json": {
             schema: z.object({
@@ -102,11 +98,16 @@ export class ComparePeriods extends OpenAPIRoute {
                 .describe(
                   "Period date is the date most close to the requested date. If there is not a period on 2026-04-01 for example it will return a period that actually exist in the database that is closest to that date. It will be with in a week of the requested date. The API only tracks data over the span of a week not each day.",
                 ),
-              comparedPeriods: z.array(ComparedPeriod.or(PeriodNull)),
+              comparedGasPeriods: z
+                .array(ComparedGasPeriod.or(NullPeriod))
+                .describe(
+                  "Final comparison of priorPeriods to the referencePeriod.",
+                ),
             }),
           },
         },
       },
+      ...InputValidationException.schema(),
     },
   };
 
@@ -115,22 +116,7 @@ export class ComparePeriods extends OpenAPIRoute {
     const data = await this.getValidatedData<typeof this.schema>();
 
     // Retrieve the validated parameters
-    const { location, fuelType, referenceDate, periodsToCompare } = data.query;
-
-    /**
-     * Returns weekly frequency always
-     * Can only go back 10 years from referenceDate
-     *
-     * fetch start referenceDate end referenceDate - 10 years
-     *
-     * Get all data from reference date to 10 years before with the frequency of weekly
-     * Start at top which is the referenceDate
-     * Use periodsBefore amountBefore int attribute to go back how ever many periods
-     * Multiply that with frequency type. If it is a week multiply by 1 if it is a month multiply by 4, year multiply by 52
-     * Add to a array to be returned
-     *
-     * Let full comparison happen but if it is to far back. Like it dose not exist then just return null for that data point and explain it dose not exist
-     */
+    const { location, fuelType, referenceDate, priorPeriods } = data.query;
 
     try {
       const url = new URL(c.env.END_POINT);
@@ -143,75 +129,89 @@ export class ComparePeriods extends OpenAPIRoute {
       url.searchParams.append("end", referenceDate); // end date
 
       const response = await fetch(url.toString());
-
       const result: any = await response.json();
 
+      const rawData = result.response.data;
+
+      /** Takes raw response EIA api and picks desired values from it. Only the schema is created here. Need to pass in object to be picked still */
+      const pick = new PickSchemaValues(EIAResponse, {
+        period: true,
+        "area-name": true,
+        "product-name": true,
+        value: true,
+        units: true,
+      });
+
+      /**  referenceDate period data */
+      const referencePeriod: GasPeriodT = pick.getParsedObject(
+        rawData[rawData.length - 1],
+      );
+
+      /** To be parsed into comparedGasPeriods schema then responded parameter returned to user.*/
+      const comparedGasPeriods: Array<ComparedGasPeriodT | NullPeriodT> = [];
+
       if (response.ok) {
-        const gasPeriods = new PickSchemaValues(ResponseSchema, {
-          period: true,
-          "area-name": true,
-          "product-name": true,
-          value: true,
-          units: true,
-        });
-
-        const comparedPeriod = new PickSchemaValues(ResponseSchema, {
-          period: true,
-
-          value: true,
-          units: true,
-        });
-
-        const periodDataIndexes = result.response.data.length - 1;
-        // get top and set as referenceDatePeriod
-        const referencePeriod: GasPeriodT = gasPeriods.getParsedObject(
-          result.response.data[periodDataIndexes],
-        );
-        // go through data set based on periodsToCompare and find the right date for each of those and add to comparedPeriods return array. if dose not exist, like end of dataset return PeriodNull object
-
-        const array: any = [];
         /**
-         * For each periodToCompare go back how ever many intervals from the reference period and add the found period
-         * to a ComparedPeriod schema if exist or a PeriodNull if it dose not exist. Pushes to an array that will be
-         * returned in response.
+         * Each data index holds a week of gas period data.
+         *
+         * Last item of the data array is the referenceDate. It is the latest date in the data set and is what is compared to other periods before it.
+         *
+         * Uses period.unit to see how many weeks to go back in the data.
+         * So a month would hold four weeks so to go back 1 month you multiply period.unitCount, number of months, by weeksInUnit. weeksInUnit is found by the switch statement. So if period.unit was month that would mean the number of weeks in that unit would be four since there is about four weeks in a month.
+         *
+         * Then to find the desired period it starts at the top of data array and subtracts the number of weeks from the data length to get the week of the desired period.
          */
-        // if undefined just return null period
-        periodsToCompare.forEach((period) => {
-          /** Multiple of the a week */
-          let multiple: number = 1;
+        priorPeriods.forEach((period) => {
+          /** the approximant number of weeks for each unit */
+          let weeksInUnit: number = 0;
           switch (period.unit) {
             case "week":
-              multiple = 1;
+              weeksInUnit = 1;
               break;
             case "month":
-              multiple = 4;
+              weeksInUnit = 4;
               break;
             case "year":
-              multiple = 52;
-              break;
-            default:
+              weeksInUnit = 52;
               break;
           }
 
-          const dataPoint =
-            result.response.data[periodDataIndexes - period.count * multiple];
-          // see what happens when you are at the end of the data. what is returned
+          /** Finds period to compare in rawData then adds the desired values defined in pick and then returns a parsed zod object.*/
+          const priorPeriod = pick.getParsedObject(
+            rawData[rawData.length - 1 - period.unitCount * weeksInUnit],
+          );
 
-          console.log(dataPoint);
-          array.push(dataPoint);
+          // if exist
+          if (priorPeriod !== undefined) {
+            const comparedGasPeriod: ComparedGasPeriodT = {
+              ...priorPeriod,
+              timeAgo: `${period.unitCount} ${period.unit}`,
+              percentChange: (
+                ((referencePeriod.value - priorPeriod.value) /
+                  Math.abs(priorPeriod.value)) *
+                100
+              ).toFixed(2),
+              priceChange: (referencePeriod.value - priorPeriod.value).toFixed(
+                2,
+              ),
+            };
+
+            comparedGasPeriods.push(comparedGasPeriod);
+          } else {
+            const nullPeriod: NullPeriodT = {
+              success: false,
+              message: `Period ${period.unitCount} ${period.unit} before ${referenceDate} dose not exist.`,
+            };
+
+            comparedGasPeriods.push(nullPeriod);
+          }
         });
-        const comparedPeriods = z.array(ComparedPeriod.or(PeriodNull));
-        comparedPeriods.parse(array);
-
-        // console.log(array);
-        // console.log(comparedPeriods);
       }
 
-      // return {
-      //   total: parseInt(result.response.total),
-      //   frequency: result.response.frequency,
-      //   GasPeriods: gasPeriods.getParsedArray(result.response.data),
-      // };
+      return {
+        referencePeriod: referencePeriod,
+        comparedGasPeriods: comparedGasPeriods,
+      };
     } catch (error) {
       console.log(error);
       throw new ApiException("Operation failed due to an unexpected error");

@@ -1,16 +1,8 @@
-import { z } from "zod";
+import { success, z } from "zod";
 
 /** Types */
-export const GasPeriod = z.object({
-  period: z.string(),
-  "area-name": z.string(),
-  "product-name": z.string(),
-  value: z.number(),
-  units: z.string(),
-});
-
 /** Models http://api.eia.gov/v2/petroleum/pri/gnd/data endpoint responses */
-export const EIAGasPeriod = z.object({
+export const EIAResponse = z.object({
   period: z.string(),
   duoarea: z.string(),
   "area-name": z.string(),
@@ -24,6 +16,17 @@ export const EIAGasPeriod = z.object({
   units: z.string(),
 });
 
+export type EIAGasPeriodT = z.infer<typeof EIAResponse>;
+
+/** What is returned to the user */
+export const GasPeriod = EIAResponse.pick({
+  period: true,
+  "area-name": true,
+  "product-name": true,
+  value: true,
+  units: true,
+});
+
 export type GasPeriodT = z.infer<typeof GasPeriod>;
 
 /**
@@ -33,32 +36,35 @@ export type GasPeriodT = z.infer<typeof GasPeriod>;
  *
  *  units: string of measurement type
  *
- *  percentChange: percent change from a reference period
+ *  percentChange: percent change from prior period to reference period
  *
- *  priceChange: price change from a reference period
+ *  priceChange: price change from prior period to reference period
  */
-export const ComparedPeriod = z.object({
-  period: z.string(), // date
-  value: z.string(), // price at this period
-  units: z.string(),
-  percentChange: z.number().optional(), // percent change from a reference period
-  priceChange: z.number().optional(), // price change from a reference period
+export const ComparedGasPeriod = GasPeriod.extend({
+  timeAgo: z.string(),
+  percentChange: z.coerce.number(), // percent change from prior period to reference period
+  priceChange: z.coerce.number(), // price change from prior period to reference period
 });
+
+export type ComparedGasPeriodT = z.infer<typeof ComparedGasPeriod>;
 
 /**
  * Incases there is a non existent value in the data set. Like the user request all the way at the end of the data set.
  */
-export const PeriodNull = z.object({
+export const NullPeriod = z.object({
+  success: z.boolean(),
   message: z
     .string()
     .regex(
-      /^Period \d+ (?:weeks|months|years) before \d{4}-\d{2}-\d{2}$|^\d{4}-\d{2}$|^\d{4} dose not exit\.$/,
+      /^Period \d+ (?:weeks|months|years) before \d{4}-\d{2}-\d{2}$|^\d{4}-\d{2}$|^\d{4} dose not exist\.$/,
       "Example output: Period 3 weeks before 2026-01-04 dose not exist.",
     )
     .describe(
       "A formatted error for if a period dose not exist in a data set. Example Period [int 1 or more] [string with value of 'weeks', 'months' or 'years'] before [referencePeriod] dose not exist.",
     ),
 });
+
+export type NullPeriodT = z.infer<typeof NullPeriod>;
 
 /** Regular Expression */
 /** for YYYY or YYYY-MM or YYYY-MM-DD formats */

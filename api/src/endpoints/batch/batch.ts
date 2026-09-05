@@ -5,3 +5,6 @@
 
 // optional parameters
 // fetch time
+
+// add standard response here
+// like api model on front end. if there is an error have it returned here
