@@ -8,3 +8,11 @@
 
 // add standard response here
 // like api model on front end. if there is an error have it returned here
+
+// add fetch time with this
+// app.use(async (c, next) => {
+//   const start = performance.now()
+//   await next()
+//   const end = performance.now()
+//   c.res.headers.set('X-Response-Time', `${end - start}`)
+// })

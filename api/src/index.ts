@@ -1,16 +1,29 @@
-import { fromHono } from "chanfana";
+import { ApiException, fromHono, UnauthorizedException } from "chanfana";
 import { Hono } from "hono";
+import { every } from "hono/combine";
+import { cors } from "hono/cors";
+import { csrf } from "hono/csrf";
+import { secureHeaders } from "hono/secure-headers";
 
 /// endpoints
 // import Users from "./endpoints/"
 import PetroleumPeriods from "./endpoints/petroleumPeriod/petroleumEndpoints";
-import { UnauthorizedException } from "chanfana";
-import { TooManyRequestsException } from "chanfana";
 import { HTTPException } from "hono/http-exception";
 import { ZodError } from "zod";
+import { timeout } from "hono/timeout";
+import { trimTrailingSlash } from "hono/trailing-slash";
+import { rateLimiter } from "hono-rate-limiter";
+import { logger } from "hono/logger";
+import { handleTurnstileValidation } from "./utility/validateTurnstile";
+import { env } from "cloudflare:workers";
+
+type Env = {
+  API_RATE_LIMITER: RateLimit;
+};
 
 const app = new Hono<{ Bindings: Env }>();
 
+/** Global Error Management */
 app.onError((err, c) => {
   console.error("Global error handler caught:", err);
 
@@ -51,6 +64,34 @@ app.onError((err, c) => {
     500,
   );
 });
+
+/** Global Middleware  */
+app.use(async (c, next) => {
+  c.res.headers.set("Fetch-Time", `${new Date()}`);
+  await next();
+});
+
+app.use(
+  rateLimiter<{ Bindings: Env }>({
+    binding: (c) => c.env.API_RATE_LIMITER,
+    keyGenerator: (c) => c.req.header("cf-connecting-ip") ?? "",
+    message: "Rate limit exceeded",
+    statusCode: 429,
+  }),
+);
+
+// make rate limit first then validate
+app.use(
+  "*",
+  every(
+    // cors(),
+    // csrf(),
+    // secureHeaders(),
+    // trimTrailingSlash(),
+    timeout(8000),
+    // logger(),
+  ),
+);
 
 /// Setup OpenAPI registry
 const openapi = fromHono(app, {

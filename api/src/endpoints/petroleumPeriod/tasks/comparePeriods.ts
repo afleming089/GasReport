@@ -38,6 +38,7 @@ import {
 } from "../petroleumTypes";
 import { type AppContext } from "../../../types";
 import { PickSchemaValues } from "../../../utility/PickSchemaValues";
+import { handleTurnstileValidation } from "../../../utility/validateTurnstile";
 
 export class ComparePeriods extends OpenAPIRoute {
   schema = {
@@ -110,15 +111,16 @@ export class ComparePeriods extends OpenAPIRoute {
   };
 
   async handle(c: AppContext) {
-    // Get validated data
+    await handleTurnstileValidation(c.req, c.env);
+    /**  Get validated data */
     const data = await this.getValidatedData<typeof this.schema>();
 
-    // Retrieve the validated parameters
+    /** Retrieve the validated parameters */
     const { location, fuelType, referenceDate, priorPeriods } = data.query;
 
     const url = new URL(c.env.END_POINT);
 
-    url.searchParams.append("api_key", c.env.API_TOKEN);
+    url.searchParams.append("api_key", "c.env.API_TOKEN");
     url.searchParams.append("facets[product][]", fuelType);
     url.searchParams.append("frequency", "weekly");
     url.searchParams.append("facets[duoarea][]", location);
