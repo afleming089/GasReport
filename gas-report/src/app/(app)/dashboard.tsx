@@ -25,81 +25,87 @@ import { PriceTrackerChart } from "../../components/dashboard/PriceTrackerChart"
 import ValidateTurnsite from "../../utility/validateTurnsite";
 
 export default function Dashboard() {
-  const [testFetch, setTestFetch] = useState<any>({});
+  const [turnsiteToken, setTurnstileToken] = useState<string>("");
 
-  return <ValidateTurnsite></ValidateTurnsite>;
+  useEffect(() => {
+    const response = fetch(
+      "http://localhost:8787/api/v1/petroleum-periods?frequency=monthly&location=NUS&fuelType=EPMP&start=2024-01-01&end=2026-01-01",
+      {
+        method: "GET", // Works with POST, PUT, DELETE, etc.
+        headers: {
+          token: turnsiteToken,
+          "Content-Type": "application/json",
+        },
+      },
+    );
+    console.log(response);
+  }, [turnsiteToken]);
 
-  // useEffect(() => {
-  //   const response = await fetch("https://your-api.com/endpoint", {
-  //     method: "GET", // Works with POST, PUT, DELETE, etc.
-  //     headers: {
-  //       token: "YOUR_TOKEN_HERE",
-  //       "Content-Type": "application/json",
-  //     },
-  //   });
-  //   console.log(response);
-  // }, []);
+  const [dashboardData, setDashboardData] = useState<DashboardDataT | null>({
+    fetchTime: new Date(),
+    areaName: "North America",
+    productName: "Regular",
+    overallSummary: {
+      periodAverage: 3.2,
+      weeklyChange: "-$2.20",
+      monthlyChange: "+$2.20",
+    },
+    graphData: {
+      frequency: "Weekly",
+      periods: [{ period: new Date(), value: 3.2, units: "usd" }],
+    },
+    priceSnapShot: [
+      {
+        petroleumPeriod: { period: new Date(), value: 3.2, units: "usd" },
+        snapShotTitle: "This Week",
+      },
+      {
+        petroleumPeriod: { period: new Date(), value: 3.2, units: "usd" },
+        snapShotTitle: "Last Week",
+      },
+      {
+        petroleumPeriod: { period: new Date(), value: 3.2, units: "usd" },
+        snapShotTitle: "Last Month",
+      },
+      {
+        petroleumPeriod: { period: new Date(), value: 3.2, units: "usd" },
+        snapShotTitle: "Last 3 Months",
+      },
+      {
+        petroleumPeriod: { period: new Date(), value: 3.2, units: "usd" },
+        snapShotTitle: "Last Year",
+      },
+    ],
+  });
 
-  // const [dashboardData, setDashboardData] = useState<DashboardDataT | null>({
-  //   fetchTime: new Date(),
-  //   areaName: "North America",
-  //   productName: "Regular",
-  //   overallSummary: {
-  //     periodAverage: 3.2,
-  //     weeklyChange: "-$2.20",
-  //     monthlyChange: "+$2.20",
-  //   },
-  //   graphData: {
-  //     frequency: "Weekly",
-  //     periods: [{ period: new Date(), value: 3.2, units: "usd" }],
-  //   },
-  //   priceSnapShot: [
-  //     {
-  //       petroleumPeriod: { period: new Date(), value: 3.2, units: "usd" },
-  //       snapShotTitle: "This Week",
-  //     },
-  //     {
-  //       petroleumPeriod: { period: new Date(), value: 3.2, units: "usd" },
-  //       snapShotTitle: "Last Week",
-  //     },
-  //     {
-  //       petroleumPeriod: { period: new Date(), value: 3.2, units: "usd" },
-  //       snapShotTitle: "Last Month",
-  //     },
-  //     {
-  //       petroleumPeriod: { period: new Date(), value: 3.2, units: "usd" },
-  //       snapShotTitle: "Last 3 Months",
-  //     },
-  //     {
-  //       petroleumPeriod: { period: new Date(), value: 3.2, units: "usd" },
-  //       snapShotTitle: "Last Year",
-  //     },
-  //   ],
-  // });
+  if (!dashboardData) return <DefaultLoader />;
 
-  // if (!dashboardData) return <DefaultLoader />;
+  return (
+    <RouteWrapper accessibilityLabel="Dashboard Group">
+      <ValidateTurnsite
+        onVerify={(token: string) => console.log(token)}
+        onError={(err: any) => console.log("Turnstile Error:", err)}
+        onExpire={() => setTurnstileToken("")}
+      />
+      <View className="h-[82px] z-50">
+        <View className="flex gap-3 absolute w-full bg-[#f2f2f2] rounded-sm">
+          <Select
+            title="Fuel Grade state here"
+            options={["Regular", "Mid Grade", "Premium", "Diesel"]}
+          />
+          <Select
+            title="Region location state here"
+            options={["Midwest", "North East", "Chicago", "South"]}
+          />
+        </View>
+      </View>
 
-  // return (
-  //   <RouteWrapper accessibilityLabel="Dashboard Group">
-  //     <View className="h-[82px] z-50">
-  //       <View className="flex gap-3 absolute w-full bg-[#f2f2f2] rounded-sm">
-  //         <Select
-  //           title="Fuel Grade state here"
-  //           options={["Regular", "Mid Grade", "Premium", "Diesel"]}
-  //         />
-  //         <Select
-  //           title="Region location state here"
-  //           options={["Midwest", "North East", "Chicago", "South"]}
-  //         />
-  //       </View>
-  //     </View>
-
-  //     <OverallSummary
-  //       OverallSummary={dashboardData.overallSummary}
-  //       lastFetch={dashboardData.fetchTime.toDateString()}
-  //     />
-  //     <PriceTrackerChart />
-  //     <PriceSnapshot priceSnapshot={dashboardData.priceSnapShot} />
-  //   </RouteWrapper>
-  // );
+      <OverallSummary
+        OverallSummary={dashboardData.overallSummary}
+        lastFetch={dashboardData.fetchTime.toDateString()}
+      />
+      <PriceTrackerChart />
+      <PriceSnapshot priceSnapshot={dashboardData.priceSnapShot} />
+    </RouteWrapper>
+  );
 }

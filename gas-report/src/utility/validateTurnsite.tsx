@@ -17,7 +17,22 @@
  * @module */
 import { WebView } from "react-native-webview";
 
-export default function ValidateTurnsite() {
+export default function ValidateTurnsite({ onVerify, onError, onExpire }) {
+  const handleMessage = (event: any) => {
+    try {
+      const data = JSON.parse(event.nativeEvent.data);
+      if (data.type === "TOKEN" && onVerify) {
+        onVerify(data.payload);
+      } else if (data.type === "ERROR" && onError) {
+        onError(data.payload);
+      } else if (data.type === "EXPIRED" && onExpire) {
+        onExpire();
+      }
+    } catch (e) {
+      console.error("Failed to parse WebView message", e);
+    }
+  };
+
   return (
     <WebView
       source={{
@@ -27,6 +42,7 @@ export default function ValidateTurnsite() {
       domStorageEnabled={true}
       allowsInlineMediaPlayback={true}
       mediaPlaybackRequiresUserAction={false}
+      onMessage={handleMessage}
     />
   );
 }
