@@ -4,13 +4,11 @@
  */
 
 // framework
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { View } from "react-native";
 
 // models
 import { DashboardDataT } from "../../models/dashboard/Dashboard";
-
-import useFetch from "../../utility/customHooks/useFetch";
 
 // components
 import {
@@ -21,25 +19,10 @@ import {
 import { OverallSummary } from "../../components/dashboard/OverallSummary";
 import { PriceSnapshot } from "../../components/dashboard/PriceSnapshot";
 import { PriceTrackerChart } from "../../components/dashboard/PriceTrackerChart";
-
 import ValidateTurnsite from "../../utility/validateTurnsite";
 
 export default function Dashboard() {
   const [turnsiteToken, setTurnstileToken] = useState<string>("");
-
-  useEffect(() => {
-    const response = fetch(
-      "http://localhost:8787/api/v1/petroleum-periods?frequency=monthly&location=NUS&fuelType=EPMP&start=2024-01-01&end=2026-01-01",
-      {
-        method: "GET", // Works with POST, PUT, DELETE, etc.
-        headers: {
-          token: turnsiteToken,
-          "Content-Type": "application/json",
-        },
-      },
-    );
-    console.log(response);
-  }, [turnsiteToken]);
 
   const [dashboardData, setDashboardData] = useState<DashboardDataT | null>({
     fetchTime: new Date(),
@@ -81,12 +64,28 @@ export default function Dashboard() {
   if (!dashboardData) return <DefaultLoader />;
 
   return (
+    <ValidateTurnsite
+      onVerify={async (token: string) => {
+        setTurnstileToken(token);
+        const response = await fetch(
+          "http://10.0.2.2:8787/api/v1/petroleum-periods?frequency=monthly&location=NUS&fuelType=EPMP",
+          {
+            method: "GET", // Works with POST, PUT, DELETE, etc.
+            headers: {
+              token: token,
+              "Content-Type": "application/json",
+            },
+          },
+        );
+        const data = await response.json();
+        console.log(data);
+      }}
+      onError={(err: any) => console.log("Turnstile Error:", err)}
+      onExpire={() => setTurnstileToken("")}
+    />
+  );
+  return (
     <RouteWrapper accessibilityLabel="Dashboard Group">
-      <ValidateTurnsite
-        onVerify={(token: string) => console.log(token)}
-        onError={(err: any) => console.log("Turnstile Error:", err)}
-        onExpire={() => setTurnstileToken("")}
-      />
       <View className="h-[82px] z-50">
         <View className="flex gap-3 absolute w-full bg-[#f2f2f2] rounded-sm">
           <Select
