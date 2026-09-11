@@ -4,25 +4,21 @@
  */
 
 // framework
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { View } from "react-native";
 
 // models
+import { useSession } from "../../context/AuthContext";
 import { DashboardDataT } from "../../models/dashboard/Dashboard";
 
 // components
-import {
-  DefaultLoader,
-  RouteWrapper,
-  Select,
-} from "../../components/common/Common";
+import { RouteWrapper, Select } from "../../components/common/Common";
 import { OverallSummary } from "../../components/dashboard/OverallSummary";
 import { PriceSnapshot } from "../../components/dashboard/PriceSnapshot";
 import { PriceTrackerChart } from "../../components/dashboard/PriceTrackerChart";
-import ValidateTurnsite from "../../utility/validateTurnsite";
 
 export default function Dashboard() {
-  const [turnsiteToken, setTurnstileToken] = useState<string>("");
+  const { session } = useSession();
 
   const [dashboardData, setDashboardData] = useState<DashboardDataT | null>({
     fetchTime: new Date(),
@@ -61,9 +57,23 @@ export default function Dashboard() {
     ],
   });
 
-  if (!dashboardData) return <DefaultLoader />;
+  useEffect(() => {
+    if (session) {
+      console.log(session);
+      const response = fetch(
+        "https://localhost:8787/api/v1/petroleum-periods?frequency=monthly&location=NUS&fuelType=EPMP&start=2024-01-01&end=2026-01-01",
+        {
+          method: "GET", // Works with POST, PUT, DELETE, etc.
+          headers: {
+            token: session,
+            "Content-Type": "application/json",
+          },
+        },
+      );
+      console.log(response);
+    }
+  }, [session]);
 
-  return <ValidateTurnsite />;
   return (
     <RouteWrapper accessibilityLabel="Dashboard Group">
       <View className="h-[82px] z-50">

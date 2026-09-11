@@ -16,10 +16,16 @@
  * https://developers.cloudflare.com/turnstile/get-started/mobile-implementation/
  * @module */
 import { Platform } from "react-native";
-import Turnstile from "react-turnstile";
 import { WebView } from "react-native-webview";
+import { Turnstile } from "react-turnstile";
 
-export default function ValidateTurnsite() {
+interface ValidateTurnstileProps {
+  setTurnstileToken: React.Dispatch<React.SetStateAction<string>>;
+}
+
+export default function ValidateTurnstile({
+  setTurnstileToken,
+}: ValidateTurnstileProps) {
   function handleTokenReceived(event: any) {
     let payload;
     try {
@@ -29,24 +35,23 @@ export default function ValidateTurnsite() {
     }
 
     if (payload.type !== "TOKEN") return;
-    if (payload.type !== "ERROR") return;
-    if (payload.type !== "EXPIRED") return;
-
-    // save state use context
+    setTurnstileToken(payload.payload);
   }
 
   if (Platform.OS === "web") {
     return (
       <Turnstile
+        className="m-2"
         sitekey="0x4AAAAAAEqlGPMYvYX7deFH"
         onVerify={(token) => {
-          console.log(token);
+          setTurnstileToken(token);
         }}
       />
     );
   } else
     return (
       <WebView
+        className="m-2"
         source={{
           uri: "https://gasreport-turnstile.aflemingrocks089.workers.dev/",
         }}
