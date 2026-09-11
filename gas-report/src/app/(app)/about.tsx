@@ -5,7 +5,7 @@
  * @module
  */
 
-import { Card, Link, RouteWrapper, Text } from "../components/common/Common";
+import { Card, Link, RouteWrapper, Text } from "../../components/common/Common";
 
 export default function About() {
   return (
@@ -24,6 +24,10 @@ export default function About() {
       <Link
         title="Gas Report Repository"
         href="https://github.com/afleming089/GasReport"
+      />
+      <Link
+        title="My Linkedin"
+        href="https://www.linkedin.com/in/afleming089/"
       />
     </RouteWrapper>
   );

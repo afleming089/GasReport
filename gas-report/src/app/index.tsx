@@ -5,30 +5,23 @@
  * @module
  */
 
-import "../../global.css";
-
-import { Link, RouteWrapper } from "@/components/common/Common";
-import ValidateTurnstile from "@/utility/validateTurnstile";
-import { useState } from "react";
+import { RouteWrapper, Text } from "@/components/common/Common";
+import { DefaultLoader } from "@/components/common/Loaders";
 import { useSession } from "../context/AuthContext";
+import "../../global.css";
+import { useEffect } from "react";
 
 export default function index() {
-  const [token, setToken] = useState<string>("");
   const { signIn } = useSession();
 
-  return token === "" ? (
-    <ValidateTurnstile setTurnstileToken={setToken} />
-  ) : (
+  useEffect(() => {
+    setTimeout(() => {}, 3000);
+  }, []);
+
+  return (
     <RouteWrapper accessibilityLabel="Home Group">
-      {/* <SignInCard /> */}
-      {/* <Link title="Sign-up" href="./sign-up" /> */}
-      <Link
-        onPress={() => {
-          signIn(token);
-        }}
-        title="Go to Dashboard"
-        href="./dashboard"
-      />
+      <Text fontSize="h2">Validating User</Text>
+      <DefaultLoader />
     </RouteWrapper>
   );
 }

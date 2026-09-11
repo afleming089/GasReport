@@ -111,7 +111,6 @@ export class ComparePeriods extends OpenAPIRoute {
   };
 
   async handle(c: AppContext) {
-    await handleTurnstileValidation(c.req, c.env);
     /**  Get validated data */
     const data = await this.getValidatedData<typeof this.schema>();
 

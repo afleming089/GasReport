@@ -21,7 +21,7 @@ const navigationWrapper = tv({
 type NavigationVariants = VariantProps<typeof navigationWrapper>;
 
 interface NavigationProps extends NavigationVariants {
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 function NavigationWrapper({ children, ...NavigationProps }: NavigationProps) {

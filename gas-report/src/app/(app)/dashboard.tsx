@@ -4,11 +4,10 @@
  */
 
 // framework
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { View } from "react-native";
 
 // models
-import { useSession } from "../../context/AuthContext";
 import { DashboardDataT } from "../../models/dashboard/Dashboard";
 
 // components
@@ -16,10 +15,9 @@ import { RouteWrapper, Select } from "../../components/common/Common";
 import { OverallSummary } from "../../components/dashboard/OverallSummary";
 import { PriceSnapshot } from "../../components/dashboard/PriceSnapshot";
 import { PriceTrackerChart } from "../../components/dashboard/PriceTrackerChart";
+import useFetch from "@/utility/customHooks/useFetch";
 
 export default function Dashboard() {
-  const { session } = useSession();
-
   const [dashboardData, setDashboardData] = useState<DashboardDataT | null>({
     fetchTime: new Date(),
     areaName: "North America",
@@ -56,23 +54,6 @@ export default function Dashboard() {
       },
     ],
   });
-
-  useEffect(() => {
-    if (session) {
-      console.log(session);
-      const response = fetch(
-        "https://localhost:8787/api/v1/petroleum-periods?frequency=monthly&location=NUS&fuelType=EPMP&start=2024-01-01&end=2026-01-01",
-        {
-          method: "GET", // Works with POST, PUT, DELETE, etc.
-          headers: {
-            token: session,
-            "Content-Type": "application/json",
-          },
-        },
-      );
-      console.log(response);
-    }
-  }, [session]);
 
   return (
     <RouteWrapper accessibilityLabel="Dashboard Group">

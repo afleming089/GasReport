@@ -32,10 +32,10 @@ export default function Account() {
     <RouteWrapper accessibilityLabel="Account Group">
       {alertState ? <Alert {...alertState} /> : null}
 
-      <Text fontSize="h2">Account</Text>
+      {/* <Text fontSize="h2">Account</Text>
       <Line />
       <Text fontSize="h4">Email: {user.email}</Text>
-      <Line />
+      <Line /> */}
       <Text fontSize="h2">Settings</Text>
       <Line />
       <Text fontSize="h4">Default Fuel Grade</Text>
@@ -55,7 +55,7 @@ export default function Account() {
       <Line />
 
       {/* // add to drop down */}
-      <Link
+      {/* <Link
         title="Sign Out"
         color="hazard"
         href={"/"}
@@ -87,7 +87,7 @@ export default function Account() {
             setAlertState,
           });
         }}
-      />
+      /> */}
     </RouteWrapper>
   );
 }

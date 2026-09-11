@@ -15,11 +15,12 @@ function Authenticated() {
           links={[
             { title: "Dashboard", href: "/dashboard" },
             { title: "Settings", href: "/account" },
-            {
-              title: "Logout",
-              href: "/",
-              className: "text-red-600",
-            },
+            { title: "About", href: "/about" },
+            // {
+            //   title: "Logout",
+            //   href: "/",
+            //   className: "text-red-600",
+            // },
           ]}
         />
       </View>

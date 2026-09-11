@@ -40,7 +40,7 @@ function RootNavigator() {
         ),
       }}>
       {/* TO DO look at docs again to do safe routing right*/}
-      {/* <Stack.Protected guard={!!session}>
+      <Stack.Protected guard={!!session}>
         <Stack.Screen
           options={{
             headerShown: false,
@@ -48,11 +48,6 @@ function RootNavigator() {
           name="(app)"
         />
       </Stack.Protected>
-      <Stack.Protected guard={!!session}>
-        <Stack.Screen name="index" />
-        <Stack.Screen name="about" />
-        <Stack.Screen name="sign-up" />
-      </Stack.Protected> */}
     </Stack>
   );
 }
