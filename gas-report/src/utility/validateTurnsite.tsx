@@ -15,34 +15,58 @@
  *
  * https://developers.cloudflare.com/turnstile/get-started/mobile-implementation/
  * @module */
+import { Platform } from "react-native";
+import Turnstile from "react-turnstile";
 import { WebView } from "react-native-webview";
 
-export default function ValidateTurnsite({ onVerify, onError, onExpire }) {
-  const handleMessage = (event: any) => {
+export default function ValidateTurnsite() {
+  function handleTokenReceived(event: any) {
+    let payload;
     try {
-      const data = JSON.parse(event.nativeEvent.data);
-      if (data.type === "TOKEN" && onVerify) {
-        onVerify(data.payload);
-      } else if (data.type === "ERROR" && onError) {
-        onError(data.payload);
-      } else if (data.type === "EXPIRED" && onExpire) {
-        onExpire();
-      }
-    } catch (e) {
-      console.error("Failed to parse WebView message", e);
+      payload = JSON.parse(event.nativeEvent.data);
+    } catch {
+      return;
     }
-  };
 
-  return (
-    <WebView
-      source={{
-        uri: "https://gasreport-turnstile.aflemingrocks089.workers.dev/",
-      }}
-      javaScriptEnabled={true}
-      domStorageEnabled={true}
-      allowsInlineMediaPlayback={true}
-      mediaPlaybackRequiresUserAction={false}
-      onMessage={handleMessage}
-    />
-  );
+    if (payload.type !== "TOKEN") return;
+    if (payload.type !== "ERROR") return;
+    if (payload.type !== "EXPIRED") return;
+
+    // save state use context
+  }
+
+  if (Platform.OS === "web") {
+    return (
+      <Turnstile
+        sitekey="0x4AAAAAAEqlGPMYvYX7deFH"
+        onVerify={(token) => {
+          console.log(token);
+        }}
+      />
+    );
+  } else
+    return (
+      <WebView
+        source={{
+          uri: "https://gasreport-turnstile.aflemingrocks089.workers.dev/",
+        }}
+        onMessage={handleTokenReceived}
+        javaScriptEnabled={true}
+        domStorageEnabled={true}
+        allowsInlineMediaPlayback={true}
+        mediaPlaybackRequiresUserAction={false}
+        originWhitelist={[
+          "https://gasreport-turnstile.aflemingrocks089.workers.dev",
+        ]}
+        allowFileAccess={false}
+        allowFileAccessFromFileURLs={false}
+        allowUniversalAccessFromFileURLs={false}
+        allowsBackForwardNavigationGestures={false}
+        onShouldStartLoadWithRequest={(req) =>
+          req.url.startsWith(
+            "https://gasreport-turnstile.aflemingrocks089.workers.dev",
+          )
+        }
+      />
+    );
 }

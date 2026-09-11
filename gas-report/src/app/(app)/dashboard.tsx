@@ -63,27 +63,7 @@ export default function Dashboard() {
 
   if (!dashboardData) return <DefaultLoader />;
 
-  return (
-    <ValidateTurnsite
-      onVerify={async (token: string) => {
-        setTurnstileToken(token);
-        const response = await fetch(
-          "http://10.0.2.2:8787/api/v1/petroleum-periods?frequency=monthly&location=NUS&fuelType=EPMP",
-          {
-            method: "GET", // Works with POST, PUT, DELETE, etc.
-            headers: {
-              token: token,
-              "Content-Type": "application/json",
-            },
-          },
-        );
-        const data = await response.json();
-        console.log(data);
-      }}
-      onError={(err: any) => console.log("Turnstile Error:", err)}
-      onExpire={() => setTurnstileToken("")}
-    />
-  );
+  return <ValidateTurnsite />;
   return (
     <RouteWrapper accessibilityLabel="Dashboard Group">
       <View className="h-[82px] z-50">
