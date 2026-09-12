@@ -22,7 +22,11 @@ export default function About() {
         </Text>
       </Card>
       <Link
-        title="Gas Report Repository"
+        title="Gas-Report Documentation"
+        href="https://afleming089.github.io/GasReport/"
+      />
+      <Link
+        title="Gas-Report Repository"
         href="https://github.com/afleming089/GasReport"
       />
       <Link

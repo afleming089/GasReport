@@ -3,7 +3,7 @@
  *
  * app holds unauthenticated views
  *
- * Validation handled by Play Integrity on Android or CORS and Turnstile if
+ * Validation handled by Google PlayIntegrity on Android or CORS and Turnstile if
  * user in browser
  * @module
  */
@@ -27,8 +27,8 @@ export default function index() {
     <RouteWrapper accessibilityLabel="Home Group">
       <Text fontSize="h2">Validating Client</Text>
       <Text fontSize="sm">
-        Validation handled by Play Integrity on Android or CORS and Turnstile if
-        user in browser
+        Validation handled by Google PlayIntegrity on Android or CORS and
+        Turnstile if user in browser
       </Text>
       <DefaultLoader />
     </RouteWrapper>
