@@ -17,6 +17,7 @@
         "ITSAppUsesNonExemptEncryption": false
       }
     },
+    "githubUrl": "https://github.com/afleming089/GasReport",
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",

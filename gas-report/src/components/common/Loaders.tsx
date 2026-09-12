@@ -1,4 +1,5 @@
 import { Text, View } from "react-native";
+import { useMemo } from "react";
 
 function DefaultLoader() {
   return (

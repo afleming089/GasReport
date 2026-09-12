@@ -2,6 +2,9 @@
  * (app) hold authenticated views
  *
  * app holds unauthenticated views
+ *
+ * Validation handled by Play Integrity on Android or CORS and Turnstile if
+ * user in browser
  * @module
  */
 
@@ -15,12 +18,18 @@ export default function index() {
   const { signIn } = useSession();
 
   useEffect(() => {
-    setTimeout(() => {}, 3000);
+    setTimeout(() => {
+      signIn();
+    }, 3000);
   }, []);
 
   return (
     <RouteWrapper accessibilityLabel="Home Group">
-      <Text fontSize="h2">Validating User</Text>
+      <Text fontSize="h2">Validating Client</Text>
+      <Text fontSize="sm">
+        Validation handled by Play Integrity on Android or CORS and Turnstile if
+        user in browser
+      </Text>
       <DefaultLoader />
     </RouteWrapper>
   );

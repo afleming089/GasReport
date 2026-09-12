@@ -6,16 +6,14 @@ import { csrf } from "hono/csrf";
 import { secureHeaders } from "hono/secure-headers";
 
 /// endpoints
-// import Users from "./endpoints/"
+import Auth from "./endpoints/auth/authEndpoints";
 import PetroleumPeriods from "./endpoints/petroleumPeriod/petroleumEndpoints";
+
 import { HTTPException } from "hono/http-exception";
 import { ZodError } from "zod";
 import { timeout } from "hono/timeout";
-import { trimTrailingSlash } from "hono/trailing-slash";
 import { rateLimiter } from "hono-rate-limiter";
 import { logger } from "hono/logger";
-import { handleTurnstileValidation } from "./utility/validateTurnstile";
-import { env } from "cloudflare:workers";
 
 type Env = {
   API_RATE_LIMITER: RateLimit;
@@ -86,7 +84,6 @@ app.use(
   every(
     // cors(),
     // csrf(),
-    // secureHeaders(),
     // trimTrailingSlash(),
     timeout(8000),
     // logger(),
@@ -125,7 +122,7 @@ const openapi = fromHono(app, {
   raiseUnknownParameters: false,
 });
 
-// openapi.route("/users", users);
+openapi.route("/auth", Auth);
 openapi.route("/petroleum-periods", PetroleumPeriods);
 
 export default app;

@@ -1,6 +1,10 @@
 import { createContext, use, type PropsWithChildren } from "react";
 
+import { Platform } from "react-native";
 import { useStorageState } from "../utility/customHooks/useStorageState";
+import * as AppIntegrity from "@expo/app-integrity";
+import * as Crypto from "expo-crypto";
+import useFetch from "../utility/customHooks/useFetch";
 
 const AuthContext = createContext<{
   signIn: () => void;
@@ -19,6 +23,24 @@ export function useSession() {
   return value;
 }
 
+async function CheckAppIntegrity() {
+  const cloudProjectNumber = "your-cloud-project-number";
+  await AppIntegrity.prepareIntegrityTokenProviderAsync(cloudProjectNumber);
+}
+
+async function RequestIntegrityToken() {
+  const requestHash = await Crypto.digestStringAsync(
+    Crypto.CryptoDigestAlgorithm.SHA256,
+    "A not so secrete token but it okay",
+  );
+  return await AppIntegrity.requestIntegrityCheckAsync(requestHash);
+}
+
+async function SetupAppIntegrityCheck() {
+  await CheckAppIntegrity();
+  return RequestIntegrityToken();
+}
+
 export function SessionProvider({ children }: PropsWithChildren) {
   const [[isLoading, session], setSession] = useStorageState("session");
 
@@ -26,8 +48,19 @@ export function SessionProvider({ children }: PropsWithChildren) {
     <AuthContext.Provider
       value={{
         signIn: () => {
-          // Perform sign-in logic here
-          console.log("ran signin");
+          let JWTToken = null;
+
+          if (Platform.OS === "web") {
+          }
+
+          if (Platform.OS === "android") {
+            const appIntegrityToken = SetupAppIntegrityCheck();
+            useFetch("http://localhost:8787/api/v1/", {
+              method: "POST",
+              headers: {},
+            });
+          }
+
           setSession("token");
         },
         signOut: () => {
