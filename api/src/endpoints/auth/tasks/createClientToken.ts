@@ -7,11 +7,16 @@
 import { z } from "zod";
 import { contentJson, OpenAPIRoute } from "chanfana";
 import { AppContext } from "../../../types";
+import { getAndroidAppToken } from "../../../utility/googleapis";
 
 export class CreateClientToken extends OpenAPIRoute {
   schema = {
     request: {
-      query: z.object({}),
+      body: contentJson(
+        z.object({
+          appIntegrityToken: z.string(),
+        }),
+      ),
     },
     responses: {
       "200": {
@@ -26,8 +31,10 @@ export class CreateClientToken extends OpenAPIRoute {
     const data = await this.getValidatedData<typeof this.schema>();
 
     /** Retrieve the validated parameters */
-    //const { location, fuelType, referenceDate, priorPeriods } = data.query;
+    const { appIntegrityToken } = data.body;
 
-    return {};
+    console.log(getAndroidAppToken(appIntegrityToken));
+
+    return { data: "create endpoint" };
   }
 }

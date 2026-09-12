@@ -28,6 +28,6 @@ export class ValidateToken extends OpenAPIRoute {
     /** Retrieve the validated parameters */
     //const { location, fuelType, referenceDate, priorPeriods } = data.query;
 
-    return {};
+    return { data: "validate" };
   }
 }

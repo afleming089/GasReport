@@ -16,7 +16,7 @@ export type AppContext = Context<{ Bindings: Env }>;
 const app = fromHono(new Hono<{ Bindings: Env }>());
 const openapi = fromHono(app);
 
-openapi.get("/", CreateClientToken);
-openapi.get("/validate", ValidateToken);
+openapi.post("/", ValidateToken);
+openapi.post("/create", CreateClientToken);
 
 export default app;

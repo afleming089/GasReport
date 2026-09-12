@@ -5,6 +5,8 @@ import { useStorageState } from "../utility/customHooks/useStorageState";
 import * as AppIntegrity from "@expo/app-integrity";
 import * as Crypto from "expo-crypto";
 import useFetch from "../utility/customHooks/useFetch";
+import { json } from "fp-ts";
+import { Json } from "io-ts-types";
 
 const AuthContext = createContext<{
   signIn: () => void;
@@ -55,13 +57,19 @@ export function SessionProvider({ children }: PropsWithChildren) {
 
           if (Platform.OS === "android") {
             const appIntegrityToken = SetupAppIntegrityCheck();
-            useFetch("http://localhost:8787/api/v1/", {
-              method: "POST",
-              headers: {},
-            });
+            const response = useFetch(
+              "http://localhost:8787/api/v1/auth/create",
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ appIntegrityToken: appIntegrityToken }),
+              },
+            );
+
+            JWTToken = response.data.token;
           }
 
-          setSession("token");
+          setSession(JWTToken);
         },
         signOut: () => {
           setSession(null);
