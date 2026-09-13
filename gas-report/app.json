@@ -9,9 +9,6 @@
     "userInterfaceStyle": "automatic",
     "ios": {
       "icon": "./assets/expo.icon",
-      "experiments": {
-        "typedRoutes": true
-      },
       "bundleIdentifier": "com.afleming089.gasreport",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
@@ -54,7 +51,8 @@
         }
       ],
       "expo-web-browser",
-      "expo-image"
+      "expo-image",
+      "expo-font"
     ],
     "experiments": {
       "typedRoutes": true,

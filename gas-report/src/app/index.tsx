@@ -13,15 +13,18 @@ import { DefaultLoader } from "@/components/common/Loaders";
 import { useSession } from "../context/AuthContext";
 import "../../global.css";
 import { useEffect } from "react";
+import ValidateTurnstile from "../utility/validateTurnstile";
+import { Platform } from "react-native";
 
 export default function index() {
   const { signIn } = useSession();
 
-  useEffect(() => {
-    setTimeout(() => {
-      signIn();
-    }, 3000);
-  }, []);
+  if (Platform.OS !== "web")
+    useEffect(() => {
+      setTimeout(() => {
+        signIn();
+      }, 3000);
+    }, []);
 
   return (
     <RouteWrapper accessibilityLabel="Home Group">
@@ -30,6 +33,7 @@ export default function index() {
         Validation handled by Google PlayIntegrity on Android or CORS and
         Turnstile if user in browser
       </Text>
+      <ValidateTurnstile />
       <DefaultLoader />
     </RouteWrapper>
   );
