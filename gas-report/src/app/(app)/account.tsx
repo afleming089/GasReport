@@ -4,25 +4,19 @@
  */
 
 import { useSession } from "@/context/AuthContext";
-import { router } from "expo-router";
+
 import {
   Alert,
   AlertProps,
   Button,
   Line,
-  Link,
   RouteWrapper,
   Text,
 } from "../../components/common/Common";
 
 import { useContext, useState } from "react";
 
-// add proper account context with correct secure auth. REMOVE LATER
-import { UserContext } from "../../context/UserContext";
-
 export default function Account() {
-  const user = useContext(UserContext);
-
   const [alertState, setAlertState] = useState<AlertProps | null>(null);
 
   // add to a drop down button

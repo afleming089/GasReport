@@ -22,7 +22,7 @@ import {
   Year_Month_Day,
 } from "../petroleumTypes";
 import { type AppContext } from "../../../types";
-import { handleTurnstileValidation } from "../../../utility/validateTurnstile";
+import { ValidateJWT } from "../../../utility/auth/validateJWT";
 
 export class GetPetroleumPeriods extends OpenAPIRoute {
   schema = {
@@ -59,6 +59,9 @@ export class GetPetroleumPeriods extends OpenAPIRoute {
   };
 
   async handle(c: AppContext) {
+    const authToken: string | null = c.req.raw.headers.get("jwt");
+    await ValidateJWT(authToken);
+
     /** Get validated data  */
     const data = await this.getValidatedData<typeof this.schema>();
 

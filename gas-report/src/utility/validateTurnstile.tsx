@@ -29,7 +29,11 @@ export default function ValidateTurnstile() {
         // sitekey="0x4AAAAAAEqlGPMYvYX7deFH" // dev
         sitekey="1x00000000000000000000AA"
         onVerify={(token) => {
-          signIn(token);
+          try {
+            signIn(token);
+          } catch (error) {
+            console.log("Failed to validate Auth", error);
+          }
         }}
       />
     );

@@ -4,19 +4,23 @@
  */
 
 import { useEffect, useState } from "react";
-import { ApiResponse, Fetch, FetchConfig } from "../../utility/api/api";
+import {
+  ApiResponse,
+  ApiResponseT,
+  Fetch,
+  FetchConfig,
+} from "../../utility/api/api";
 
-function useFetch(url: string, config: FetchConfig): ApiResponse {
-  const [response, setResponse] = useState<ApiResponse>({
+function useFetch(url: string, config: FetchConfig): ApiResponseT<any> {
+  const [response, setResponse] = useState<ApiResponseT<any>>({
     data: undefined,
     error: { message: "Loading", status: 202 },
   });
 
   useEffect(() => {
     const fetchData = async () => {
-      const apiResponse: ApiResponse = await Fetch(url, config);
+      const apiResponse: ApiResponseT<any> = await Fetch(url, config);
       setResponse(apiResponse);
-      console.log(response);
     };
 
     fetchData();

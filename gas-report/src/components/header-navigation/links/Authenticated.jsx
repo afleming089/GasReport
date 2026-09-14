@@ -14,7 +14,7 @@ function Authenticated() {
           className="p-0"
           links={[
             { title: "Dashboard", href: "/dashboard" },
-            { title: "Settings", href: "/account" },
+            // { title: "Settings", href: "/account" },
             { title: "About", href: "/about" },
             // {
             //   title: "Logout",

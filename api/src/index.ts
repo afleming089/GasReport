@@ -1,9 +1,9 @@
-import { ApiException, fromHono, UnauthorizedException } from "chanfana";
+import { fromHono } from "chanfana";
 import { Hono } from "hono";
 import { every } from "hono/combine";
 import { cors } from "hono/cors";
-import { csrf } from "hono/csrf";
-import { secureHeaders } from "hono/secure-headers";
+// import { csrf } from "hono/csrf";
+// import { secureHeaders } from "hono/secure-headers";
 
 /// endpoints
 import Auth from "./endpoints/auth/authEndpoints";
@@ -43,16 +43,6 @@ app.onError((err, c) => {
     );
   }
 
-  //   if (!authToken) {
-  //     throw new UnauthorizedException("Authentication token is required.");
-  //   }
-
-  // In your endpoint
-  // if (rateLimitExceeded) {
-  //   throw new TooManyRequestsException("Rate limit exceeded", 60); // Retry after 60 seconds
-  // }
-  // Response will include header: Retry-After: 60
-
   /** For non-chanfana errors, return a generic 500 response */
   return c.json(
     {
@@ -78,15 +68,15 @@ app.use(
   }),
 );
 
+app.use("/*", cors());
 // make rate limit first then validate
 app.use(
   "*",
   every(
-    // cors(),
     // csrf(),
     // trimTrailingSlash(),
     timeout(8000),
-    // logger(),
+    logger(),
   ),
 );
 

@@ -4,7 +4,6 @@ import { fromHono } from "chanfana";
 
 /// services
 import { CreateClientToken } from "./tasks/createClientToken";
-import { ValidateToken } from "./tasks/validateToken";
 
 export type Env = {
   // Example bindings, use your own
@@ -16,7 +15,6 @@ export type AppContext = Context<{ Bindings: Env }>;
 const app = fromHono(new Hono<{ Bindings: Env }>());
 const openapi = fromHono(app);
 
-openapi.post("/", ValidateToken);
 openapi.post("/create", CreateClientToken);
 
 export default app;

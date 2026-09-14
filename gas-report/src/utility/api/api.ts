@@ -1,6 +1,6 @@
-import { ApiError } from "./ApiError";
-import { ApiResponse } from "./ApiResponse";
+import { ApiError, ApiErrorT } from "./ApiError";
+import { ApiResponse, ApiResponseT } from "./ApiResponse";
 import { FetchConfig } from "./FetchConfig";
 import { Fetch } from "./Fetch";
 
-export { ApiError, ApiResponse, FetchConfig, Fetch };
+export { ApiError, ApiErrorT, ApiResponse, ApiResponseT, FetchConfig, Fetch };

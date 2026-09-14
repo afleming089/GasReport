@@ -1,4 +1,4 @@
-import { success, z } from "zod";
+import { z } from "zod";
 
 /** Types */
 /** Models http://api.eia.gov/v2/petroleum/pri/gnd/data endpoint responses */

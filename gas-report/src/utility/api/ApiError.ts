@@ -1,6 +1,14 @@
-interface ApiError {
-  message: string;
-  status?: number;
-}
+import * as t from "io-ts";
 
-export { ApiError };
+const ApiError = t.intersection([
+  t.type({
+    message: t.string,
+  }),
+  t.partial({
+    status: t.number,
+  }),
+]);
+
+type ApiErrorT = t.TypeOf<typeof ApiError>;
+
+export { ApiError, ApiErrorT };

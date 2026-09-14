@@ -6,9 +6,12 @@ import * as AppIntegrity from "@expo/app-integrity";
 import * as Crypto from "expo-crypto";
 import { Fetch } from "../utility/api/Fetch";
 import { router } from "expo-router";
+import { Auth } from "../models/Auth";
+
+import { useTurnstile } from "react-turnstile";
 
 const AuthContext = createContext<{
-  signIn: (token?: string) => Promise<void>;
+  signIn: (turnstileToken?: string) => Promise<void>;
   signOut: () => void;
   session?: string | null;
   isLoading: boolean;
@@ -46,43 +49,54 @@ async function SetupAppIntegrityCheck() {
 }
 
 /**Browser Validation */
-let turnstileToken: string | null = null;
 export function SessionProvider({ children }: PropsWithChildren) {
   const [[isLoading, session], setSession] = useStorageState("session");
+  const turnstile = useTurnstile();
 
   return (
     <AuthContext.Provider
       value={{
-        signIn: async (token) => {
-          let JWTToken = null;
+        signIn: async (turnstileToken) => {
+          let jwt = null;
           let response: any = undefined;
 
           if (Platform.OS === "web") {
-            response = Fetch("http://localhost:8787/api/v1/auth/create", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ turnstileToken: token }),
-            });
+            try {
+              response = await Fetch(
+                "http://localhost:8787/api/v1/auth/create",
+                {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  model: Auth,
+                  body: JSON.stringify({ turnstileToken: turnstileToken }),
+                },
+              );
+            } catch (err) {
+              console.log(err);
+              turnstile.reset();
+            }
           }
 
           if (Platform.OS === "android") {
-            const appIntegrityToken = SetupAppIntegrityCheck();
+            const appIntegrityToken = await SetupAppIntegrityCheck();
             response = Fetch("http://localhost:8787/api/v1/auth/create", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
+              model: Auth,
               body: JSON.stringify({ appIntegrityToken: appIntegrityToken }),
             });
           }
 
-          const result = await response.json;
-          console.log(result);
+          if (response.decodedData) {
+            jwt = response.decodedData.sessionToken;
 
-          if (result && result.ok) {
-            JWTToken = "response.data.token";
-            setSession(JWTToken);
+            setSession(jwt);
+            console.log("Set Session token");
             router.navigate("/(app)/dashboard");
+          } else {
+            console.log("Failed to set session");
+            setSession(null);
           }
-          setSession(null);
         },
         signOut: () => {
           setSession(null);

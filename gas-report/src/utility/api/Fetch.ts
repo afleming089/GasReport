@@ -1,11 +1,14 @@
-import { ApiResponse, FetchConfig } from "./api";
+import { ApiResponseT, ApiResponse, FetchConfig } from "./api";
 
 // schema validation
 import * as t from "io-ts";
 import { PathReporter } from "io-ts/PathReporter";
 import { isLeft } from "fp-ts/Either";
 
-async function Fetch(url: string, config: FetchConfig): Promise<ApiResponse> {
+async function Fetch(
+  url: string,
+  config: FetchConfig,
+): Promise<ApiResponseT<any>> {
   try {
     if (!config.model)
       throw new Error(
@@ -25,6 +28,7 @@ async function Fetch(url: string, config: FetchConfig): Promise<ApiResponse> {
     const response = await fetch(finalUrl, {
       method: config.method || "GET",
       headers: config.headers,
+      body: config.body,
     });
 
     const data: unknown = await response.json();
@@ -39,14 +43,14 @@ async function Fetch(url: string, config: FetchConfig): Promise<ApiResponse> {
     type DataT = t.TypeOf<typeof config.model>; // compile-time type
     const decodedData: DataT = decoded.right; // now safely the correct type
 
-    return { decodedData } as ApiResponse;
+    return { decodedData } as ApiResponseT<any>;
   } catch (error) {
     return {
       error: {
         message:
           error instanceof Error ? error.message : "Unknown error occurred",
       },
-    } as ApiResponse;
+    } as ApiResponseT<any>;
   }
 }
 

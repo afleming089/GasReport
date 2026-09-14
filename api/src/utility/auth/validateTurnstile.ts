@@ -6,6 +6,7 @@
  */
 
 import {
+  ApiException,
   InputValidationException,
   InternalServerErrorException,
   UnauthorizedException,
@@ -14,19 +15,36 @@ import {
 async function validateTurnstile(
   token: string,
   remoteip: string,
-  appContext: Env,
+  secretKey: string,
 ) {
-  const formData = new FormData();
-  formData.append("secret", appContext.TURNSTILE_SECRET_KEY);
-  formData.append("response", token);
-  formData.append("remoteip", remoteip);
+  // Input validation
+  if (!token || typeof token !== "string") {
+    throw new ApiException("Invalid token format");
+  }
+
+  if (token.length > 2048) {
+    throw new ApiException("Token too long");
+  }
+
+  const controller = new AbortController();
+  // 10 second time out
+  const timeoutId = setTimeout(() => controller.abort(), 10000);
 
   try {
+    const formData = new FormData();
+    formData.append("secret", secretKey);
+    formData.append("response", token);
+
+    if (remoteip) {
+      formData.append("remoteip", remoteip);
+    }
+
     const response = await fetch(
       "https://challenges.cloudflare.com/turnstile/v0/siteverify",
       {
         method: "POST",
         body: formData,
+        signal: controller.signal,
       },
     );
 
@@ -35,12 +53,17 @@ async function validateTurnstile(
   } catch (error) {
     console.error("Turnstile validation error:", error);
     throw new InternalServerErrorException("Turnstile validation error");
+  } finally {
+    clearTimeout(timeoutId);
   }
 }
 
 /** Only handles GET request currently. Verifying on GET request to prevent low effort bot scrapping */
-async function handleTurnstileValidation(request: any, appContext: Env) {
-  const token = request.raw.headers.get("token");
+export default async function handleTurnstileValidation(
+  request: any,
+  token: string,
+  secretKey: string,
+) {
   const ip =
     request.raw.headers.get("CF-Connecting-IP") ||
     request.raw.headers.get("X-Forwarded-For") ||
@@ -50,15 +73,15 @@ async function handleTurnstileValidation(request: any, appContext: Env) {
     throw new InputValidationException("Turnstile token is missing.");
   }
 
-  const validation: any = await validateTurnstile(token, ip, appContext);
+  const validation: any = await validateTurnstile(token, ip, secretKey);
 
   if (validation.success) {
     /** Token is valid - process the form */
-    console.log("Valid submission from:", validation.hostname);
+    return await validation;
   } else {
     /**  Token is invalid - reject the submission */
-    console.log("Invalid token:", validation["error-codes"]);
-    throw new UnauthorizedException("Invalid verification token.");
+    console.log("Invalid Turnstile token:", validation["error-codes"]);
+    throw new UnauthorizedException("Unauthorized");
   }
 }
 

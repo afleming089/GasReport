@@ -5,6 +5,7 @@
  * @module
  */
 
+import { ReactComponent } from "expo-router/build/testing-library/context-stubs";
 import { Button, ButtonProps } from "./Button";
 import { Text } from "./Text";
 import { TextInput, TextInputProps } from "./TextInput";
@@ -21,6 +22,7 @@ interface AlertProps {
   className?: string;
   buttonsPropsArray?: ButtonProps[];
   textInputArray?: TextInputProps[];
+  children?: React.ReactNode;
 }
 
 function Alert({
@@ -31,6 +33,7 @@ function Alert({
   setAlertState,
   buttonsPropsArray,
   textInputArray,
+  children,
 }: AlertProps) {
   return (
     <View className="absolute inset-0 z-50 flex items-center justify-center bg-black/50 h-[100vh]">
@@ -71,6 +74,8 @@ function Alert({
             )}
           </View>
         )}
+
+        {children && <View className="flex gap-2 w-full">{children}</View>}
 
         {buttonsPropsArray && (
           <View className="flex gap-2 w-full flex-row justify-center mt-2">

@@ -5,19 +5,26 @@
 
 // framework
 import { useState } from "react";
-import { View } from "react-native";
 
 // models
 import { DashboardDataT } from "../../models/dashboard/Dashboard";
 
 // components
-import { RouteWrapper, Select } from "../../components/common/Common";
+import {
+  RouteWrapper,
+  Select,
+  Button,
+  Alert,
+  AlertProps,
+} from "../../components/common/Common";
 import { OverallSummary } from "../../components/dashboard/OverallSummary";
 import { PriceSnapshot } from "../../components/dashboard/PriceSnapshot";
 import { PriceTrackerChart } from "../../components/dashboard/PriceTrackerChart";
 import useFetch from "@/utility/customHooks/useFetch";
+import { View } from "react-native";
 
 export default function Dashboard() {
+  const [alertState, setAlertState] = useState<AlertProps | null>(null);
   const [dashboardData, setDashboardData] = useState<DashboardDataT | null>({
     fetchTime: new Date(),
     areaName: "North America",
@@ -57,19 +64,36 @@ export default function Dashboard() {
 
   return (
     <RouteWrapper accessibilityLabel="Dashboard Group">
-      <View className="h-[82px] z-50">
-        <View className="flex gap-3 absolute w-full bg-[#f2f2f2] rounded-sm">
-          <Select
-            title="Fuel Grade state here"
-            options={["Regular", "Mid Grade", "Premium", "Diesel"]}
-          />
-          <Select
-            title="Region location state here"
-            options={["Midwest", "North East", "Chicago", "South"]}
-          />
-        </View>
-      </View>
-
+      <Button
+        title="Options"
+        onPress={() => {
+          setAlertState({
+            title: "Select Region and Fuel Grade",
+            children: (
+              <View className="gap-2">
+                <Select
+                  title="Select Fuel Type"
+                  options={["Regular", "Mid Grade", "Premium", "Diesel"]}
+                />
+                <Select
+                  title="Select Region"
+                  options={["Midwest", "North East", "Chicago", "South"]}
+                />
+              </View>
+            ),
+            setAlertState,
+            buttonsPropsArray: [
+              {
+                title: "Fetch Data",
+                onPress: () => {
+                  //handle submit function
+                },
+              },
+            ],
+          });
+        }}
+      />
+      {alertState ? <Alert {...alertState} /> : null}
       <OverallSummary
         OverallSummary={dashboardData.overallSummary}
         lastFetch={dashboardData.fetchTime.toDateString()}

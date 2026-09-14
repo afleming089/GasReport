@@ -38,7 +38,7 @@ import {
 } from "../petroleumTypes";
 import { type AppContext } from "../../../types";
 import { PickSchemaValues } from "../../../utility/PickSchemaValues";
-import { handleTurnstileValidation } from "../../../utility/validateTurnstile";
+import { handleTurnstileValidation } from "../../../utility/auth/validateTurnstile";
 
 export class ComparePeriods extends OpenAPIRoute {
   schema = {
@@ -116,6 +116,9 @@ export class ComparePeriods extends OpenAPIRoute {
 
     /** Retrieve the validated parameters */
     const { location, fuelType, referenceDate, priorPeriods } = data.query;
+    const headers = data.headers;
+
+    console.log(headers);
 
     const url = new URL(c.env.END_POINT);
 

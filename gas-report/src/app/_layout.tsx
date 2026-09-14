@@ -12,6 +12,7 @@ import { SessionProvider, useSession } from "@/context/AuthContext";
 import { SplashScreenController } from "@/utility/splash";
 
 import { NotAuthenticated as NavigationComponents } from "../components/header-navigation/links/Links";
+import { useEffect } from "react";
 
 export default function Root() {
   // Set up the auth context and render your layout inside of it.
@@ -28,7 +29,11 @@ export default function Root() {
  */
 // Create a new component that can access the SessionProvider context later.
 function RootNavigator() {
-  const { session } = useSession();
+  const { session, signIn } = useSession();
+
+  useEffect(() => {
+    signIn();
+  }, []);
 
   return (
     <Stack
@@ -47,6 +52,9 @@ function RootNavigator() {
           }}
           name="(app)"
         />
+        <Stack.Protected guard={!session}>
+          <Stack.Screen name="sign-in" />
+        </Stack.Protected>
       </Stack.Protected>
     </Stack>
   );

@@ -14,7 +14,7 @@ const { google } = require("googleapis");
  */
 async function getAndroidAppToken(appIntegrityToken: string) {
   const auth = new google.auth.GoogleAuth({
-    keyFile: "../gasreportplayintegrity-6a168da53fb2.json",
+    keyFile: "file path",
     scopes: ["https://www.googleapis.com/auth/playintegrity"],
   });
 
