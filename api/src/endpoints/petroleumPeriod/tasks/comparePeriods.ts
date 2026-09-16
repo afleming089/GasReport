@@ -22,6 +22,7 @@
 
 import { z } from "zod";
 import { contentJson, NotFoundException, OpenAPIRoute } from "chanfana";
+import { ValidateJWT } from "../../../utility/auth/validateJWT";
 
 // types
 import {
@@ -38,7 +39,6 @@ import {
 } from "../petroleumTypes";
 import { type AppContext } from "../../../types";
 import { PickSchemaValues } from "../../../utility/PickSchemaValues";
-import { handleTurnstileValidation } from "../../../utility/auth/validateTurnstile";
 
 export class ComparePeriods extends OpenAPIRoute {
   schema = {
@@ -114,15 +114,15 @@ export class ComparePeriods extends OpenAPIRoute {
     /**  Get validated data */
     const data = await this.getValidatedData<typeof this.schema>();
 
+    const authToken: string | null = c.req.raw.headers.get("jwt");
+    await ValidateJWT(authToken);
+
     /** Retrieve the validated parameters */
     const { location, fuelType, referenceDate, priorPeriods } = data.query;
-    const headers = data.headers;
-
-    console.log(headers);
 
     const url = new URL(c.env.END_POINT);
 
-    url.searchParams.append("api_key", "c.env.API_TOKEN");
+    url.searchParams.append("api_key", c.env.API_TOKEN);
     url.searchParams.append("facets[product][]", fuelType);
     url.searchParams.append("frequency", "weekly");
     url.searchParams.append("facets[duoarea][]", location);
@@ -130,11 +130,12 @@ export class ComparePeriods extends OpenAPIRoute {
     url.searchParams.append("end", referenceDate); // end date
 
     const response = await fetch(url.toString());
-    const result: any = await response.json();
 
     /**In case third part api is out of service */
-    if (!result)
+    if (!response.ok)
       throw new NotFoundException("Failed to fetch from https://api.eia.gov");
+
+    const result: any = await response.json();
 
     const rawData = result.response.data;
 

@@ -33,6 +33,8 @@ async function Fetch(
 
     const data: unknown = await response.json();
 
+    console.log(data);
+
     const decoded = config.model.decode(data);
     if (isLeft(decoded)) {
       throw Error(

@@ -22,6 +22,7 @@ interface AlertProps {
   className?: string;
   buttonsPropsArray?: ButtonProps[];
   textInputArray?: TextInputProps[];
+  showExitButton?: boolean;
   children?: React.ReactNode;
 }
 
@@ -33,6 +34,7 @@ function Alert({
   setAlertState,
   buttonsPropsArray,
   textInputArray,
+  showExitButton = true,
   children,
 }: AlertProps) {
   return (
@@ -42,12 +44,14 @@ function Alert({
           className,
           "absolute top-20 z-50 p-11 flex items-center justify-center bg-white rounded-lg shadow-xl gap-2 sm:w-[400px] md:w-[430px]",
         )}>
-        <Button
-          className="absolute top-3 right-3 p-0 mb-2"
-          hitSlop={20}
-          onPress={() => setAlertState(null)}
-          title="x"
-        />
+        {showExitButton ? (
+          <Button
+            className="absolute top-3 right-3 p-0 mb-2"
+            hitSlop={20}
+            onPress={() => setAlertState(null)}
+            title="x"
+          />
+        ) : null}
 
         {status && (
           <Text className="text-center" fontSize="h2">

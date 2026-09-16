@@ -2,8 +2,7 @@ import { fromHono } from "chanfana";
 import { Hono } from "hono";
 import { every } from "hono/combine";
 import { cors } from "hono/cors";
-// import { csrf } from "hono/csrf";
-// import { secureHeaders } from "hono/secure-headers";
+import { secureHeaders } from "hono/secure-headers";
 
 /// endpoints
 import Auth from "./endpoints/auth/authEndpoints";
@@ -68,15 +67,23 @@ app.use(
   }),
 );
 
-app.use("/*", cors());
-// make rate limit first then validate
+app.use(
+  "/*",
+  cors({
+    //origin: ["https://gas-report.expo.app"],
+    allowMethods: ["GET", "POST"],
+  }),
+);
+
 app.use(
   "*",
   every(
-    // csrf(),
-    // trimTrailingSlash(),
+    secureHeaders({
+      xFrameOptions: false,
+      xXssProtection: false,
+    }),
     timeout(8000),
-    logger(),
+    //logger(),
   ),
 );
 

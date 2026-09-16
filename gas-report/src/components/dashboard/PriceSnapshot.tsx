@@ -4,11 +4,11 @@
  */
 
 import { View } from "react-native";
-import { PriceSnapshotT } from "../../models/dashboard/PriceSnapshot";
+import { PriceSnapshotDataT } from "../../models/dashboard/PriceSnapshot";
 import { Card, Text } from "../common/Common";
 
 interface PriceSnapshotProps {
-  priceSnapshot: PriceSnapshotT[];
+  priceSnapshot: PriceSnapshotDataT[];
 }
 
 function PriceSnapshot({ priceSnapshot }: PriceSnapshotProps) {

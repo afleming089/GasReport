@@ -9,7 +9,7 @@ function Authenticated() {
 
         <NavigationDropdown
           type="misty"
-          title="Account"
+          title="Navigation"
           showPressableArrow={false}
           className="p-0"
           links={[

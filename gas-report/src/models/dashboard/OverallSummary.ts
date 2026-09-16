@@ -1,6 +1,6 @@
 import * as t from "io-ts";
 
-const OverallSummary = t.readonly(
+const OverallSummaryData = t.readonly(
   t.type({
     periodAverage: t.number,
     weeklyChange: t.string,
@@ -8,6 +8,6 @@ const OverallSummary = t.readonly(
   }),
 );
 
-type OverallSummaryT = t.TypeOf<typeof OverallSummary>;
+type OverallSummaryDataT = t.TypeOf<typeof OverallSummaryData>;
 
-export { OverallSummary, OverallSummaryT };
+export { OverallSummaryData, OverallSummaryDataT };

@@ -9,10 +9,10 @@ import { View } from "react-native";
 import { Card, Line, Text } from "../common/Common";
 
 // model
-import { OverallSummaryT } from "../../models/dashboard/OverallSummary";
+import { OverallSummaryDataT } from "../../models/dashboard/OverallSummary";
 
 interface OverallSummaryProps {
-  OverallSummary: OverallSummaryT;
+  OverallSummary: OverallSummaryDataT;
   lastFetch: string;
 }
 

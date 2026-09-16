@@ -100,6 +100,7 @@ export function SessionProvider({ children }: PropsWithChildren) {
         },
         signOut: () => {
           setSession(null);
+          router.navigate("/");
         },
         session,
         isLoading,
