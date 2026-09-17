@@ -1,6 +1,21 @@
-import { ApiError, ApiErrorT } from "./ApiError";
-import { ApiResponse, ApiResponseT } from "./ApiResponse";
+import { ApiError, ApiErrorT } from "./model/ApiError";
+import { ApiResponse, ApiResponseT } from "./model/ApiResponse";
 import { FetchConfig } from "./FetchConfig";
 import { Fetch } from "./Fetch";
 
-export { ApiError, ApiErrorT, ApiResponse, ApiResponseT, FetchConfig, Fetch };
+/// endpoint response
+import { Auth } from "./model/endpoints/Auth";
+import { ComparePetroleumPeriods } from "./model/endpoints/ComparePetroleumPeriods";
+import { GetPetroleumPeriods } from "./model/endpoints/GetPetroleumPeriods";
+
+export {
+  ApiError,
+  ApiErrorT,
+  ApiResponse,
+  ApiResponseT,
+  FetchConfig,
+  Fetch,
+  Auth,
+  ComparePetroleumPeriods,
+  GetPetroleumPeriods,
+};

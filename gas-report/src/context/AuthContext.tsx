@@ -6,7 +6,7 @@ import * as AppIntegrity from "@expo/app-integrity";
 import * as Crypto from "expo-crypto";
 import { Fetch } from "../utility/api/Fetch";
 import { router } from "expo-router";
-import { Auth } from "../models/Auth";
+import { Auth } from "../utility/api/model/endpoints/Auth";
 
 import { useTurnstile } from "react-turnstile";
 

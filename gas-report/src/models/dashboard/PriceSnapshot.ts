@@ -1,12 +1,12 @@
 import * as t from "io-ts";
 
-import { PetroleumPeriod } from "../PetroleumPeriod";
+import { PetroleumPeriod } from "../../utility/api/model/endpoints/components/PetroleumPeriod";
 
 // can get a PetroleumPeriod and add a name like this week or last week to it.
 // example compare price from this week to a week ago, a month ago etc.
 const PriceSnapshotData = t.readonly(
   t.type({
-    petroleumPeriod: PetroleumPeriod,
+    gasPeriod: PetroleumPeriod,
     snapShotTitle: t.string,
   }),
 );

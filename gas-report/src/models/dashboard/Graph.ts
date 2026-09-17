@@ -1,6 +1,6 @@
 import * as t from "io-ts";
 
-import { PetroleumPeriod } from "../PetroleumPeriod";
+import { PetroleumPeriod } from "../../utility/api/model/endpoints/components/PetroleumPeriod";
 
 const GraphData = t.readonly(
   t.type({

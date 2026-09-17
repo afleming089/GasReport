@@ -5,13 +5,19 @@
 
 // framework
 import { useEffect, useState } from "react";
+import { View } from "react-native";
 
 // models
-import { GraphData } from "../../models/dashboard/Graph";
-import { OverallSummaryData } from "../../models/dashboard/OverallSummary";
-import { PriceSnapshotData } from "../../models/dashboard/PriceSnapshot";
-import { DashboardDataT } from "../../models/dashboard/Dashboard";
+import { OverallSummary } from "../../components/dashboard/OverallSummary";
+import { PriceSnapshot } from "../../components/dashboard/PriceSnapshot";
+import { PriceTrackerChart } from "../../components/dashboard/PriceTrackerChart";
+import { ComparePetroleumPeriods } from "../../utility/api/model/endpoints/ComparePetroleumPeriods";
+import { GetPetroleumPeriods } from "../../utility/api/model/endpoints/GetPetroleumPeriods";
+
+//auth
 import { useSession } from "../../context/AuthContext";
+
+import { Fetch } from "@/utility/api/Fetch";
 
 // components
 import {
@@ -23,13 +29,6 @@ import {
   Text,
   DefaultLoader,
 } from "../../components/common/Common";
-import { OverallSummary } from "../../components/dashboard/OverallSummary";
-import { PriceSnapshot } from "../../components/dashboard/PriceSnapshot";
-import { PriceTrackerChart } from "../../components/dashboard/PriceTrackerChart";
-import useFetch from "@/utility/customHooks/useFetch";
-import { View } from "react-native";
-import { Json } from "io-ts-types";
-import { Fetch } from "@/utility/api/Fetch";
 
 export default function Dashboard() {
   const [alertState, setAlertState] = useState<AlertProps | null>(null);
@@ -56,7 +55,7 @@ export default function Dashboard() {
       {
         method: "GET",
         headers: { "Content-Type": "application/json", jwt: session as string },
-        model: OverallSummaryData,
+        model: ComparePetroleumPeriods,
         queryParams: {
           location: options["region"],
           fuelType: options["fuel-type"],
@@ -69,52 +68,52 @@ export default function Dashboard() {
       },
     );
 
-    const graph = await Fetch(
-      "http://localhost:8787/api/v1/petroleum-periods",
-      {
-        method: "GET",
-        headers: { "Content-Type": "application/json", jwt: session as string },
-        model: GraphData,
-        queryParams: {
-          frequency: "weekly",
-          location: options["region"],
-          fuelType: options["fuel-type"],
-          start: lastYear,
-        },
-      },
-    );
+    // const graph = await Fetch(
+    //   "http://localhost:8787/api/v1/petroleum-periods",
+    //   {
+    //     method: "GET",
+    //     headers: { "Content-Type": "application/json", jwt: session as string },
+    //     model: GetPetroleumPeriods,
+    //     queryParams: {
+    //       frequency: "weekly",
+    //       location: options["region"],
+    //       fuelType: options["fuel-type"],
+    //       start: lastYear,
+    //     },
+    //   },
+    // );
 
-    const priceSnapShot = await Fetch(
-      "http://localhost:8787/api/v1/petroleum-periods/compare",
-      {
-        method: "GET",
-        headers: { "Content-Type": "application/json", jwt: session as string },
-        model: PriceSnapshotData,
-        queryParams: {
-          location: options["region"],
-          fuelType: options["fuel-type"],
-          referenceDate: referenceDate,
-          priorPeriods: JSON.stringify([
-            { unitCount: 1, unit: "week" },
-            { unitCount: 1, unit: "month" },
-            { unitCount: 3, unit: "month" },
-            { unitCount: 1, unit: "year" },
-          ]),
-        },
-      },
-    );
+    // const priceSnapShot = await Fetch(
+    //   "http://localhost:8787/api/v1/petroleum-periods/compare",
+    //   {
+    //     method: "GET",
+    //     headers: { "Content-Type": "application/json", jwt: session as string },
+    //     model: ComparePetroleumPeriods,
+    //     queryParams: {
+    //       location: options["region"],
+    //       fuelType: options["fuel-type"],
+    //       referenceDate: referenceDate,
+    //       priorPeriods: JSON.stringify([
+    //         { unitCount: 1, unit: "week" },
+    //         { unitCount: 1, unit: "month" },
+    //         { unitCount: 3, unit: "month" },
+    //         { unitCount: 1, unit: "year" },
+    //       ]),
+    //     },
+    //   },
+    // );
 
     console.log({
       overallSummary: overallSummary,
-      graph: graph,
-      priceSnapShot: priceSnapShot,
+      // graph: graph,
+      // priceSnapShot: priceSnapShot,
     });
 
-    setDashboardData({
-      overallSummary: overallSummary,
-      graph: graph,
-      priceSnapShot: priceSnapShot,
-    });
+    // setDashboardData({
+    //   overallSummary: overallSummary,
+    //   graph: graph,
+    //   priceSnapShot: priceSnapShot,
+    // });
   }
 
   useEffect(() => {

@@ -105,7 +105,7 @@ export class GetPetroleumPeriods extends OpenAPIRoute {
       return {
         total: parseInt(result.response.total),
         frequency: result.response.frequency,
-        GasPeriods: pick.getParsedArray(result.response.data),
+        PetroPeriods: pick.getParsedArray(result.response.data),
       };
     }
   }

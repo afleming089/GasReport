@@ -4,12 +4,7 @@
  */
 
 import { useEffect, useState } from "react";
-import {
-  ApiResponse,
-  ApiResponseT,
-  Fetch,
-  FetchConfig,
-} from "../../utility/api/api";
+import { ApiResponse, ApiResponseT, Fetch, FetchConfig } from "../api/api";
 
 function useFetch(url: string, config: FetchConfig): ApiResponseT<any> {
   const [response, setResponse] = useState<ApiResponseT<any>>({
