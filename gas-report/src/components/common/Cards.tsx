@@ -45,11 +45,11 @@ function Card({ title, subTitle, children, ...CardVariants }: CardProps) {
   return (
     <View accessibilityLabel="Card" className={wrapper()}>
       <View accessibilityLabel="Header Group" className={headerGroup()}>
-        <Text accessibilityLabel="Title" fontSize="h2">
+        <Text accessibilityLabel="Title" fontSize="h3">
           {title}
         </Text>
         {subTitle && (
-          <Text accessibilityLabel="Sub Title" fontSize="h3">
+          <Text accessibilityLabel="Sub Title" fontSize="h4">
             ${subTitle}
           </Text>
         )}

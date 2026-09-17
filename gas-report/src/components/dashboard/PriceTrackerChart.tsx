@@ -5,16 +5,16 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useWindowDimensions, View } from "react-native";
+import { Text } from "../common/Common";
 import { LineChart } from "react-native-chart-kit/v2";
 
-const data = [
-  { month: "Jan", revenue: 52 },
-  { month: "Feb", revenue: 86 },
-  { month: "Mar", revenue: 58 },
-  { month: "Apr", revenue: 134 },
-];
+import { GasPeriodT } from "../../utility/api/model/endpoints/types/petroleumTypes";
 
-function PriceTrackerChart() {
+interface PriceTrackerChartProps {
+  data: GasPeriodT[];
+}
+
+function PriceTrackerChart({ data = [] }: PriceTrackerChartProps) {
   const [chartDimensions, setChartDimensions] = useState({
     width: 0,
     height: 0,
@@ -27,17 +27,33 @@ function PriceTrackerChart() {
   }, [useWindowDimensions().width]);
 
   return (
-    <View
-      ref={ref}
-      className="flex sm:flex-row gap-4 justify-center items-center sm:items-stretch aspect-video">
-      <LineChart
-        preset="graphite"
-        data={data}
-        xKey="month"
-        yKey="revenue"
-        width={chartDimensions.width}
-        height={chartDimensions.height}
-      />
+    <View>
+      <Text fontSize="h2" className="mb-2">
+        Change Since Last Year
+      </Text>
+      <View
+        ref={ref}
+        className="flex sm:flex-row gap-4 justify-center items-center sm:items-stretch aspect-video">
+        <LineChart
+          showDots={false}
+          formatXLabel={(value, index) => {
+            const Year_Month = value.toString().split("-");
+            return `${Year_Month[0]}-${Year_Month[1]}`;
+          }}
+          formatYLabel={(value) => {
+            return `$${value}.00`;
+          }}
+          showVerticalGridLines={true}
+          showHorizontalGridLines={true}
+          preset="graphite"
+          data={data}
+          xKey="period"
+          yKey="value"
+          width={chartDimensions.width}
+          height={chartDimensions.height}
+          curve="monotone"
+        />
+      </View>
     </View>
   );
 }

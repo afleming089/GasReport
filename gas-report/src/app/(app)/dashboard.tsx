@@ -68,52 +68,51 @@ export default function Dashboard() {
       },
     );
 
-    // const graph = await Fetch(
-    //   "http://localhost:8787/api/v1/petroleum-periods",
-    //   {
-    //     method: "GET",
-    //     headers: { "Content-Type": "application/json", jwt: session as string },
-    //     model: GetPetroleumPeriods,
-    //     queryParams: {
-    //       frequency: "weekly",
-    //       location: options["region"],
-    //       fuelType: options["fuel-type"],
-    //       start: lastYear,
-    //     },
-    //   },
-    // );
+    const graph = await Fetch(
+      "http://localhost:8787/api/v1/petroleum-periods",
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json", jwt: session as string },
+        model: GetPetroleumPeriods,
+        queryParams: {
+          frequency: "weekly",
+          location: options["region"],
+          fuelType: options["fuel-type"],
+          start: lastYear,
+        },
+      },
+    );
 
-    // const priceSnapShot = await Fetch(
-    //   "http://localhost:8787/api/v1/petroleum-periods/compare",
-    //   {
-    //     method: "GET",
-    //     headers: { "Content-Type": "application/json", jwt: session as string },
-    //     model: ComparePetroleumPeriods,
-    //     queryParams: {
-    //       location: options["region"],
-    //       fuelType: options["fuel-type"],
-    //       referenceDate: referenceDate,
-    //       priorPeriods: JSON.stringify([
-    //         { unitCount: 1, unit: "week" },
-    //         { unitCount: 1, unit: "month" },
-    //         { unitCount: 3, unit: "month" },
-    //         { unitCount: 1, unit: "year" },
-    //       ]),
-    //     },
-    //   },
-    // );
+    const priceSnapShot = await Fetch(
+      "http://localhost:8787/api/v1/petroleum-periods/compare",
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json", jwt: session as string },
+        model: ComparePetroleumPeriods,
+        queryParams: {
+          location: options["region"],
+          fuelType: options["fuel-type"],
+          referenceDate: referenceDate,
+          priorPeriods: JSON.stringify([
+            { unitCount: 1, unit: "week" },
+            { unitCount: 1, unit: "month" },
+            { unitCount: 3, unit: "month" },
+            { unitCount: 1, unit: "year" },
+          ]),
+        },
+      },
+    );
 
     console.log({
-      overallSummary: overallSummary,
-      // graph: graph,
-      // priceSnapShot: priceSnapShot,
+      overallSummary,
+      graph,
+      priceSnapShot,
     });
-
-    // setDashboardData({
-    //   overallSummary: overallSummary,
-    //   graph: graph,
-    //   priceSnapShot: priceSnapShot,
-    // });
+    setDashboardData({
+      overallSummary,
+      graph,
+      priceSnapShot,
+    });
   }
 
   useEffect(() => {
@@ -172,14 +171,25 @@ export default function Dashboard() {
         className="p-2 flex flex-row rounded-sm bg-navyBlack">
         Region: {options["region"]}
       </Text>
+
       <OverallSummary
-        OverallSummary={dashboardData.overallSummary}
-        lastFetch={new Date().toISOString()}
+        currentPeriod={dashboardData?.overallSummary?.data?.referencePeriod}
+        comparedGasPeriods={
+          dashboardData?.overallSummary?.data?.comparedGasPeriods
+        }
+        lastFetch={new Date().toISOString().split("T", 1)[0]}
       />
-      <PriceTrackerChart />
-      <PriceSnapshot priceSnapshot={dashboardData.priceSnapShot} />
+      <PriceTrackerChart data={dashboardData?.graph?.data?.PetroPeriods} />
+      <PriceSnapshot
+        currentPeriod={dashboardData?.priceSnapShot?.data?.referencePeriod}
+        comparedGasPeriods={
+          dashboardData?.priceSnapShot?.data?.comparedGasPeriods
+        }
+      />
     </RouteWrapper>
   ) : (
-    <DefaultLoader></DefaultLoader>
+    <RouteWrapper accessibilityLabel="Dashboard Group Loader">
+      <DefaultLoader></DefaultLoader>
+    </RouteWrapper>
   );
 }

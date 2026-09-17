@@ -4,17 +4,25 @@
  */
 
 import { View } from "react-native";
-import { PriceSnapshotDataT } from "../../models/dashboard/PriceSnapshot";
 import { Card, Text } from "../common/Common";
 
+import {
+  GasPeriodT,
+  ComparedGasPeriodT,
+} from "../../utility/api/model/endpoints/types/petroleumTypes";
+
 interface PriceSnapshotProps {
-  priceSnapshot: PriceSnapshotDataT[];
+  currentPeriod: GasPeriodT;
+  comparedGasPeriods: ComparedGasPeriodT[];
 }
 
-function PriceSnapshot({ priceSnapshot }: PriceSnapshotProps) {
+function PriceSnapshot({
+  currentPeriod,
+  comparedGasPeriods = [],
+}: PriceSnapshotProps) {
   return (
     <View>
-      <Text className="text-center mb-3" fontSize="h1">
+      <Text className="text-center mb-3" fontSize="h2">
         Price Snapshot
       </Text>
       <View
@@ -23,24 +31,16 @@ function PriceSnapshot({ priceSnapshot }: PriceSnapshotProps) {
         <View key={0} className="w-full">
           <Card
             align="centered"
-            title={priceSnapshot[0].snapShotTitle}
-            subTitle={
-              priceSnapshot[0].petroleumPeriod.value +
-              " " +
-              priceSnapshot[0].petroleumPeriod.units
-            }
+            title="Current Week"
+            subTitle={`${currentPeriod?.value.toFixed(2)}`}
           />
         </View>
-        {priceSnapshot.slice(1).map((snapshot, index) => (
+        {comparedGasPeriods.map((period, index) => (
           <View key={index + 1} className="w-full sm:w-[43%] grow">
             <Card
               align="centered"
-              title={snapshot.snapShotTitle}
-              subTitle={
-                snapshot.petroleumPeriod.value +
-                " " +
-                snapshot.petroleumPeriod.units
-              }
+              title={period?.timeAgo + " ago"}
+              subTitle={`${period?.value.toFixed(2)}`}
             />
           </View>
         ))}

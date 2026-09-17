@@ -87,8 +87,8 @@ export function SessionProvider({ children }: PropsWithChildren) {
             });
           }
 
-          if (response.decodedData) {
-            jwt = response.decodedData.sessionToken;
+          if (response.success) {
+            jwt = response.data.sessionToken;
 
             setSession(jwt);
             console.log("Set Session token");

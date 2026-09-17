@@ -1,9 +1,8 @@
-import { ApiResponseT, ApiResponse, FetchConfig } from "./api";
+import { ApiResponseT, ApiResponse } from "./model/ApiResponse";
+import { FetchConfig } from "./FetchConfig";
 
 // schema validation
-import * as t from "io-ts";
-import { PathReporter } from "io-ts/PathReporter";
-import { isLeft } from "fp-ts/Either";
+import { z } from "zod";
 
 async function Fetch(
   url: string,
@@ -33,17 +32,17 @@ async function Fetch(
 
     const data: unknown = await response.json();
 
-    const decoded = config.model.decode(data);
-    if (isLeft(decoded)) {
-      throw Error(
-        `Could not validate data: ${PathReporter.report(decoded).join("\n")}`,
-      );
+    const decodedData = config.model.safeParse(data);
+
+    if (!decodedData.success) {
+      console.log(`Could not validate data: `, decodedData.error);
+      throw Error(`Could not validate data: `, decodedData.error);
     }
 
-    type DataT = t.TypeOf<typeof config.model>; // compile-time type
-    const decodedData: DataT = decoded.right; // now safely the correct type
-
-    return { decodedData } as ApiResponseT<any>;
+    return {
+      data: decodedData.data,
+      success: decodedData.success,
+    } as ApiResponseT<any>;
   } catch (error) {
     return {
       error: {

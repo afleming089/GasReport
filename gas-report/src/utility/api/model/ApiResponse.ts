@@ -1,15 +1,15 @@
-import * as t from "io-ts";
-import { ApiError } from "./ApiError"; // Assuming ApiError is an io-ts codec
+import { z } from "zod";
+import { ApiError, ApiErrorT } from "./ApiError"; // Assuming ApiError is an io-ts codec
 
-const ApiResponse = <T extends t.Mixed>(dataSchema: T) =>
-  t.partial({
-    data: dataSchema,
-    error: ApiError,
+const ApiResponse = <T extends z.ZodTypeAny>(dataSchema: T) =>
+  z.object({
+    data: dataSchema.optional(),
+    error: ApiError.optional(),
   });
 
-type ApiResponseT<T extends t.Mixed> = {
+type ApiResponseT<T> = {
   data?: T;
-  error?: t.TypeOf<typeof ApiError>;
+  error?: ApiErrorT;
 };
 
 export { ApiResponse, ApiResponseT };

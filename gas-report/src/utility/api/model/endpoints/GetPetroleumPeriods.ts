@@ -1,15 +1,13 @@
-import * as t from "io-ts";
+import { z } from "zod";
 
-import { PetroleumPeriod } from "./components/PetroleumPeriod";
+import { GasPeriod } from "./types/petroleumTypes";
 
-const GetPetroleumPeriods = t.readonly(
-  t.type({
-    frequency: t.string,
-    PetroPeriods: t.array(PetroleumPeriod),
-    total: t.number,
-  }),
-);
+const GetPetroleumPeriods = z.object({
+  frequency: z.string(),
+  PetroPeriods: z.array(GasPeriod),
+  total: z.number(),
+});
 
-type GetPetroleumPeriodsT = t.TypeOf<typeof GetPetroleumPeriods>;
+type GetPetroleumPeriodsT = z.infer<typeof GetPetroleumPeriods>;
 
 export { GetPetroleumPeriods, GetPetroleumPeriodsT };

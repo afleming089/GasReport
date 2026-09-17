@@ -1,14 +1,16 @@
-import * as t from "io-ts";
+import { z } from "zod";
 
-import { PetroleumPeriod } from "./components/PetroleumPeriod";
+import {
+  GasPeriod,
+  ComparedGasPeriod,
+  NullPeriod,
+} from "./types/petroleumTypes";
 
-const ComparePetroleumPeriods = t.readonly(
-  t.type({
-    referencePeriod: PetroleumPeriod,
-    comparedGasPeriods: t.array(PetroleumPeriod),
-  }),
-);
+const ComparePetroleumPeriods = z.object({
+  referencePeriod: GasPeriod,
+  comparedGasPeriods: z.array(ComparedGasPeriod.or(NullPeriod)),
+});
 
-type ComparePetroleumPeriodsT = t.TypeOf<typeof ComparePetroleumPeriods>;
+type ComparePetroleumPeriodsT = z.infer<typeof ComparePetroleumPeriods>;
 
 export { ComparePetroleumPeriods, ComparePetroleumPeriodsT };

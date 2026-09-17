@@ -1,11 +1,9 @@
-import * as t from "io-ts";
+import { z } from "zod";
 
-const Auth = t.readonly(
-  t.type({
-    sessionToken: t.string,
-  }),
-);
+const Auth = z.object({
+  sessionToken: z.string(),
+});
 
-type AuthT = t.TypeOf<typeof Auth>;
+type AuthT = z.infer<typeof Auth>;
 
 export { Auth, AuthT };

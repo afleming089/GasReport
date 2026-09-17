@@ -1,14 +1,10 @@
-import * as t from "io-ts";
+import { z } from "zod";
 
-const ApiError = t.intersection([
-  t.type({
-    message: t.string,
-  }),
-  t.partial({
-    status: t.number,
-  }),
-]);
+const ApiError = z.object({
+  message: z.string(),
+  status: z.number().optional(),
+});
 
-type ApiErrorT = t.TypeOf<typeof ApiError>;
+type ApiErrorT = z.infer<typeof ApiError>;
 
 export { ApiError, ApiErrorT };
