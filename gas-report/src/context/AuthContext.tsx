@@ -69,7 +69,7 @@ export function SessionProvider({ children }: PropsWithChildren) {
           if (Platform.OS === "web") {
             try {
               response = await Fetch(
-                "http://localhost:8787/api/v1/auth/create",
+                "https://api.aflemingrocks089.workers.dev/api/v1/auth/create",
                 {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
@@ -85,12 +85,15 @@ export function SessionProvider({ children }: PropsWithChildren) {
 
           if (Platform.OS === "android") {
             const appIntegrityToken = await SetupAppIntegrityCheck();
-            response = Fetch("http://localhost:8787/api/v1/auth/create", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              model: Auth,
-              body: JSON.stringify({ appIntegrityToken: appIntegrityToken }),
-            });
+            response = Fetch(
+              "https://api.aflemingrocks089.workers.dev/api/v1/auth/create",
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                model: Auth,
+                body: JSON.stringify({ appIntegrityToken: appIntegrityToken }),
+              },
+            );
           }
 
           if (response.success) {

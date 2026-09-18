@@ -35,7 +35,6 @@ import {
   AlertProps,
   Text,
   DefaultLoader,
-  Link,
 } from "../../components/common/Common";
 
 export default function Dashboard() {
@@ -62,7 +61,7 @@ export default function Dashboard() {
     const lastYear = (today.getFullYear() - 1).toString();
 
     const overallSummary = await Fetch(
-      "http://localhost:8787/api/v1/petroleum-periods/compare",
+      "https://api.aflemingrocks089.workers.dev/api/v1/petroleum-periods/compare",
       {
         method: "GET",
         headers: { "Content-Type": "application/json", jwt: session as string },
@@ -80,7 +79,7 @@ export default function Dashboard() {
     );
 
     const graph = await Fetch(
-      "http://localhost:8787/api/v1/petroleum-periods",
+      "https://api.aflemingrocks089.workers.dev/api/v1/petroleum-periods",
       {
         method: "GET",
         headers: { "Content-Type": "application/json", jwt: session as string },
@@ -95,7 +94,7 @@ export default function Dashboard() {
     );
 
     const priceSnapShot = await Fetch(
-      "http://localhost:8787/api/v1/petroleum-periods/compare",
+      "https://api.aflemingrocks089.workers.dev/api/v1/petroleum-periods/compare",
       {
         method: "GET",
         headers: { "Content-Type": "application/json", jwt: session as string },
