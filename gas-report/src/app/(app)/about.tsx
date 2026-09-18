@@ -40,7 +40,7 @@ export default function About() {
       />
 
       <Card title="Region Map">
-        <Image source={require("./assets/region-map.png")} />
+        <Image source={require("../../../assets/images/region-map.png")} />
       </Card>
 
       <Card title="Results Subject to EIA API Accuracy">
