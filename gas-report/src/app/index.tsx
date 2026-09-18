@@ -9,6 +9,7 @@
  */
 
 import { RouteWrapper, Text } from "@/components/common/Common";
+
 import { DefaultLoader } from "@/components/common/Loaders";
 import "../../global.css";
 import ValidateTurnstile from "../utility/validateTurnstile";

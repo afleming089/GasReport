@@ -38,11 +38,6 @@ export default function About() {
         title="Gas-Report Repository"
         href="https://github.com/afleming089/GasReport"
       />
-
-      <Card title="Region Map">
-        <Image source={require("../../../assets/images/region-map.png")} />
-      </Card>
-
       <Card title="Results Subject to EIA API Accuracy">
         <Link
           href={"https://www.eia.gov/about/information_quality_guidelines.php"}
