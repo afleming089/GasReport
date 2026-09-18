@@ -11,7 +11,7 @@
   "dependencies": {
     "chanfana": "^3.3.0",
     "googleapis": "^180.0.0",
-    "hono": "^4.12.12",
+    "hono": "^4.13.8",
     "hono-rate-limiter": "^0.5.3",
     "jose": "^6.2.12",
     "zod": "^4.3.6"
