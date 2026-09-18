@@ -139,7 +139,7 @@ export const frequency = ["weekly", "monthly", "annual"] as const;
  *
  *  YORD: CHICAGO
  */
-export const locations = [
+export const locations: string[] = [
   "NUS", // U.S. [All Below]
   "R10", // PADD 1 East Coast [New England, Central Atlantic, Lower Atlantic]
   "R1X", // PADD 1A New England [ME, VT, NH, MA, CT, RI]
@@ -182,7 +182,7 @@ export const locations = [
  *
  * EPM0: Total Gasoline
  */
-export const fuelType = [
+export const fuelType: string[] = [
   "EPMR", // Regular Gasoline
   "EPMM", // Mid-grade
   "EPMP", // Premium Gasoline

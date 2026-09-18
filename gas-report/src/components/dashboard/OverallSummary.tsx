@@ -39,8 +39,8 @@ function OverallSummary({
     }
   };
 
-  const weeklyChange = `${signToShow(comparedGasPeriods[0]?.priceChange)} $${comparedGasPeriods[0]?.priceChange}`;
-  const monthlyChange = `${signToShow(comparedGasPeriods[1]?.priceChange)} $${comparedGasPeriods[1]?.priceChange}`;
+  const weeklyChange = `${signToShow(comparedGasPeriods[0]?.priceChange)} $${Math.abs(comparedGasPeriods[0]?.priceChange)}`;
+  const monthlyChange = `${signToShow(comparedGasPeriods[1]?.priceChange)} $${Math.abs(comparedGasPeriods[1]?.priceChange)}`;
 
   const content = [
     { title: "Since Last Week", data: weeklyChange },

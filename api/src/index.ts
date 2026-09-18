@@ -70,7 +70,7 @@ app.use(
 app.use(
   "/*",
   cors({
-    //origin: ["https://gas-report.expo.app"],
+    origin: ["https://gas-report.expo.app"],
     allowMethods: ["GET", "POST"],
   }),
 );
@@ -82,8 +82,8 @@ app.use(
       xFrameOptions: false,
       xXssProtection: false,
     }),
-    timeout(8000),
-    //logger(),
+    timeout(10000),
+    logger(),
   ),
 );
 

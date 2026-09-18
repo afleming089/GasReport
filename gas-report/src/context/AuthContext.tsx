@@ -53,6 +53,12 @@ export function SessionProvider({ children }: PropsWithChildren) {
   const [[isLoading, session], setSession] = useStorageState("session");
   const turnstile = useTurnstile();
 
+  const sessionTime = 15 * 60 * 1000; // 15 minutes
+  setTimeout(() => {
+    setSession(null);
+    router.navigate("/");
+  }, sessionTime);
+
   return (
     <AuthContext.Provider
       value={{

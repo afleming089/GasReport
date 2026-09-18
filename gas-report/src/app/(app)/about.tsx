@@ -22,6 +22,10 @@ export default function About() {
         </Text>
       </Card>
       <Link
+        title="My Linkedin"
+        href="https://www.linkedin.com/in/afleming089/"
+      />
+      <Link
         title="Gas-Report Documentation"
         href="https://afleming089.github.io/GasReport/"
       />
@@ -29,10 +33,13 @@ export default function About() {
         title="Gas-Report Repository"
         href="https://github.com/afleming089/GasReport"
       />
-      <Link
-        title="My Linkedin"
-        href="https://www.linkedin.com/in/afleming089/"
-      />
+
+      <Card title="Results Subject to EIA API Accuracy">
+        <Link
+          href={"https://www.eia.gov/about/information_quality_guidelines.php"}
+          title="EIAs API Quality Guidelines"
+        />
+      </Card>
     </RouteWrapper>
   );
 }

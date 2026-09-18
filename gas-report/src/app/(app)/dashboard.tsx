@@ -14,6 +14,13 @@ import { PriceTrackerChart } from "../../components/dashboard/PriceTrackerChart"
 import { ComparePetroleumPeriods } from "../../utility/api/model/endpoints/ComparePetroleumPeriods";
 import { GetPetroleumPeriods } from "../../utility/api/model/endpoints/GetPetroleumPeriods";
 
+import {
+  locations,
+  locationsCodes,
+  fuelType,
+  fuelTypeCodes,
+} from "../../utility/api/model/endpoints/types/petroleumTypes";
+
 //auth
 import { useSession } from "../../context/AuthContext";
 
@@ -28,24 +35,28 @@ import {
   AlertProps,
   Text,
   DefaultLoader,
+  Link,
 } from "../../components/common/Common";
 
 export default function Dashboard() {
   const [alertState, setAlertState] = useState<AlertProps | null>(null);
   const [options, setOptions] = useState<Record<string, string>>({
-    "fuel-type": "EPMR",
-    region: "NUS",
+    "fuel-type": "Regular Gasoline",
+    region: "Midwest",
   });
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const { session, signOut } = useSession();
+  const { session } = useSession();
 
   const [dashboardData, setDashboardData] = useState<any>(null);
+  const [fetchData, setFetchData] = useState<boolean>(true);
+  const optionCodes = {
+    regionApiCode: locationsCodes[options["region"]],
+    fuelTypeApiCode: fuelTypeCodes[options["fuel-type"]],
+  };
 
   /// TO DO add batching later for one request
   async function handelFetch() {
-    /// re auth if session timeout
-    if (!session) signOut();
-
     const today = new Date();
     const referenceDate = today.toISOString().split("T", 1)[0];
     const lastYear = (today.getFullYear() - 1).toString();
@@ -57,8 +68,8 @@ export default function Dashboard() {
         headers: { "Content-Type": "application/json", jwt: session as string },
         model: ComparePetroleumPeriods,
         queryParams: {
-          location: options["region"],
-          fuelType: options["fuel-type"],
+          location: optionCodes.regionApiCode,
+          fuelType: optionCodes.fuelTypeApiCode,
           referenceDate: referenceDate,
           priorPeriods: JSON.stringify([
             { unitCount: 1, unit: "week" },
@@ -76,8 +87,8 @@ export default function Dashboard() {
         model: GetPetroleumPeriods,
         queryParams: {
           frequency: "weekly",
-          location: options["region"],
-          fuelType: options["fuel-type"],
+          location: optionCodes.regionApiCode,
+          fuelType: optionCodes.fuelTypeApiCode,
           start: lastYear,
         },
       },
@@ -90,8 +101,8 @@ export default function Dashboard() {
         headers: { "Content-Type": "application/json", jwt: session as string },
         model: ComparePetroleumPeriods,
         queryParams: {
-          location: options["region"],
-          fuelType: options["fuel-type"],
+          location: optionCodes.regionApiCode,
+          fuelType: optionCodes.fuelTypeApiCode,
           referenceDate: referenceDate,
           priorPeriods: JSON.stringify([
             { unitCount: 1, unit: "week" },
@@ -103,23 +114,24 @@ export default function Dashboard() {
       },
     );
 
-    console.log({
-      overallSummary,
-      graph,
-      priceSnapShot,
-    });
     setDashboardData({
       overallSummary,
       graph,
       priceSnapShot,
     });
+
+    setIsLoading(false);
   }
 
   useEffect(() => {
     handelFetch();
-  }, []);
+  }, [fetchData]);
 
-  return dashboardData ? (
+  return isLoading ? (
+    <RouteWrapper accessibilityLabel="Dashboard Group Loader">
+      <DefaultLoader></DefaultLoader>
+    </RouteWrapper>
+  ) : (
     <RouteWrapper accessibilityLabel="Dashboard Group">
       <Button
         title="Select Region and Fuel-Grade"
@@ -127,18 +139,19 @@ export default function Dashboard() {
         onPress={() => {
           setAlertState({
             title: "Select Region and Fuel Grade",
+            message: "Diesel Readings not available at state or city level.",
             showExitButton: false,
             children: (
               <View className="gap-2">
                 <Select
                   title="Select Fuel Type"
-                  options={["Regular", "Mid Grade", "Premium", "Diesel"]}
+                  options={fuelType}
                   setQueryParameters={setOptions}
                   queryParameterKey="fuel-type"
                 />
                 <Select
                   title="Select Region"
-                  options={["Midwest", "North East", "Chicago", "South"]}
+                  options={locations}
                   setQueryParameters={setOptions}
                   queryParameterKey="region"
                 />
@@ -149,8 +162,8 @@ export default function Dashboard() {
               {
                 title: "Fetch Data",
                 onPress: () => {
-                  //handle submit function
-                  handelFetch();
+                  fetchData ? setFetchData(false) : setFetchData(true);
+                  setIsLoading(true);
                   setAlertState(null);
                 },
               },
@@ -177,7 +190,7 @@ export default function Dashboard() {
         comparedGasPeriods={
           dashboardData?.overallSummary?.data?.comparedGasPeriods
         }
-        lastFetch={new Date().toISOString().split("T", 1)[0]}
+        lastFetch={new Date().toLocaleTimeString()}
       />
       <PriceTrackerChart data={dashboardData?.graph?.data?.PetroPeriods} />
       <PriceSnapshot
@@ -186,10 +199,6 @@ export default function Dashboard() {
           dashboardData?.priceSnapShot?.data?.comparedGasPeriods
         }
       />
-    </RouteWrapper>
-  ) : (
-    <RouteWrapper accessibilityLabel="Dashboard Group Loader">
-      <DefaultLoader></DefaultLoader>
     </RouteWrapper>
   );
 }

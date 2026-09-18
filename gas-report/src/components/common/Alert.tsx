@@ -54,7 +54,7 @@ function Alert({
         ) : null}
 
         {status && (
-          <Text className="text-center" fontSize="h2">
+          <Text className="text-" fontSize="h2">
             {status}
           </Text>
         )}
@@ -63,11 +63,7 @@ function Alert({
             {title}
           </Text>
         )}
-        {message && (
-          <Text className="text-center" fontSize="sm">
-            {message}
-          </Text>
-        )}
+        {message && <Text fontSize="sm">{message}</Text>}
 
         {textInputArray && (
           <View className="flex gap-2 w-full">

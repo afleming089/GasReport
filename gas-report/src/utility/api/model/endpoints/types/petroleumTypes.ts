@@ -138,38 +138,68 @@ export const frequency = ["weekly", "monthly", "annual"] as const;
  *  YMIA: MIAMI
  *
  *  YORD: CHICAGO
+ *
+ * Human Readable Locations
  */
-export const locations = [
-  "NUS", // U.S. [All Below]
-  "R10", // PADD 1 East Coast [New England, Central Atlantic, Lower Atlantic]
-  "R1X", // PADD 1A New England [ME, VT, NH, MA, CT, RI]
-  "R1Y", // PADD 1B Central Atlantic [NY, PA, MD, NJ, DE]
-  "R1Z", // PADD 1C Lower Atlantic [WV, VA, NC, SC, GA, FL]
-  "R20", // PADD 2 Midwest [ND, SD, NE, KS, OK, MO, IA, MN, WI, IL, IN, MI, OH, KY, TN]
-  "R30", // PADD 3 Gulf Coast [NM, TX, AR, LA, MS, AL]
-  "R40", // PADD 4 Rocky Mountain [MT, ID, WY, UT, CO]
-  "R50", // PADD 5 West Coast [WA, OR, NV, CA, AZ, AK, HI]
-  "R5XCA", // PADD 5 EXCEPT CALIFORNIA
-  "SCA", // CALIFORNIA
-  "SCO", // COLORADO
-  "SFL", // FLORIDA
-  "SMA", // MASSACHUSETTS
-  "SMN", // MINNESOTA
-  "SNY", // NEW YORK
-  "SOH", // OHIO
-  "STX", // TEXAS
-  "SWA", // WASHINGTON
-  "Y05LA", // LOS ANGELES
-  "Y05SF", // SAN FRANCISCO
-  "Y35NY", // NEW YORK CITY
-  "Y44HO", // HOUSTON
-  "Y48SE", // SEATTLE
-  "YBOS", // BOSTON
-  "YCLE", // CLEVELAND
-  "YDEN", // DENVER
-  "YMIA", // MIAMI
-  "YORD", // CHICAGO
+export const locations: string[] = [
+  "U.S.", // NUS
+  "New England", // R1X
+  "Central Atlantic", // R1Y
+  "Lower Atlantic", // R1Z
+  "Midwest", // R20
+  "Gulf Coast", // R30
+  "Rocky Mountain", // R40
+  "West Coast", // R50
+  "California", // SCA
+  "Colorado", // SCO
+  "Florida", // SFL
+  "Massachusetts", // SMA
+  "Minnesota", // SMN
+  "New York", // SNY
+  "Ohio", // SOH
+  "Texas", // STX
+  "Washington", // SWA
+  "Los Angeles", // Y05LA
+  "San Francisco", // Y05SF
+  "New York City", // Y35NY
+  "Houston", // Y44H0
+  "Seattle", // Y48SE
+  "Boston", // YB0S
+  "Cleveland", // YCLE
+  "Denver", // YDEN
+  "Miami", // YMIA
+  "Chicago", // YORD
 ] as const;
+
+export const locationsCodes: any = {
+  "U.S.": "NUS",
+  "New England": "R1X",
+  "Central Atlantic": "R1Y",
+  "Lower Atlantic": "R1Z",
+  Midwest: "R20",
+  "Gulf Coast": "R30",
+  "Rocky Mountain": "R40",
+  "West Coast": "R50",
+  California: "SCA",
+  Colorado: "SCO",
+  Florida: "SFL",
+  Massachusetts: "SMA",
+  Minnesota: "SMN",
+  "New York": "SNY",
+  Ohio: "SOH",
+  Texas: "STX",
+  Washington: "SWA",
+  "Los Angeles": "Y05LA",
+  "San Francisco": "Y05SF",
+  "New York City": "Y35NY",
+  Houston: "Y44HO",
+  Seattle: "Y48SE",
+  Boston: "YBOS",
+  Cleveland: "YCLE",
+  Denver: "YDEN",
+  Miami: "YMIA",
+  Chicago: "YORD",
+} as const;
 
 /** includes subsets in each such as low sulfur, reformulated and conventional
  * EPMR: Regular Gasoline
@@ -181,11 +211,20 @@ export const locations = [
  * EPD2D: No 2 Diesel
  *
  * EPM0: Total Gasoline
- */
-export const fuelType = [
-  "EPMR", // Regular Gasoline
-  "EPMM", // Mid-grade
-  "EPMP", // Premium Gasoline
-  "EPD2D", // No 2 Diesel
-  "EPM0", // Total Gasoline
+ *
+ * Human Readable Fuel Types */
+export const fuelType: string[] = [
+  "Regular Gasoline", // EPMR
+  "Mid-grade", // EPMM
+  "Premium Gasoline", // EPMP
+  "No 2 Diesel", // EPD2D
+  "Total Gasoline", // EPM0
 ] as const;
+
+export const fuelTypeCodes: any = {
+  "Regular Gasoline": "EPMR",
+  "Mid-grade": "EPMM",
+  "Premium Gasoline": "EPMP",
+  "No 2 Diesel": "EPD2D",
+  "Total Gasoline": "EPM0",
+} as const;

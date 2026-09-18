@@ -47,7 +47,7 @@ export class CreateClientToken extends OpenAPIRoute {
       const jwt = await new SignJWT(payload)
         .setProtectedHeader({ alg })
         .setIssuedAt()
-        .setExpirationTime("3m")
+        .setExpirationTime("15m")
         .sign(secret);
 
       return jwt;

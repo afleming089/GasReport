@@ -16,7 +16,7 @@ interface CustomDropdownProps extends GenericDropdownProps {
 
 /// Select from different options and has option to add a useForm hook if need to make calls to backend
 interface SelectProps extends GenericDropdownProps {
-  options: string[];
+  options: readonly string[];
   queryParameterKey: string;
   setQueryParameters: Dispatch<SetStateAction<Record<string, string>>>;
   handleSelect?(): void;

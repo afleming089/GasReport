@@ -26,8 +26,7 @@ export default function ValidateTurnstile() {
   if (Platform.OS === "web") {
     return (
       <Turnstile
-        // sitekey="0x4AAAAAAEqlGPMYvYX7deFH" // dev
-        sitekey="1x00000000000000000000AA"
+        sitekey="0x4AAAAAAEqlGPMYvYX7deFH"
         onVerify={(token) => {
           try {
             signIn(token);
