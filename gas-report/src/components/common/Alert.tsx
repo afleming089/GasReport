@@ -5,6 +5,7 @@
  * @module
  */
 
+import { ReactComponent } from "expo-router/build/testing-library/context-stubs";
 import { Button, ButtonProps } from "./Button";
 import { Text } from "./Text";
 import { TextInput, TextInputProps } from "./TextInput";
@@ -21,6 +22,8 @@ interface AlertProps {
   className?: string;
   buttonsPropsArray?: ButtonProps[];
   textInputArray?: TextInputProps[];
+  showExitButton?: boolean;
+  children?: React.ReactNode;
 }
 
 function Alert({
@@ -31,6 +34,8 @@ function Alert({
   setAlertState,
   buttonsPropsArray,
   textInputArray,
+  showExitButton = true,
+  children,
 }: AlertProps) {
   return (
     <View className="absolute inset-0 z-50 flex items-center justify-center bg-black/50 h-[100vh]">
@@ -39,15 +44,17 @@ function Alert({
           className,
           "absolute top-20 z-50 p-11 flex items-center justify-center bg-white rounded-lg shadow-xl gap-2 sm:w-[400px] md:w-[430px]",
         )}>
-        <Button
-          className="absolute top-3 right-3 p-0 mb-2"
-          hitSlop={20}
-          onPress={() => setAlertState(null)}
-          title="x"
-        />
+        {showExitButton ? (
+          <Button
+            className="absolute top-3 right-3 p-0 mb-2"
+            hitSlop={20}
+            onPress={() => setAlertState(null)}
+            title="x"
+          />
+        ) : null}
 
         {status && (
-          <Text className="text-center" fontSize="h2">
+          <Text className="text-" fontSize="h2">
             {status}
           </Text>
         )}
@@ -56,11 +63,7 @@ function Alert({
             {title}
           </Text>
         )}
-        {message && (
-          <Text className="text-center" fontSize="sm">
-            {message}
-          </Text>
-        )}
+        {message && <Text fontSize="sm">{message}</Text>}
 
         {textInputArray && (
           <View className="flex gap-2 w-full">
@@ -71,6 +74,8 @@ function Alert({
             )}
           </View>
         )}
+
+        {children && <View className="flex gap-2 w-full">{children}</View>}
 
         {buttonsPropsArray && (
           <View className="flex gap-2 w-full flex-row justify-center mt-2">

@@ -9,14 +9,12 @@
     "userInterfaceStyle": "automatic",
     "ios": {
       "icon": "./assets/expo.icon",
-      "experiments": {
-        "typedRoutes": true
-      },
       "bundleIdentifier": "com.afleming089.gasreport",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }
     },
+    "githubUrl": "https://github.com/afleming089/GasReport",
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
@@ -52,7 +50,9 @@
           "faceIDPermission": "Allow $(PRODUCT_NAME) to access your Face ID biometric data."
         }
       ],
-      "expo-web-browser"
+      "expo-web-browser",
+      "expo-image",
+      "expo-font"
     ],
     "experiments": {
       "typedRoutes": true,

@@ -9,17 +9,18 @@ function Authenticated() {
 
         <NavigationDropdown
           type="misty"
-          title="Account"
+          title="Navigation"
           showPressableArrow={false}
           className="p-0"
           links={[
             { title: "Dashboard", href: "/dashboard" },
-            { title: "Settings", href: "/account" },
-            {
-              title: "Logout",
-              href: "/",
-              className: "text-red-600",
-            },
+            // { title: "Settings", href: "/account" },
+            { title: "About", href: "/about" },
+            // {
+            //   title: "Logout",
+            //   href: "/",
+            //   className: "text-red-600",
+            // },
           ]}
         />
       </View>

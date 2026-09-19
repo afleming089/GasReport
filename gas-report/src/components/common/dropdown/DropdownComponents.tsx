@@ -51,8 +51,8 @@ function Select({
   title,
   className,
   options,
-  url,
-  fetchConfig,
+  queryParameterKey,
+  setQueryParameters,
   ...styles
 }: SelectProps) {
   const { text } = dropdown(styles);
@@ -60,14 +60,16 @@ function Select({
   const [pressableTitle, setPressableTitle] = useState<string>(title);
   const [showMenu, setShowMenu] = useState<boolean>(false);
 
-  const [selectedOption, setSelectedOption] = useState<string>("");
-
   function handleSelect(optionValue: string) {
-    setSelectedOption(optionValue);
     setPressableTitle(optionValue);
 
     // add to selectedOption to prams
-    if (url && fetchConfig) useFetch(url.concat(selectedOption), fetchConfig);
+    if (setQueryParameters) {
+      setQueryParameters((prevQueryParameters: any) => ({
+        ...prevQueryParameters,
+        [queryParameterKey]: optionValue,
+      }));
+    }
 
     setShowMenu(false);
   }

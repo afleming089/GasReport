@@ -1,5 +1,6 @@
 /**
  * Wraps Views in app layout. Adds custom styles and a scroll view to applied pages.
+ *
  * @module
  */
 

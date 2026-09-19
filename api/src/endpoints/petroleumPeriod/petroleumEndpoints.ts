@@ -4,7 +4,7 @@ import { fromHono } from "chanfana";
 
 /// services
 import { GetPetroleumPeriods } from "./tasks/getPetroleumPeriods";
-import { ComparePeriodChanges } from "./tasks/comparePeriodChange";
+import { ComparePeriods } from "./tasks/comparePeriods";
 
 export type Env = {
   // Example bindings, use your own
@@ -17,6 +17,6 @@ const app = fromHono(new Hono<{ Bindings: Env }>());
 const openapi = fromHono(app);
 
 openapi.get("/", GetPetroleumPeriods);
-openapi.get("/compare", ComparePeriodChanges);
+openapi.get("/compare", ComparePeriods);
 
 export default app;

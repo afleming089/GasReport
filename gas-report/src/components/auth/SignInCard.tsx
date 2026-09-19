@@ -20,7 +20,7 @@ import {
   TextInput,
 } from "../common/Common";
 
-import { ApiError } from "../../utility/api/ApiError";
+import { ApiError, ApiErrorT } from "../../utility/api/model/ApiError";
 
 import { useSession } from "@/context/AuthContext";
 import { router } from "expo-router";
@@ -43,7 +43,7 @@ function SignInCard() {
       router.replace("/dashboard");
     } catch (error: any) {
       // const apiError = error as ApiError;
-      const apiError: ApiError = error;
+      const apiError: ApiErrorT = error;
 
       setAlertState({
         message: apiError.message,

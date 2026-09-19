@@ -1,5 +1,6 @@
 /**
  * Expands on TextInput from React Native
+ *
  * @module
  */
 

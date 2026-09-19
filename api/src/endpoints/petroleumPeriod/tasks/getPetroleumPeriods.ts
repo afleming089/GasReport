@@ -7,12 +7,22 @@
  * @module
  */
 
-import { InputValidationException, OpenAPIRoute } from "chanfana";
 import { z } from "zod";
+import { contentJson, NotFoundException, OpenAPIRoute } from "chanfana";
 
-/// types
-import { GasPeriod, locations, fuelType, frequency } from "../petroleumTypes";
+import { PickSchemaValues } from "../../../utility/PickSchemaValues";
+
+// types
+import {
+  GasPeriod,
+  EIAResponse,
+  locations,
+  fuelType,
+  frequency,
+  Year_Month_Day,
+} from "../petroleumTypes";
 import { type AppContext } from "../../../types";
+import { ValidateJWT } from "../../../utility/auth/validateJWT";
 
 export class GetPetroleumPeriods extends OpenAPIRoute {
   schema = {
@@ -20,58 +30,83 @@ export class GetPetroleumPeriods extends OpenAPIRoute {
     summary:
       "Get gas periods based on location, fuel type and period timeline frequency. Can also add an optional date range parameter.",
     request: {
-      params: z.object({
+      query: z.object({
         frequency: z.enum(frequency),
         location: z.enum(locations),
         fuelType: z.enum(fuelType),
-        startDate: z.date().optional(),
-        endDate: z.date().optional(),
+        start: z
+          .string()
+          .regex(Year_Month_Day, "Must be YYYY, YYYY-MM, or YYYY-MM-DD")
+          .optional(),
+        end: z
+          .string()
+          .regex(Year_Month_Day, "Must be YYYY, YYYY-MM, or YYYY-MM-DD")
+          .optional(),
       }),
     },
     responses: {
       "200": {
         description: "Returns a list Gas Periods",
-        content: {
-          "application/json": {
-            schema: z.object({
-              status: z.int(),
-              numberOfPeriods: z.int().optional(),
-              gasPeriods: GasPeriod.array(),
-            }),
-          },
-        },
-        ...InputValidationException.schema(), // Document HTTP 400 error
+        ...contentJson(
+          z.object({
+            total: z.int(),
+            frequency: z.string(),
+            gasPeriods: GasPeriod.array(),
+          }),
+        ),
       },
     },
   };
 
   async handle(c: AppContext) {
-    // Get validated data
+    const authToken: string | null = c.req.raw.headers.get("jwt");
+    await ValidateJWT(authToken);
+
+    /** Get validated data  */
     const data = await this.getValidatedData<typeof this.schema>();
 
-    // Retrieve the validated parameters
-    const { frequency, location, fuelType, startDate, endDate } = data.params;
+    /** Retrieve the validated parameters  */
+    const { frequency, location, fuelType, start, end } = data.query;
 
-    // Implement your own object list here
+    const url = new URL(c.env.END_POINT);
 
-    return {
-      success: true,
-      tasks: [
-        {
-          name: "Clean my room",
-          slug: "clean-room",
-          description: undefined,
-          completed: false,
-          due_date: "2025-01-05",
-        },
-        {
-          name: "Build something awesome with Cloudflare Workers",
-          slug: "cloudflare-workers",
-          description: "Lorem Ipsum",
-          completed: true,
-          due_date: "2022-12-24",
-        },
-      ],
-    };
+    url.searchParams.append("api_key", c.env.API_TOKEN);
+    url.searchParams.append("frequency", frequency);
+    url.searchParams.append("facets[product][]", fuelType);
+    url.searchParams.append("facets[duoarea][]", location);
+    url.searchParams.append("data[]", "value");
+    start ? url.searchParams.append("start", start) : null;
+    end ? url.searchParams.append("end", end) : null;
+
+    const response = await fetch(url.toString());
+    const result: any = await response.json();
+
+    /**In case third part api is out of service */
+    if (!result)
+      throw new NotFoundException("Failed to fetch from https://api.eia.gov");
+
+    const rawData = result.response.data;
+
+    if (rawData.length === 0)
+      throw new NotFoundException(
+        `No period data found with current parameters.}`,
+      );
+
+    if (response.ok) {
+      /** Takes raw response EIA api and picks desired values from it. Only the schema is created here. Need to pass in object to be picked still */
+      const pick = new PickSchemaValues(EIAResponse, {
+        period: true,
+        "area-name": true,
+        "product-name": true,
+        value: true,
+        units: true,
+      });
+
+      return {
+        total: parseInt(result.response.total),
+        frequency: result.response.frequency,
+        PetroPeriods: pick.getParsedArray(result.response.data),
+      };
+    }
   }
 }

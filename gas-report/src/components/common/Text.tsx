@@ -1,5 +1,6 @@
 /**
  * Expands on Text from React Native
+ *
  * @module
  */
 
