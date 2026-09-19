@@ -3,6 +3,10 @@
  *
  * Creates a JSON Web Token to send back to them
  *
+ * Has a timeout of 15 minutes to prevent bot abuse.
+ *
+ * Needs to re auth with Turnstile in order to get a new token.
+ *
  * @module
  */
 

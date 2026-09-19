@@ -1,5 +1,6 @@
 /**
  * Chart showing trends overtime. Can select different periods to view in the chart its self.
+ *
  * @module
  */
 

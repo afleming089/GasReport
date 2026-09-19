@@ -1,5 +1,6 @@
 /**
  * Displays current gas price and ones from a week ago, a month ago, a year ago, and etc.
+ *
  * @module
  */
 

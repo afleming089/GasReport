@@ -1,5 +1,6 @@
 /**
  * Expands on Pressable from React Native
+ *
  * @module
  */
 

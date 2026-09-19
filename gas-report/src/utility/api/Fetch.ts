@@ -1,3 +1,10 @@
+/**
+ * Handles fetch and schema validation with zod.
+ * Ensures that at runtime if api response schema changes it will throw an error.
+ *
+ * @module
+ */
+
 import { ApiResponseT, ApiResponse } from "./model/ApiResponse";
 import { FetchConfig } from "./FetchConfig";
 

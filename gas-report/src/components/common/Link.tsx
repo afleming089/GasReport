@@ -1,5 +1,6 @@
 /**
  * Expands on Link from React Native
+ *
  * @module
  */
 
