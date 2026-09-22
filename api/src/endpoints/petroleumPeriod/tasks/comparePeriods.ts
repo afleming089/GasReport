@@ -136,8 +136,7 @@ export class ComparePeriods extends OpenAPIRoute {
       throw new NotFoundException("Failed to fetch from https://api.eia.gov");
 
     const result: any = await response.json();
-
-    const rawData = result.response.data;
+    const rawData = await result.response.data;
 
     if (rawData.length === 0)
       throw new NotFoundException(
