@@ -82,10 +82,11 @@ app.use(
       xFrameOptions: false,
       xXssProtection: false,
     }),
-    timeout(10000),
     logger(),
   ),
 );
+
+app.use("/*", timeout(60000));
 
 /// Setup OpenAPI registry
 const openapi = fromHono(app, {
