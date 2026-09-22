@@ -21,7 +21,7 @@ const app = new Hono<{ Bindings: Env }>();
 
 /** Global Error Management */
 app.onError((err, c) => {
-  console.error("Global error handler caught:", err);
+  console.error("Global error handler caught:", { err });
 
   /**
    * Chanfana errors arrive as HTTPException with the formatted response attached.
