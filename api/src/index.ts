@@ -1,6 +1,5 @@
 import { fromHono } from "chanfana";
 import { Hono } from "hono";
-import { every } from "hono/combine";
 import { cors } from "hono/cors";
 import { secureHeaders } from "hono/secure-headers";
 
@@ -75,18 +74,11 @@ app.use(
   }),
 );
 
-app.use(
-  "*",
-  every(
-    secureHeaders({
-      xFrameOptions: false,
-      xXssProtection: false,
-    }),
-    logger(),
-  ),
-);
+app.use("*", logger());
 
-app.use("/*", timeout(60000));
+app.use("*", secureHeaders());
+
+app.use("*", timeout(60000));
 
 /// Setup OpenAPI registry
 const openapi = fromHono(app, {
