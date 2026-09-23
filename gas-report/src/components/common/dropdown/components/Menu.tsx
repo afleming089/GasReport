@@ -4,20 +4,21 @@
  */
 
 import React from "react";
-import { FlatList, View } from "react-native";
+import { DimensionValue, FlatList, View } from "react-native";
 import { dropdown, DropdownVariants } from "../StyleVariants";
 
 // menu for all drop down types
 interface MenuProps extends DropdownVariants {
+  height?: DimensionValue | undefined;
   children: React.ReactNode;
 }
 
-function Menu({ children, ...styles }: MenuProps) {
+function Menu({ height = 180, children, ...styles }: MenuProps) {
   const childArray = React.Children.toArray(children);
   const { menu, option } = dropdown(styles);
 
   return (
-    <View className="h-[150px]">
+    <View style={{ height: height }}>
       <FlatList
         data={childArray}
         scrollEnabled={true}

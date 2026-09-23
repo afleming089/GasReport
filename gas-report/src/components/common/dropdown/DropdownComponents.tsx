@@ -148,7 +148,11 @@ function NavigationDropdown({
         {...styles}
       />
 
-      {showMenu ? <Menu {...styles}>{linksElements}</Menu> : null}
+      {showMenu ? (
+        <Menu height="auto" {...styles}>
+          {linksElements}
+        </Menu>
+      ) : null}
     </View>
   );
 }
