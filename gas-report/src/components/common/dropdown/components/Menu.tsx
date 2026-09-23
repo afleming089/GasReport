@@ -17,14 +17,16 @@ function Menu({ children, ...styles }: MenuProps) {
   const { menu, option } = dropdown(styles);
 
   return (
-    <FlatList
-      data={childArray}
-      scrollEnabled={false}
-      keyExtractor={(_, index) => index.toString()}
-      className={menu()}
-      contentContainerClassName="gap-1"
-      renderItem={({ item }) => <View className={option()}>{item}</View>}
-    />
+    <View className="h-[150px]">
+      <FlatList
+        data={childArray}
+        scrollEnabled={true}
+        keyExtractor={(_, index) => index.toString()}
+        className={menu()}
+        contentContainerClassName="gap-1"
+        renderItem={({ item }) => <View className={option()}>{item}</View>}
+      />
+    </View>
   );
 }
 
