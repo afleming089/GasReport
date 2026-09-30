@@ -1,4 +1,8 @@
-/// Endpoints for price periods overtime of consumer grade fuel
+/**
+ * Endpoint group for auth. Grouped together in index.ts
+ * @module
+ */
+
 import { Hono, type Context } from "hono";
 import { fromHono } from "chanfana";
 

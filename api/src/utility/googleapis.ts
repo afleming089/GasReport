@@ -1,3 +1,9 @@
+/**
+ * NOT ADDED. May want ton add android app support later and this is used to validate if the app runs on a valid
+ *  android device
+ * @module
+ */
+
 import { InternalServerErrorException } from "chanfana";
 
 const { google } = require("googleapis");

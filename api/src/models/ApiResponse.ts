@@ -1,3 +1,7 @@
+/**
+ * Standard API response with data and error of type ApiError
+ * @module
+ */
 import { z } from "zod";
 import { ApiError } from "./ApiError";
 

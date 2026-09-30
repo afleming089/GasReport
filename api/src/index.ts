@@ -119,6 +119,9 @@ const openapi = fromHono(app, {
   raiseUnknownParameters: false,
 });
 
+/**
+ * Route families
+ */
 openapi.route("/auth", Auth);
 openapi.route("/petroleum-periods", PetroleumPeriods);
 
