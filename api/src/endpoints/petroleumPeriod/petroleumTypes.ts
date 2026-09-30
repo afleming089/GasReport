@@ -1,3 +1,8 @@
+/**
+ * Models of API data. Validated during runtime with zod
+ * @module
+ */
+
 import { z } from "zod";
 
 /** Types */

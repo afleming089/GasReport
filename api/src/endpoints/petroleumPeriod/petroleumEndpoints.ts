@@ -1,4 +1,8 @@
-/// Endpoints for price periods overtime of consumer grade fuel
+/**
+ * Endpoints for price periods overtime of consumer grade fuel. Grouped together in index.ts
+ * @module
+ */
+
 import { Hono, type Context } from "hono";
 import { fromHono } from "chanfana";
 

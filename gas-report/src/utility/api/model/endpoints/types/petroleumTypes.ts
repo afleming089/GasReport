@@ -1,3 +1,8 @@
+/**
+ * Various models of API endpoint data and query parameters
+ *
+ * @module */
+
 import { z } from "zod";
 
 /** Types */

@@ -1,0 +1,10 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPointStrategy": "packages",
+  "entryPoints": ["api", "gas-report"],
+  "commentStyle": "all",
+  "packageOptions": {
+    "entryPoints": ["src/"],
+    "entryPointStrategy": "expand"
+  }
+}

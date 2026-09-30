@@ -1,3 +1,7 @@
+/**
+ * Errors message and http status for api errors
+ * @module
+ */
 import { z } from "zod";
 
 const ApiError = z.object({
